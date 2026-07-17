@@ -4,11 +4,11 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 
 ## Week 1 — Foundation
 - [x] `week-1` `type:chore` `p1` Set up Tailwind CSS (optional utility layer) — done in PR #3
-- [ ] `week-1` `type:chore` `p1` Build `Layout.astro` — base HTML shell, meta tags, fonts
-- [ ] `week-1` `type:feature` `p1` Build `Nav.astro` — fixed nav, links, name/logo
-- [ ] `week-1` `type:feature` `p1` Build `Hero.astro` structure (placeholder for 3D)
-- [ ] `week-1` `type:chore` `p2` Build `Footer.astro`
-- [ ] `week-1` `type:feature` `p1` Manifesto section (static)
+- [x] `week-1` `type:chore` `p1` Build `Layout.astro` — base HTML shell, meta tags, fonts — done in PR #1
+- [x] `week-1` `type:feature` `p1` Build `Nav.astro` — fixed nav, links, name/logo — done in PR #1
+- [x] `week-1` `type:feature` `p1` Build `Hero.astro` structure (placeholder for 3D) — done in PR #1
+- [x] `week-1` `type:chore` `p2` Build `Footer.astro` — done in PR #1
+- [x] `week-1` `type:feature` `p1` Manifesto section (static) — done in PR #5
 - [ ] `week-1` `type:feature` `p1` Work section — 5 project cards (static layout)
 - [ ] `week-1` `type:feature` `p2` About section
 - [ ] `week-1` `type:feature` `p2` Contact section
