@@ -1,52 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Footer from '../components/Footer.astro';
 ---
 <Layout>
+  <Nav />
   <main>
-    <section class="hero">
-      <p class="eyebrow">Generative AI Engineer</p>
-      <h1>I make machines that imagine.</h1>
-      <p class="subline">
-        I build generative systems across text, image, and audio —
-        end to end, not just API calls.
-      </p>
-    </section>
+    <Hero />
   </main>
+  <Footer />
 </Layout>
-
-<style>
-  .hero {
-    min-height: 100svh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 0 8vw;
-    gap: 1rem;
-  }
-
-  .eyebrow {
-    font-family: var(--font-mono);
-    color: var(--accent);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-  }
-
-  h1 {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-weight: 300;
-    font-size: clamp(2.5rem, 7vw, 5.5rem);
-    line-height: 1.05;
-    margin: 0;
-    max-width: 16ch;
-  }
-
-  .subline {
-    color: var(--text-dim);
-    max-width: 40ch;
-    font-size: 1.1rem;
-    line-height: 1.5;
-  }
-</style>
