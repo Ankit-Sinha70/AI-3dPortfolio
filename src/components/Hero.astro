@@ -1,0 +1,76 @@
+<section class="hero" id="hero">
+  <p class="eyebrow">Generative AI Engineer</p>
+  <h1>I make machines that imagine.</h1>
+  <p class="subline">
+    I build generative systems across text, image, and audio —
+    end to end, not just API calls.
+  </p>
+  <div class="scroll-indicator" aria-hidden="true">
+    <span></span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 8vw;
+    gap: 1rem;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: 1.05;
+    margin: 0;
+    max-width: 16ch;
+  }
+
+  .subline {
+    color: var(--text-dim);
+    max-width: 40ch;
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 8vw;
+    width: 1px;
+    height: 48px;
+    background: rgba(244, 241, 255, 0.2);
+    overflow: hidden;
+  }
+
+  .scroll-indicator span {
+    display: block;
+    width: 100%;
+    height: 40%;
+    background: var(--accent);
+    animation: scroll-down 1.8s ease-in-out infinite;
+  }
+
+  @keyframes scroll-down {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(250%);
+    }
+  }
+</style>

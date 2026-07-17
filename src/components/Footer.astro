@@ -1,0 +1,45 @@
+---
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <p>&copy; {year} Ankit Sinha</p>
+  <div class="socials">
+    <a href="https://github.com/Ankit-Sinha70" target="_blank" rel="noopener">GitHub</a>
+    <a href="mailto:ar86748483@gmail.com">Email</a>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 8vw;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    border-top: 1px solid rgba(244, 241, 255, 0.08);
+  }
+
+  .socials {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .socials a {
+    color: var(--text-dim);
+    text-decoration: none;
+  }
+
+  .socials a:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .footer {
+      flex-direction: column;
+      gap: 0.75rem;
+      text-align: center;
+    }
+  }
+</style>
