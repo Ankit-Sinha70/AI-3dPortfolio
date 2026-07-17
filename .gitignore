@@ -1,0 +1,25 @@
+# build output
+dist/
+
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+.npm-install.log
+
+# leftover from sandbox scaffold cleanup, safe to delete manually
+.git-broken/
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
