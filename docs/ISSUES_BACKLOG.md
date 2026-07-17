@@ -3,7 +3,7 @@
 Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask Claude to, once GitHub access is connected), one per row, using the Feature issue template. Check off here once filed.
 
 ## Week 1 — Foundation
-- [ ] `week-1` `type:chore` `p1` Set up Tailwind CSS (optional utility layer)
+- [x] `week-1` `type:chore` `p1` Set up Tailwind CSS (optional utility layer) — done in PR #3
 - [ ] `week-1` `type:chore` `p1` Build `Layout.astro` — base HTML shell, meta tags, fonts
 - [ ] `week-1` `type:feature` `p1` Build `Nav.astro` — fixed nav, links, name/logo
 - [ ] `week-1` `type:feature` `p1` Build `Hero.astro` structure (placeholder for 3D)
