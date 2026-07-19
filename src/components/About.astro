@@ -1,0 +1,81 @@
+—---
+const stack = ['Python', 'PyTorch', 'TypeScript', 'FastAPI', 'LangChain', 'Astro'];
+---
+<section class="about" id="about">
+  <p class="eyebrow">About</p>
+  <div class="content">
+    <p class="bio">
+      I'm Ankit, a generative AI engineer who ships systems, not just demos.
+      My work spans text, image, and audio models — from fine-tuning and
+      inference infrastructure to the product surface people actually touch.
+    </p>
+    <p class="bio">
+      Before a model reaches a user, it goes through the unglamorous part:
+      data pipelines, evaluation harnesses, latency budgets, and failure
+      modes. That's the part I like most.
+    </p>
+    <ul class="stack">
+      {stack.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+.about {
+  position: relative;
+  padding: 10rem 8vw;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 60ch;
+}
+
+.bio {
+  font-family: var(--font-body);
+  color: var(--text);
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+}
+
+.stack li {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--warm);
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .about {
+    padding: 6rem 6vw;
+    gap: 1.5rem;
+  }
+}
+</style>
