@@ -142,8 +142,39 @@ function initWorkCardsReveal() {
   });
 }
 
+// Section headings: numbered counter that ticks up when scrolled into view
+function initSectionCounters() {
+  const counters = document.querySelectorAll('.section-counter[data-count]');
+  if (!counters.length) return;
+
+  counters.forEach((el) => {
+    const target = parseInt(el.dataset.count, 10) || 0;
+
+    if (prefersReducedMotion) {
+      el.textContent = String(target).padStart(2, '0');
+      return;
+    }
+
+    el.textContent = '00';
+    const counterObj = { value: 0 };
+    gsap.to(counterObj, {
+      value: target,
+      duration: 1,
+      ease: 'power1.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+      },
+      onUpdate: () => {
+        el.textContent = String(Math.round(counterObj.value)).padStart(2, '0');
+      },
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initHeroReveal();
   initManifestoReveal();
   initWorkCardsReveal();
+  initSectionCounters();
 });
