@@ -11,7 +11,7 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [x] `week-1` `type:feature` `p1` Manifesto section (static) — done in PR #5
 - [x] `week-1` `type:feature` `p1` Work section — 5 project cards (static layout) — done in PR #8
 - [ ] `week-1` `type:feature` `p2` About section
-- [ ] `week-1` `type:feature` `p2` Contact section
+- [x] `week-1` `type:feature` `p2` Contact section — done in PR #10, wired in PR #15 (closes #12)
 - [ ] `week-1` `type:content` `p1` Write all copy (manifesto, project descriptions, about)
 - [ ] `week-1` `type:chore` `p2` Finalize color palette (3 colors max)
 - [ ] `week-1` `type:chore` `p3` Mobile pass on static site
