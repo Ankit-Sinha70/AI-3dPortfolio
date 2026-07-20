@@ -90,7 +90,60 @@ function initManifestoReveal() {
   });
 }
 
+// Work: project card scroll-enter reveal + mouse tilt
+function initWorkCardsReveal() {
+  const cards = document.querySelectorAll('.work .card');
+  if (!cards.length) return;
+
+  if (prefersReducedMotion) {
+    gsap.set(cards, { opacity: 1, y: 0 });
+    return;
+  }
+
+  cards.forEach((card) => {
+    gsap.set(card, { opacity: 0, y: 32 });
+    gsap.to(card, {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: card,
+        start: 'top 88%',
+      },
+    });
+
+    const maxTilt = 6;
+
+    function handleMove(e) {
+      const rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      gsap.to(card, {
+        rotateX: py * -maxTilt,
+        rotateY: px * maxTilt,
+        transformPerspective: 600,
+        duration: 0.4,
+        ease: 'power2.out',
+      });
+    }
+
+    function handleLeave() {
+      gsap.to(card, {
+        rotateX: 0,
+        rotateY: 0,
+        duration: 0.5,
+        ease: 'power3.out',
+      });
+    }
+
+    card.addEventListener('pointermove', handleMove);
+    card.addEventListener('pointerleave', handleLeave);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initHeroReveal();
   initManifestoReveal();
+  initWorkCardsReveal();
 });
