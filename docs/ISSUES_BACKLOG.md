@@ -14,7 +14,7 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [x] `week-1` `type:feature` `p2` Contact section — done in PR #10, wired in PR #15 (closes #12)
 - [x] `week-1` `type:content` `p1` Write all copy (manifesto, project descriptions, about) — already done in PR #5, #8, #9; audited and closed out in PR #16 (closes #13)
 - [ ] `week-1` `type:chore` `p2` Finalize color palette (3 colors max)
-- [ ] `week-1` `type:chore` `p3` Mobile pass on static site
+- [x] `week-1` `type:chore` `p3` Mobile pass on static site — audited, breakpoints already present on all sections (PR #1, #5, #8, #9, #10); no visual issues found at 375px (closes #20)
 
 ## Week 2 — Scroll animations
 - [ ] `week-2` `type:chore` `p1` Install + configure GSAP, ScrollTrigger, Lenis
