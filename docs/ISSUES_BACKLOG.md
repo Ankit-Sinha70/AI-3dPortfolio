@@ -22,7 +22,7 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [x] `week-2` `type:feature` `p1` Manifesto word-by-word scroll reveal — already done in PR #7, initManifestoReveal() (closes #22)
 - [ ] `week-2` `type:feature` `p2` Project card scroll-enter animation + tilt
 - [ ] `week-2` `type:feature` `p3` Section heading counters
-- [ ] `week-2` `type:feature` `p2` Skills marquee (dual-row, opposite directions)
+- [x] `week-2` `type:feature` `p2` Skills marquee (dual-row, opposite directions) — done in PR #30 (closes #29)
 - [ ] `week-2` `type:feature` `p3` Contact magnetic button effect
 
 ## Week 3 — 3D hero + live demos

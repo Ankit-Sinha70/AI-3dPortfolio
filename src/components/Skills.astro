@@ -1,0 +1,156 @@
+---
+const rowOne = [
+  'Python',
+  'PyTorch',
+  'Diffusion Models',
+  'LoRA Fine-Tuning',
+  'RAG',
+  'Vector DBs',
+  'LangChain',
+  'Agent Orchestration',
+];
+
+const rowTwo = [
+  'TypeScript',
+  'FastAPI',
+  'WebSockets',
+  'Astro',
+  'GSAP',
+  'Docker',
+  'PostgreSQL',
+  'CI/CD',
+];
+---
+<section class="skills" id="skills">
+  <p class="eyebrow">Skills</p>
+  <div class="marquee-wrap">
+    <div class="marquee-row row-1">
+      <div class="marquee-track">
+        {rowOne.map((skill) => (
+          <span class="skill-tag">{skill}</span>
+        ))}
+        {rowOne.map((skill) => (
+          <span class="skill-tag" aria-hidden="true">{skill}</span>
+        ))}
+      </div>
+    </div>
+    <div class="marquee-row row-2">
+      <div class="marquee-track">
+        {rowTwo.map((skill) => (
+          <span class="skill-tag">{skill}</span>
+        ))}
+        {rowTwo.map((skill) => (
+          <span class="skill-tag" aria-hidden="true">{skill}</span>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.skills {
+  position: relative;
+  padding: 10rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  overflow: hidden;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  margin: 0;
+  padding: 0 8vw;
+}
+
+.marquee-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.marquee-row {
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+
+.marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: max-content;
+  will-change: transform;
+  animation: marquee 32s linear infinite;
+}
+
+.row-2 .marquee-track {
+  animation-direction: reverse;
+}
+
+.marquee-row:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.skill-tag {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  border: 1px solid rgba(244, 241, 255, 0.12);
+  border-radius: 999px;
+  padding: 0.6rem 1.4rem;
+  white-space: nowrap;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.skill-tag:hover {
+  color: var(--warm);
+  border-color: var(--warm);
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-row {
+    overflow: visible;
+    mask-image: none;
+  }
+  .marquee-track {
+    flex-wrap: wrap;
+    width: auto;
+    animation: none;
+    transform: none;
+  }
+  .marquee-track [aria-hidden='true'] {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .skills {
+    padding: 6rem 0;
+    gap: 2rem;
+  }
+  .eyebrow {
+    padding: 0 6vw;
+  }
+}
+</style>
