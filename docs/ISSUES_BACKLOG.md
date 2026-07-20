@@ -17,9 +17,9 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [ ] `week-1` `type:chore` `p3` Mobile pass on static site
 
 ## Week 2 — Scroll animations
-- [ ] `week-2` `type:chore` `p1` Install + configure GSAP, ScrollTrigger, Lenis
-- [ ] `week-2` `type:feature` `p1` Hero staggered word/line reveal on load
-- [ ] `week-2` `type:feature` `p1` Manifesto word-by-word scroll reveal
+- [x] `week-2` `type:chore` `p1` Install + configure GSAP, ScrollTrigger, Lenis — already done in PR #7 (closes #22)
+- [x] `week-2` `type:feature` `p1` Hero staggered word/line reveal on load — already done in PR #7, initHeroReveal() (closes #22)
+- [x] `week-2` `type:feature` `p1` Manifesto word-by-word scroll reveal — already done in PR #7, initManifestoReveal() (closes #22)
 - [ ] `week-2` `type:feature` `p2` Project card scroll-enter animation + tilt
 - [ ] `week-2` `type:feature` `p3` Section heading counters
 - [ ] `week-2` `type:feature` `p2` Skills marquee (dual-row, opposite directions)
