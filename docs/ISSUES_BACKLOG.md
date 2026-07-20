@@ -20,7 +20,7 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [x] `week-2` `type:chore` `p1` Install + configure GSAP, ScrollTrigger, Lenis — already done in PR #7 (closes #22)
 - [x] `week-2` `type:feature` `p1` Hero staggered word/line reveal on load — already done in PR #7, initHeroReveal() (closes #22)
 - [x] `week-2` `type:feature` `p1` Manifesto word-by-word scroll reveal — already done in PR #7, initManifestoReveal() (closes #22)
-- [ ] `week-2` `type:feature` `p2` Project card scroll-enter animation + tilt
+- [x] `week-2` `type:feature` `p2` Project card scroll-enter animation + tilt — done in PR #25 (closes #24)
 - [ ] `week-2` `type:feature` `p3` Section heading counters
 - [ ] `week-2` `type:feature` `p2` Skills marquee (dual-row, opposite directions)
 - [ ] `week-2` `type:feature` `p3` Contact magnetic button effect
