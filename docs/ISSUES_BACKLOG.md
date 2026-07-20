@@ -11,9 +11,9 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [x] `week-1` `type:feature` `p1` Manifesto section (static) — done in PR #5
 - [x] `week-1` `type:feature` `p1` Work section — 5 project cards (static layout) — done in PR #8
 - [x] `week-1` `type:feature` `p2` About section — done in PR #9, wired in PR #14 (closes #11)
-- [ ] `week-1` `type:feature` `p2` Contact section
-- [ ] `week-1` `type:content` `p1` Write all copy (manifesto, project descriptions, about)
-- [ ] `week-1` `type:chore` `p2` Finalize color palette (3 colors max)
+- [x] `week-1` `type:feature` `p2` Contact section — done in PR #10, wired in PR #15, wiring restored in PR #18 (closes #12)
+- [x] `week-1` `type:content` `p1` Write all copy (manifesto, project descriptions, about) — already done in PR #5, #8, #9; audited and closed out in PR #16 (closes #13)
+- [x] `week-1` `type:chore` `p2` Finalize color palette (3 colors max) — already done in PR #1 (Layout.astro tokens: --bg, --accent, --warm, --text, --text-dim); audited, no change needed (closes #17)
 - [ ] `week-1` `type:chore` `p3` Mobile pass on static site
 
 ## Week 2 — Scroll animations
