@@ -21,7 +21,7 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [x] `week-2` `type:feature` `p1` Hero staggered word/line reveal on load — already done in PR #7, initHeroReveal() (closes #22)
 - [x] `week-2` `type:feature` `p1` Manifesto word-by-word scroll reveal — already done in PR #7, initManifestoReveal() (closes #22)
 - [x] `week-2` `type:feature` `p2` Project card scroll-enter animation + tilt — done in PR #25 (closes #24)
-- [ ] `week-2` `type:feature` `p3` Section heading counters
+- [x] `week-2` `type:feature` `p3` Section heading counters — already done in PR #28 (closes #27); checkbox regressed after PR #26 merge, re-closed here
 - [x] `week-2` `type:feature` `p2` Skills marquee (dual-row, opposite directions) — done in PR #30 (closes #29)
 - [x] `week-2` `type:feature` `p3` Contact magnetic button effect — initContactMagnetic() added to scroll.js (closes #31)
 
