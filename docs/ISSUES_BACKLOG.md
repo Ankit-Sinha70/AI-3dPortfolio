@@ -23,7 +23,7 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [x] `week-2` `type:feature` `p2` Project card scroll-enter animation + tilt — done in PR #25 (closes #24)
 - [ ] `week-2` `type:feature` `p3` Section heading counters
 - [x] `week-2` `type:feature` `p2` Skills marquee (dual-row, opposite directions) — done in PR #30 (closes #29)
-- [ ] `week-2` `type:feature` `p3` Contact magnetic button effect
+- [x] `week-2` `type:feature` `p3` Contact magnetic button effect — initContactMagnetic() added to scroll.js (closes #31)
 
 ## Week 3 — 3D hero + live demos
 - [ ] `week-3` `type:feature` `p1` 3D hero scene (aurora shader / character / particles — pick one)
