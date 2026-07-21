@@ -172,9 +172,40 @@ function initSectionCounters() {
   });
 }
 
+// Contact: magnetic hover effect on the primary CTA button
+function initContactMagnetic() {
+  const cta = document.querySelector('.contact .cta');
+  if (!cta) return;
+  if (prefersReducedMotion) return;
+  const maxOffsetX = 14;
+  const maxOffsetY = 8;
+  function handleMove(e) {
+    const rect = cta.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    gsap.to(cta, {
+      x: px * maxOffsetX,
+      y: py * maxOffsetY,
+      duration: 0.4,
+      ease: 'power2.out',
+    });
+  }
+  function handleLeave() {
+    gsap.to(cta, {
+      x: 0,
+      y: 0,
+      duration: 0.5,
+      ease: 'power3.out',
+    });
+  }
+  cta.addEventListener('pointermove', handleMove);
+  cta.addEventListener('pointerleave', handleLeave);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initHeroReveal();
   initManifestoReveal();
   initWorkCardsReveal();
   initSectionCounters();
+  initContactMagnetic();
 });
