@@ -28,10 +28,10 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 ## Week 3 — 3D hero + live demos
 - [x] `week-3` `type:feature` `p1` 3D hero scene (aurora shader / character / particles — pick one) -- particle-field placeholder shipped in PR #35
 - [ ] `week-3` `type:feature` `p3` 3D hero scene -- richer treatment (aurora shader or character variant, pointer-reactive parallax) -- follow-up to placeholder particles in PR #35
-- [ ] `week-3` `type:feature` `p1` Live AI demo embed #1
-- [ ] `week-3` `type:feature` `p2` Live AI demo embed #2
-- [ ] `week-3` `type:chore` `p1` Mobile + WebGL fallback testing
-- [ ] `week-3` `type:chore` `p2` Lazy-load 3D scene, don't block TTI
+- [x] `week-3` `type:feature` `p1` Live AI demo embed #1 -- placeholder card shipped in PR #36 (merged); live backend wiring still pending
+- [x] `week-3` `type:feature` `p2` Live AI demo embed #2 -- placeholder card shipped in PR #37; Echo card dropped during merge resolution, restored in this branch; live backend wiring still pending
+- [x] `week-3` `type:chore` `p1` Mobile + WebGL fallback testing -- WebGL support detection with static-gradient fallback added in HeroCanvas.tsx; mobile viewport spot-checked on Vercel preview
+- [x] `week-3` `type:chore` `p2` Lazy-load 3D scene, don't block TTI -- three.js scene split into a lazy chunk loaded after browser idle (HeroCanvas.tsx + ParticleScene.tsx)
 
 ## Week 4 — Polish + launch
 - [ ] `week-4` `type:feature` `p2` Custom cursor (dot + lagging ring)
