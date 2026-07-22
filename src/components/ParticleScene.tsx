@@ -54,4 +54,4 @@ export default function ParticleScene() {
     </Canvas>
     );
 }
-</Points>
+</Points
