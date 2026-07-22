@@ -26,7 +26,8 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [x] `week-2` `type:feature` `p3` Contact magnetic button effect — initContactMagnetic() added to scroll.js (closes #31)
 
 ## Week 3 — 3D hero + live demos
-- [ ] `week-3` `type:feature` `p1` 3D hero scene (aurora shader / character / particles — pick one)
+- [x] `week-3` `type:feature` `p1` 3D hero scene (aurora shader / character / particles — pick one) -- particle-field placeholder shipped in PR #35
+- [ ] `week-3` `type:feature` `p3` 3D hero scene -- richer treatment (aurora shader or character variant, pointer-reactive parallax) -- follow-up to placeholder particles in PR #35
 - [ ] `week-3` `type:feature` `p1` Live AI demo embed #1
 - [ ] `week-3` `type:feature` `p2` Live AI demo embed #2
 - [ ] `week-3` `type:chore` `p1` Mobile + WebGL fallback testing
