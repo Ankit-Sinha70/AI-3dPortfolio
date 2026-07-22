@@ -34,8 +34,8 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [x] `week-3` `type:chore` `p2` Lazy-load 3D scene, don't block TTI -- three.js scene split into a lazy chunk loaded after browser idle (HeroCanvas.tsx + ParticleScene.tsx)
 
 ## Week 4 — Polish + launch
-- [ ] `week-4` `type:feature` `p2` Custom cursor (dot + lagging ring)
-- [ ] `week-4` `type:feature` `p3` Page-load counter animation
+- [x] `week-4` `type:feature` `p2` Custom cursor (dot + lagging ring) -- dot follows pointer, ring lerps behind + grows on hover; in polish.js; skips on touch / reduced-motion
+- [x] `week-4` `type:feature` `p3` Page-load counter animation -- preloader overlay counts 0->100 then fades, in polish.js; respects reduced-motion
 - [ ] `week-4` `type:chore` `p1` Lighthouse audit — 90+ perf, 100 a11y
 - [ ] `week-4` `type:chore` `p2` Image compression / WebP / lazy load
 - [ ] `week-4` `type:chore` `p2` `prefers-reduced-motion` fallback pass
