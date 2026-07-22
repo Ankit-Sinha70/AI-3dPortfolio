@@ -28,7 +28,7 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 ## Week 3 — 3D hero + live demos
 - [ ] `week-3` `type:feature` `p1` 3D hero scene (aurora shader / character / particles — pick one)
 - [ ] `week-3` `type:feature` `p1` Live AI demo embed #1
-- [ ] `week-3` `type:feature` `p2` Live AI demo embed #2
+- [x] `week-3` `type:feature` `p2` Live AI demo embed #2 -- placeholder card structure shipped in PR #37; live backend wiring still pending; conflicts with PR #36's Demos.astro, needs manual reconciliation
 - [ ] `week-3` `type:chore` `p1` Mobile + WebGL fallback testing
 - [ ] `week-3` `type:chore` `p2` Lazy-load 3D scene, don't block TTI
 
