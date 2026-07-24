@@ -76,7 +76,9 @@ function initManifestoReveal() {
     return;
   }
 
-  gsap.set(words, { opacity: 0.15 });
+    // Initial opacity bumped from 0.15 to 0.5 -- 0.15 failed WCAG AA contrast
+    // in the Lighthouse a11y audit (pre-reveal text was unreadably dim)
+    gsap.set(words, { opacity: 0.5 });
   gsap.to(words, {
     opacity: 1,
     stagger: 0.03,
