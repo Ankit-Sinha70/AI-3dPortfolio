@@ -37,7 +37,7 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [x] `week-4` `type:feature` `p2` Custom cursor (dot + lagging ring) -- dot follows pointer, ring lerps behind + grows on hover; in polish.js; skips on touch / reduced-motion
 - [x] `week-4` `type:feature` `p3` Page-load counter animation -- preloader overlay counts 0->100 then fades, in polish.js; respects reduced-motion
 - [ ] `week-4` `type:chore` `p1` Lighthouse audit — 90+ perf, 100 a11y
-- [ ] `week-4` `type:chore` `p2` Image compression / WebP / lazy load
+- [x] `week-4` `type:chore` `p2` Image compression / WebP / lazy load -- no raster assets exist yet (only `favicon.svg`; section backgrounds are CSS gradients), so nothing to compress today; loading / WebP / CLS convention documented in CONTRIBUTING.md for when images are added (PR #44)
 - [ ] `week-4` `type:chore` `p2` `prefers-reduced-motion` fallback pass
 - [ ] `week-4` `type:content` `p1` Final proofread
 - [ ] `week-4` `type:chore` `p1` OG meta tags + preview image
