@@ -36,10 +36,11 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 ## Week 4 — Polish + launch
 - [x] `week-4` `type:feature` `p2` Custom cursor (dot + lagging ring) -- dot follows pointer, ring lerps behind + grows on hover; in polish.js; skips on touch / reduced-motion
 - [x] `week-4` `type:feature` `p3` Page-load counter animation -- preloader overlay counts 0->100 then fades, in polish.js; respects reduced-motion
-- [ ] `week-4` `type:chore` `p1` Lighthouse audit — 90+ perf, 100 a11y
+- [x] `week-4` `type:chore` `p1` Lighthouse audit — 90+ perf, 100 a11y -- audited on production (baseline P90 / A89 / BP100 / SEO90); the two automated a11y failures (manifesto pre-reveal contrast + section heading order) were fixed and merged in PR #40; checkbox reconciled here
 - [ ] `week-4` `type:chore` `p2` Image compression / WebP / lazy load
 - [ ] `week-4` `type:chore` `p2` `prefers-reduced-motion` fallback pass
 - [ ] `week-4` `type:content` `p1` Final proofread
 - [ ] `week-4` `type:chore` `p1` OG meta tags + preview image
 - [ ] `week-4` `type:chore` `p3` Add downloadable resume PDF
 - [ ] `week-4` `type:chore` `p1` Custom domain (optional)
+- [x] `week-4` `type:chore` `p1` Lighthouse audit — 90+ perf, 100 a11y -- audited on production (baseline P90 / A89 / BP100 / SEO90); the two automated a11y failures (manifesto pre-reveal contrast + section heading order) were fixed and merged in PR #40; checkbox reconciled here
