@@ -27,7 +27,8 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 
 ## Week 3 — 3D hero + live demos
 - [x] `week-3` `type:feature` `p1` 3D hero scene (aurora shader / character / particles — pick one) -- particle-field placeholder shipped in PR #35
-- [ ] `week-3` `type:feature` `p3` 3D hero scene -- richer treatment (aurora shader or character variant, pointer-reactive parallax) -- follow-up to placeholder particles in PR #35
+- [x] `week-3` `type:feature` `p3` 3D hero scene -- richer treatment (pointer-reactive parallax) -- parallax shipped to `main` in ParticleScene.tsx (pointermove tracking + eased lerp on rotation/position); aurora-shader / character variant split out to the line below
+- [ ] `week-3` `type:feature` `p3` 3D hero scene -- aurora shader OR character variant (larger visual pass; deferred from the pointer-parallax work -- too big for one blind PR without a local build to verify the WebGL output)
 - [x] `week-3` `type:feature` `p1` Live AI demo embed #1 -- placeholder card shipped in PR #36 (merged); live backend wiring still pending
 - [x] `week-3` `type:feature` `p2` Live AI demo embed #2 -- placeholder card shipped in PR #37; Echo card dropped during merge resolution, restored in this branch; live backend wiring still pending
 - [x] `week-3` `type:chore` `p1` Mobile + WebGL fallback testing -- WebGL support detection with static-gradient fallback added in HeroCanvas.tsx; mobile viewport spot-checked on Vercel preview

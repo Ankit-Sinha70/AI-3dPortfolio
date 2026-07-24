@@ -57,3 +57,10 @@ Labels:
 ## Release / deploy
 
 No separate release branch — every merge to `main` is a production deploy via Vercel. Treat `main` as production: don't push directly to it, always go through a PR (even solo, this keeps history clean and gives you a preview URL to sanity-check before it's live).
+
+
+## Images
+
+The repo has no raster image assets yet -- the only binary in `public/` is `favicon.svg`, and every section background is a CSS gradient -- so there is nothing to compress right now. This section records the convention to follow once real images are added, so the "Image compression / WebP / lazy load" build-plan item has a documented answer rather than an empty checkbox.
+
+When a raster image is added: prefer WebP or AVIF with a JPEG/PNG fallback via `<picture>`; always set explicit `width` and `height` (or an aspect-ratio box) so the image reserves space and doesn't cause layout shift; add `loading="lazy"` and `decoding="async"` to anything below the fold, while keeping the hero / LCP image eager so it isn't delayed; and run assets through a compressor (e.g. Squoosh) before committing, targeting roughly 150 KB or less for full-width images. SVGs such as the favicon don't need compression but should be minified (e.g. SVGO) if hand-authored.
