@@ -1,0 +1,34 @@
+---
+// Scroll-scrubbed blueprint line-art for the hero. Pure SVG strokes (no
+// WebGL) so it stays cheap + mobile-friendly. Each element uses
+// pathLength="1" so one stroke-dashoffset drives the reveal; GSAP scrubs
+// that offset to the hero's scroll progress. Respects reduced-motion.
+---
+<svg id="hero-lines" class="hero-lines" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" fill="none" aria-hidden="true">
+<circle class="draw" cx="50" cy="50" r="32" pathLength="1" />
+<circle class="draw" cx="50" cy="50" r="21" pathLength="1" />
+<line class="draw" x1="18" y1="82" x2="82" y2="18" pathLength="1" />
+<line class="draw" x1="18" y1="18" x2="82" y2="82" pathLength="1" />
+<line class="draw" x1="50" y1="12" x2="28" y2="74" pathLength="1" />
+<line class="draw" x1="50" y1="12" x2="72" y2="74" pathLength="1" />
+<line class="draw" x1="28" y1="74" x2="72" y2="74" pathLength="1" />
+<line class="draw" x1="8" y1="50" x2="92" y2="50" pathLength="1" />
+<line class="draw" x1="50" y1="8" x2="50" y2="92" pathLength="1" />
+</svg>
+
+<style>
+.hero-lines { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.35; }
+.hero-lines .draw { stroke: var(--accent); stroke-width: 0.18; stroke-dasharray: 1; stroke-dashoffset: 1; }
+@media (prefers-reduced-motion: reduce) { .hero-lines .draw { stroke-dashoffset: 0; } }
+</style>
+
+<script>
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const paths = document.querySelectorAll('#hero-lines .draw');
+if (paths.length && !reduce) {
+gsap.to(paths, { strokeDashoffset: 0, ease: 'none', stagger: 0.12, scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.5 } });
+}
+</script>
