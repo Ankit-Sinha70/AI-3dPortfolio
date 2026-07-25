@@ -1,12 +1,15 @@
 ---
 import HeroCanvas from './HeroCanvas.tsx';
 import HeroLines from './HeroLines.astro';
+import AuroraBackground from './AuroraBackground.astro';
 ---
 <section class="hero" id="hero">
+  <AuroraBackground />
   <div class="hero-canvas" aria-hidden="true">
     <HeroCanvas client:visible />
   </div>
-  <HeroLines />  <div class="hero-content">
+  <HeroLines />
+  <div class="hero-content">
     <p class="eyebrow">Generative AI Engineer</p>
     <h1>I make machines that imagine.</h1>
     <p class="subline">
