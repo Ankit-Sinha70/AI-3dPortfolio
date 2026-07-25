@@ -1,0 +1,53 @@
+---
+// Reusable responsive image component implementing the convention already
+// documented in CONTRIBUTING.md: WebP/AVIF with a JPEG/PNG fallback via
+// <picture>, explicit width/height so the image reserves space (no layout
+// shift), loading="lazy" + decoding="async" for anything below the fold
+// (eager + high fetchpriority for the hero/LCP image), and pre-compressed
+// sources -- run assets through a compressor such as Squoosh before
+// committing, targeting roughly 150KB or less for full-width images.
+//
+// There are no raster image assets in the repo yet (every section
+// background is a CSS gradient -- see CONTRIBUTING.md), so this component
+// is unused infrastructure for now. It exists so the first real image drop
+// doesn't also have to invent the markup pattern from scratch.
+
+interface Props {
+  src: string;
+  webp?: string;
+  avif?: string;
+  alt: string;
+  width: number;
+  height: number;
+  loading?: 'lazy' | 'eager';
+  class?: string;
+}
+
+const {
+  src,
+  webp,
+  avif,
+  alt,
+  width,
+  height,
+  loading = 'lazy',
+  class: className,
+} = Astro.props;
+
+const decoding = loading === 'eager' ? 'sync' : 'async';
+const fetchpriority = loading === 'eager' ? 'high' : 'auto';
+---
+<picture>
+  {avif && <source srcset={avif} type="image/avif" />}
+  {webp && <source srcset={webp} type="image/webp" />}
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding={decoding}
+    fetchpriority={fetchpriority}
+    class={className}
+  />
+</picture>
