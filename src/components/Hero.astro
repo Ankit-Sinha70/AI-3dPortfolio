@@ -103,4 +103,10 @@ import HeroLines from './HeroLines.astro';
       transform: translateY(250%);
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-indicator span {
+      animation: none;
+    }
+  }
 </style>
