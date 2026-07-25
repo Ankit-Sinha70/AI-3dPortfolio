@@ -61,4 +61,19 @@ import '../scripts/polish.js';
     letter-spacing: 0.15em;
     margin-right: 0.75em;
   }
+
+  /* Defense-in-depth: component-level animations (scroll.js, polish.js,
+     HeroCanvas/ParticleScene, HeroLines, Skills marquee) already gate on
+     prefers-reduced-motion individually. This global rule is a safety net
+     for anything future work misses. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 </style>
