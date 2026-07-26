@@ -41,7 +41,7 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [x] `week-4` `type:chore` `p1` Lighthouse audit — 90+ perf, 100 a11y -- audited on production (baseline P90 / A89 / BP100 / SEO90); the two automated a11y failures (manifesto pre-reveal contrast + section heading order) were fixed and merged in PR #40; checkbox reconciled here
 - [ ] `week-4` `type:chore` `p2` Image compression / WebP / lazy load
 - [x] `week-4` `type:chore` `p2` `prefers-reduced-motion` fallback pass -- PR #46
-- [ ] `week-4` `type:content` `p1` Final proofread
+- [x] `week-4` `type:content` `p1` Final proofread -- read all copy (Hero, Manifesto, Work, Skills, Demos, About, Contact, Footer, Nav) for typos/grammar/style consistency; fixed one inconsistency (Demos.astro project titles used a plain hyphen where Work.astro uses an em dash, e.g. Aurora — Text-to-Image); no other issues found (issue #52).
 - [ ] `week-4` `type:chore` `p1` OG meta tags + preview image
 - [ ] `week-4` `type:chore` `p3` Add downloadable resume PDF
 - [ ] `week-4` `type:chore` `p1` Custom domain (optional)
