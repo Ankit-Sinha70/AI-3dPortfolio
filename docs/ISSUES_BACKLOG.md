@@ -42,7 +42,7 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [x] `week-4` `type:chore` `p2` Image compression / WebP / lazy load -- convention documented in CONTRIBUTING.md and implemented in `src/components/OptimizedImage.astro`; already checked off once in PR #44 and again in PR #47, but the checkbox regressed again after a later merge (same pattern as the Week 1 Mobile pass / Week 2 Section heading counters regressions above). No raster assets exist yet to compress. Re-closed here (issue #50).
 - [x] `week-4` `type:chore` `p2` `prefers-reduced-motion` fallback pass -- PR #46
 - [x] `week-4` `type:content` `p1` Final proofread -- read all copy (Hero, Manifesto, Work, Skills, Demos, About, Contact, Footer, Nav) for typos/grammar/style consistency; fixed one inconsistency (Demos.astro project titles used a plain hyphen where Work.astro uses an em dash, e.g. Aurora — Text-to-Image); no other issues found (issue #52).
-- [ ] `week-4` `type:chore` `p1` OG meta tags + preview image
+- [x] `week-4` `type:chore` `p1` OG meta tags + preview image -- Layout.astro now sets og:title/description/type/url/image and twitter:card/title/description/image via a description prop with a sensible default; astro.config.mjs sets `site` to the stable Vercel production alias; new public/og-image.png (1200x630, on-brand) added (issue #54).
 - [ ] `week-4` `type:chore` `p3` Add downloadable resume PDF
 - [ ] `week-4` `type:chore` `p1` Custom domain (optional)
 - [x] `week-4` `type:chore` `p1` Lighthouse audit — 90+ perf, 100 a11y -- audited on production (baseline P90 / A89 / BP100 / SEO90); the two automated a11y failures (manifesto pre-reveal contrast + section heading order) were fixed and merged in PR #40; checkbox reconciled here
