@@ -1,4 +1,4 @@
-# Issue backlog
+——————————————————————————————# Issue backlog
 
 Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask Claude to, once GitHub access is connected), one per row, using the Feature issue template. Check off here once filed.
 
