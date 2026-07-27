@@ -8,16 +8,16 @@ import { Suspense, lazy, useEffect, useState } from 'react';
 // browser is idle, so the 3D bundle never blocks TTI
 
 // HERO_VARIANT selects which scene renders once the gate above passes.
-// 'particles' is the shipped default (ParticleScene.tsx, pointer-reactive
-// parallax field). 'aurora' is a dormant alternative (AuroraScene.tsx,
-// gradient shader plane) added as a scoped-down first step on the "aurora
-// shader OR character variant" backlog item -- it exists and builds, but
-// hasn't been visually verified against a local dev server (this workflow
-// has no local build), so it stays off by default. Flip this to 'aurora'
-// and run `npm run dev` to preview it, then flip back (or make it the
-// default) once it's been eyeballed. See docs/ISSUES_BACKLOG.md for the
-// follow-up line tracking that step.
-const HERO_VARIANT: 'particles' | 'aurora' = 'particles';
+// 'aurora' is now the default (AuroraScene.tsx, a slow-drifting gradient
+// shader plane blending the --accent and --warm tokens). 'particles'
+// (ParticleScene.tsx, pointer-reactive parallax field) remains available
+// as an alternative. This promotes the previously dormant aurora variant
+// to the live hero visual, closing the "aurora shader OR character
+// variant" backlog item. The result was verified by loading the PR's
+// Vercel preview deploy (the aurora wash renders behind the hero copy),
+// not a local dev server. Flip this constant back to 'particles' to
+// restore the particle field.
+const HERO_VARIANT: 'particles' | 'aurora' = 'aurora';
 
 const ParticleScene = lazy(() => import('./ParticleScene.tsx'));
 const AuroraScene = lazy(() => import('./AuroraScene.tsx'));
