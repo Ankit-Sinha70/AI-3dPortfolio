@@ -54,4 +54,3 @@ Ad hoc features requested directly (not part of the original build plan), added 
 
 - [x] `week-5` `type:feature` `p2` Individual project case-study pages -- one page per Work project (summary, problem, approach, outcome) at `/work/<slug>/`, project data extracted into shared `src/data/projects.js` -- PR #59
 - [x] `week-5` `type:feature` `p2` Blog / writing section -- post index at `/blog/` and individual post pages at `/blog/<slug>/`, sourced from `src/data/posts.js`, one sample post shipped; Nav.astro updated with a Blog link -- PR #60
-- [x] `week-5` `type:chore` `p3` Custom 404 page -- src/pages/404.astro matching site branding, links back to home/Work/Writing/Contact (no custom 404 existed before) -- PR #61
