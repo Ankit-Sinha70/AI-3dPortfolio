@@ -53,4 +53,3 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 Ad hoc features requested directly (not part of the original build plan), added here for tracking as each ships.
 
 - [x] `week-5` `type:feature` `p2` Individual project case-study pages -- one page per Work project (summary, problem, approach, outcome) at `/work/<slug>/`, project data extracted into shared `src/data/projects.js` -- PR #59
-- [x] `week-5` `type:feature` `p2` Blog / writing section -- post index at `/blog/` and individual post pages at `/blog/<slug>/`, sourced from `src/data/posts.js`, one sample post shipped; Nav.astro updated with a Blog link -- PR #60
