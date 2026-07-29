@@ -47,3 +47,9 @@ Ready-to-file issues, pulled from the build plan. File these on GitHub (or ask C
 - [ ] `week-4` `type:chore` `p1` Custom domain (optional) -- setup guide documented in docs/CUSTOM_DOMAIN.md (PR #57); domain purchase + DNS configuration is a manual step, not automatable, still open below
 - [ ] `week-4` `type:chore` `p3` Custom domain -- purchase a domain and configure DNS in Vercel (manual/financial step for Ankit; guide in docs/CUSTOM_DOMAIN.md, PR #57)
 - [x] `week-4` `type:chore` `p1` Lighthouse audit — 90+ perf, 100 a11y -- audited on production (baseline P90 / A89 / BP100 / SEO90); the two automated a11y failures (manifesto pre-reveal contrast + section heading order) were fixed and merged in PR #40; checkbox reconciled here
+
+## Week 5 — Post-launch extensions
+
+Ad hoc features requested directly (not part of the original build plan), added here for tracking as each ships.
+
+- [x] `week-5` `type:feature` `p2` Individual project case-study pages -- one page per Work project (summary, problem, approach, outcome) at `/work/<slug>/`, project data extracted into shared `src/data/projects.js` -- PR #59
