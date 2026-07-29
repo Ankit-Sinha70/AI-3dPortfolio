@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+<Layout title="Page not found — Ankit" description="This page doesn't exist.">
+  <Nav />
+  <main>
+    <section class="not-found">
+      <span class="code">404</span>
+      <h1>This page drifted off-screen.</h1>
+      <p>The link might be broken, or the page moved. Here are a few places to go instead.</p>
+      <div class="links">
+        <a href="/" class="primary">Back to home</a>
+        <a href="/#work">Work</a>
+        <a href="/blog/">Writing</a>
+        <a href="/#contact">Contact</a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .not-found {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 8rem 6vw;
+  }
+
+  .code {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm);
+  }
+
+  .not-found h1 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    margin: 0;
+    color: var(--text);
+    max-width: 20ch;
+  }
+
+  .not-found p {
+    color: var(--text-dim);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 44ch;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .links a {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.25s ease, color 0.25s ease;
+  }
+
+  .links a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .links a.primary {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .not-found {
+      padding: 6rem 6vw;
+      gap: 1.25rem;
+    }
+  }
+</style>
