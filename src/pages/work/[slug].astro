@@ -1,0 +1,171 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { projects } from '../../data/projects.js';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const title = `${project.title} — Case Study — Ankit`;
+const description = project.summary;
+---
+<Layout title={title} description={description}>
+  <Nav />
+  <main>
+    <article class="case-study">
+      <a class="back-link" href="/#work">&larr; Back to Work</a>
+
+      <header class="case-header">
+        <span class="section-counter" data-count>Case Study</span>
+        <h1>{project.title}</h1>
+        <p class="role">{project.role}</p>
+        <ul class="tags">
+          {project.tags.map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      </header>
+
+      <section class="block">
+        <h2>Summary</h2>
+        <p>{project.summary}</p>
+      </section>
+
+      <section class="block">
+        <h2>The problem</h2>
+        <p>{project.problem}</p>
+      </section>
+
+      <section class="block">
+        <h2>Approach</h2>
+        <ul class="approach">
+          {project.approach.map((step) => (
+            <li>{step}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2>Outcome</h2>
+        <p>{project.outcome}</p>
+      </section>
+
+      <a class="back-link" href="/#work">&larr; Back to Work</a>
+    </article>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .case-study {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 10rem 6vw 8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .back-link {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    text-decoration: none;
+    width: fit-content;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .case-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .case-header .section-counter {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--warm);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .case-header h1 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin: 0;
+    color: var(--text);
+  }
+
+  .role {
+    color: var(--text-dim);
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .tags li {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: var(--warm);
+    text-transform: uppercase;
+  }
+
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .block h2 {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .block p,
+  .approach li {
+    color: var(--text-dim);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .approach {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-left: 1.25rem;
+  }
+
+  @media (max-width: 640px) {
+    .case-study {
+      padding: 7rem 6vw 5rem;
+      gap: 2.25rem;
+    }
+  }
+</style>
