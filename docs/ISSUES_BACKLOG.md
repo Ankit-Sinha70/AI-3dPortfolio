@@ -61,6 +61,6 @@ Sourced from analyzing alche.studio (cinematic Unreal Engine/metaverse studio si
 
 - [x] `week-6` `type:feature` `p2` Vision scroll-reveal section — new section (between Manifesto and Work) with a GSAP ScrollTrigger-scrubbed SVG line/circle draw-in (stroke-dashoffset animated on scroll) that resolves into a single thesis line, echoing alche.studio's scroll-locked geometry moment -- PR #64
 - [ ] `week-6` `type:feature` `p2` Log / recent-activity section — small dated list (3-5 entries) of recent shipped features, experiments, or writing, styled as a minimal mono-type ticker; mirrors alche.studio's dated News list
-- [ ] `week-6` `type:feature` `p3` Capabilities narrative block — 2-3 short prose blocks (e.g. LLM & agent systems, applied computer vision, 3D/WebGL engineering) as a text-first complement to the existing Skills marquee, matching alche.studio's Service section structure
+- [x] `week-6` `type:feature` `p3` Capabilities narrative block — 2-3 short prose blocks (e.g. LLM & agent systems, applied computer vision, 3D/WebGL engineering) as a text-first complement to the existing Skills marquee, matching alche.studio's Service section structure -- PR #68
 - [ ] `week-6` `type:feature` `p3` Scroll-progress side rail — thin fixed vertical indicator on the page edge marking scroll progress through sections, a subtle chrome detail seen on alche.studio
 - [ ] `week-6` `type:chore` `p3` "More Work" expand affordance — pagination/expand pattern for the Work grid, to use once project count grows past the current 5 cards (future-proofing, not urgent yet)
