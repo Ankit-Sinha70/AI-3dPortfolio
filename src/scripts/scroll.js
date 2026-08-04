@@ -116,6 +116,49 @@ function initManifestoReveal() {
   });
 }
 
+                // Vision: scroll-scrubbed SVG draw-in that resolves into a thesis line
+function initVisionReveal() {
+    const section = document.querySelector('.vision');
+    if (!section) return;
+
+    const shapes = section.querySelectorAll('.v-shape');
+    const line = section.querySelector('.vision-line');
+    if (!shapes.length || !line) return;
+
+    if (prefersReducedMotion) {
+          gsap.set(shapes, { opacity: 0.55 });
+          gsap.set(line, { opacity: 1 });
+          return;
+    }
+
+    shapes.forEach((shape) => {
+          const length = shape.getTotalLength();
+          gsap.set(shape, {
+                  strokeDasharray: length,
+                  strokeDashoffset: length,
+                  opacity: 0.55,
+          });
+    });
+
+    gsap.set(line, { opacity: 0, y: 12 });
+
+    gsap
+      .timeline({
+              scrollTrigger: {
+                        trigger: section,
+                        start: 'top 75%',
+                        end: 'bottom 40%',
+                        scrub: 0.6,
+              },
+      })
+      .to(shapes, {
+              strokeDashoffset: 0,
+              stagger: 0.15,
+              ease: 'none',
+      })
+      .to(line, { opacity: 1, y: 0, ease: 'none' }, '-=0.3');
+}
+
 // Work: project card scroll-enter reveal + mouse tilt
 function initWorkCardsReveal() {
   const cards = document.querySelectorAll('.work .card');
@@ -257,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroReveal();
   initLogReveal();
   initManifestoReveal();
+  initVisionReveal();
   initWorkCardsReveal();
   initCapabilitiesReveal();
   initSectionCounters();
