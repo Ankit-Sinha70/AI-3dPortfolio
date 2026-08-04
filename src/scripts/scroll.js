@@ -174,6 +174,31 @@ function initSectionCounters() {
   });
 }
 
+// Capabilities: text blocks fade in individually on scroll enter
+function initCapabilitiesReveal() {
+  const items = document.querySelectorAll('.capabilities .capability');
+  if (!items.length) return;
+  
+  if (prefersReducedMotion) {
+    gsap.set(items, { opacity: 1, y: 0 });
+    return;
+  }
+  
+  items.forEach((item) => {
+    gsap.set(item, { opacity: 0, y: 24 });
+    gsap.to(item, {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: item,
+        start: 'top 88%',
+      },
+    });
+  });
+}
+
 // Contact: magnetic hover effect on the primary CTA button
 function initContactMagnetic() {
   const cta = document.querySelector('.contact .cta');
@@ -208,6 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroReveal();
   initManifestoReveal();
   initWorkCardsReveal();
+  initCapabilitiesReveal();
   initSectionCounters();
   initContactMagnetic();
 });
