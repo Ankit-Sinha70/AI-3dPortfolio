@@ -1,0 +1,84 @@
+---
+const capabilities = [
+{
+label: 'LLM & Agent Systems',
+text: 'I design and ship production agent pipelines -- retrieval, tool use, evaluation harnesses -- not just prompts. Systems that stay reliable when the input gets weird.',
+},
+{
+label: 'Applied Computer Vision',
+text: 'From diffusion fine-tuning to real-time inference, I build vision systems that hold up under production load, not just demo conditions.',
+},
+{
+label: '3D / WebGL Engineering',
+text: 'Three.js, shader work, and scroll-driven interaction -- the same craft that shaped this site, applied to product surfaces that need to feel alive.',
+},
+];
+---
+
+<section class="capabilities" id="capabilities">
+<h2 class="eyebrow">Capabilities</h2>
+<div class="capability-list">
+{capabilities.map((cap) => (
+<div class="capability">
+<h3 class="capability-label">{cap.label}</h3>
+<p class="capability-text">{cap.text}</p>
+</div>
+))}
+</div>
+</section>
+
+<style>
+.capabilities {
+position: relative;
+padding: 10rem 8vw;
+display: flex;
+flex-direction: column;
+gap: 3rem;
+}
+
+.eyebrow {
+font-family: var(--font-mono);
+color: var(--accent);
+letter-spacing: 0.15em;
+text-transform: uppercase;
+font-size: 0.85rem;
+margin: 0;
+}
+
+.capability-list {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 3rem;
+}
+
+.capability-label {
+font-family: var(--font-display);
+font-weight: 400;
+font-size: 1.35rem;
+color: var(--text);
+margin: 0 0 0.75rem;
+}
+
+.capability-text {
+font-family: var(--font-body);
+font-size: 0.95rem;
+line-height: 1.6;
+color: var(--text-dim);
+margin: 0;
+max-width: 32ch;
+}
+
+@media (max-width: 900px) {
+.capability-list {
+grid-template-columns: 1fr;
+gap: 2rem;
+}
+}
+
+@media (max-width: 640px) {
+.capabilities {
+padding: 6rem 6vw;
+gap: 2rem;
+}
+}
+</style>
