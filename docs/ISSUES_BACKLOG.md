@@ -54,7 +54,6 @@ Ad hoc features requested directly (not part of the original build plan), added 
 
 - [x] `week-5` `type:feature` `p2` Individual project case-study pages -- one page per Work project (summary, problem, approach, outcome) at `/work/<slug>/`, project data extracted into shared `src/data/projects.js` -- PR #59
 
-
 ## Week 6 — Alche-inspired visual/narrative additions
 
 Sourced from analyzing alche.studio (cinematic Unreal Engine/metaverse studio site) as a design reference at Ankit's request. Translated to this portfolio's own aesthetic (dark bg, teal/warm accents, Fraunces/Inter/JetBrains Mono) and subject matter (generative AI engineering), not copied. None of these are started yet.
