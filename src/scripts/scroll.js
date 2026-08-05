@@ -61,12 +61,12 @@ function initHeroReveal() {
 function initLogReveal() {
   const entries = document.querySelectorAll('.log .log-entry');
   if (!entries.length) return;
-  
+
   if (prefersReducedMotion) {
     gsap.set(entries, { opacity: 1, y: 0 });
     return;
   }
-  
+
   gsap.set(entries, { opacity: 0, y: 16 });
   gsap.to(entries, {
     opacity: 1,
@@ -100,9 +100,9 @@ function initManifestoReveal() {
     return;
   }
 
-    // Initial opacity bumped from 0.15 to 0.5 -- 0.15 failed WCAG AA contrast
-    // in the Lighthouse a11y audit (pre-reveal text was unreadably dim)
-    gsap.set(words, { opacity: 0.5 });
+  // Initial opacity bumped from 0.15 to 0.5 -- 0.15 failed WCAG AA contrast
+  // in the Lighthouse a11y audit (pre-reveal text was unreadably dim)
+  gsap.set(words, { opacity: 0.5 });
   gsap.to(words, {
     opacity: 1,
     stagger: 0.03,
@@ -116,47 +116,47 @@ function initManifestoReveal() {
   });
 }
 
-                // Vision: scroll-scrubbed SVG draw-in that resolves into a thesis line
+// Vision: scroll-scrubbed SVG draw-in that resolves into a thesis line
 function initVisionReveal() {
-    const section = document.querySelector('.vision');
-    if (!section) return;
+  const section = document.querySelector('.vision');
+  if (!section) return;
 
-    const shapes = section.querySelectorAll('.v-shape');
-    const line = section.querySelector('.vision-line');
-    if (!shapes.length || !line) return;
+  const shapes = section.querySelectorAll('.v-shape');
+  const line = section.querySelector('.vision-line');
+  if (!shapes.length || !line) return;
 
-    if (prefersReducedMotion) {
-          gsap.set(shapes, { opacity: 0.55 });
-          gsap.set(line, { opacity: 1 });
-          return;
-    }
+  if (prefersReducedMotion) {
+    gsap.set(shapes, { opacity: 0.55 });
+    gsap.set(line, { opacity: 1 });
+    return;
+  }
 
-    shapes.forEach((shape) => {
-          const length = shape.getTotalLength();
-          gsap.set(shape, {
-                  strokeDasharray: length,
-                  strokeDashoffset: length,
-                  opacity: 0.55,
-          });
+  shapes.forEach((shape) => {
+    const length = shape.getTotalLength();
+    gsap.set(shape, {
+      strokeDasharray: length,
+      strokeDashoffset: length,
+      opacity: 0.55,
     });
+  });
 
-    gsap.set(line, { opacity: 0, y: 12 });
+  gsap.set(line, { opacity: 0, y: 12 });
 
-    gsap
-      .timeline({
-              scrollTrigger: {
-                        trigger: section,
-                        start: 'top 75%',
-                        end: 'bottom 40%',
-                        scrub: 0.6,
-              },
-      })
-      .to(shapes, {
-              strokeDashoffset: 0,
-              stagger: 0.15,
-              ease: 'none',
-      })
-      .to(line, { opacity: 1, y: 0, ease: 'none' }, '-=0.3');
+  gsap
+    .timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 75%',
+        end: 'bottom 40%',
+        scrub: 0.6,
+      },
+    })
+    .to(shapes, {
+      strokeDashoffset: 0,
+      stagger: 0.15,
+      ease: 'none',
+    })
+    .to(line, { opacity: 1, y: 0, ease: 'none' }, '-=0.3');
 }
 
 // Work: project card scroll-enter reveal + mouse tilt
@@ -245,12 +245,12 @@ function initSectionCounters() {
 function initCapabilitiesReveal() {
   const items = document.querySelectorAll('.capabilities .capability');
   if (!items.length) return;
-  
+
   if (prefersReducedMotion) {
     gsap.set(items, { opacity: 1, y: 0 });
     return;
   }
-  
+
   items.forEach((item) => {
     gsap.set(item, { opacity: 0, y: 24 });
     gsap.to(item, {
@@ -296,6 +296,33 @@ function initContactMagnetic() {
   cta.addEventListener('pointerleave', handleLeave);
 }
 
+// Scroll-progress side rail: fill height tracks overall page scroll progress
+function initScrollProgressRail() {
+  const fill = document.querySelector('.scroll-progress-fill');
+  if (!fill) return;
+
+  if (prefersReducedMotion) {
+    // Still functional without motion: jump straight to current progress
+    // instead of animating, then keep in sync on scroll.
+    ScrollTrigger.create({
+      start: 0,
+      end: 'max',
+      onUpdate: (self) => {
+        fill.style.height = `${self.progress * 100}%`;
+      },
+    });
+    return;
+  }
+
+  ScrollTrigger.create({
+    start: 0,
+    end: 'max',
+    onUpdate: (self) => {
+      gsap.set(fill, { height: `${self.progress * 100}%` });
+    },
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initHeroReveal();
   initLogReveal();
@@ -305,4 +332,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initCapabilitiesReveal();
   initSectionCounters();
   initContactMagnetic();
+  initScrollProgressRail();
 });
