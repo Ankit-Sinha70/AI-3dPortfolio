@@ -4,32 +4,21 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const prefersReducedMotion = window.matchMedia(
-  '(prefers-reduced-motion: reduce)'
-).matches;
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Smooth scroll
+// Use a single animation clock for Lenis + GSAP. Running Lenis from both its
+// own requestAnimationFrame and the GSAP ticker causes duplicate work and can
+// produce uneven scroll timing on high-refresh displays.
 if (!prefersReducedMotion) {
-  const lenis = new Lenis({
-    duration: 1.1,
-    smoothWheel: true,
-  });
-
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
-
-  lenis.on('scroll', ScrollTrigger.update);
+  const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
 
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000);
   });
   gsap.ticker.lagSmoothing(0);
+  lenis.on('scroll', ScrollTrigger.update);
 }
 
-// Hero: staggered reveal on page load
 function initHeroReveal() {
   const hero = document.querySelector('.hero');
   if (!hero) return;
@@ -38,6 +27,8 @@ function initHeroReveal() {
     hero.querySelector('.eyebrow'),
     hero.querySelector('h1'),
     hero.querySelector('.subline'),
+    hero.querySelector('.hero-actions'),
+    hero.querySelector('.hero-meta'),
     hero.querySelector('.scroll-indicator'),
   ].filter(Boolean);
 
@@ -52,12 +43,31 @@ function initHeroReveal() {
     y: 0,
     duration: 0.9,
     ease: 'power3.out',
-    stagger: 0.12,
+    stagger: 0.1,
     delay: 0.2,
   });
 }
 
-// Log: recent-activity entries fade/stagger in on scroll
+function initHeroScrollChoreography() {
+  const hero = document.querySelector('.hero');
+  if (!hero || prefersReducedMotion) return;
+
+  const copy = hero.querySelector('.hero-copy');
+  const meta = hero.querySelector('.hero-meta');
+  if (!copy) return;
+
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: hero,
+      start: 'top top',
+      end: 'bottom top',
+      scrub: 0.8,
+    },
+  })
+    .to(copy, { y: -80, opacity: 0.25, ease: 'none' }, 0)
+    .to(meta, { y: 40, opacity: 0, ease: 'none' }, 0);
+}
+
 function initLogReveal() {
   const entries = document.querySelectorAll('.log .log-entry');
   if (!entries.length) return;
@@ -74,49 +84,34 @@ function initLogReveal() {
     duration: 0.6,
     ease: 'power3.out',
     stagger: 0.08,
-    scrollTrigger: {
-      trigger: '.log',
-      start: 'top 80%',
-    },
+    scrollTrigger: { trigger: '.log', start: 'top 80%' },
   });
 }
 
-// Manifesto: word-by-word reveal driven by scroll
 function initManifestoReveal() {
   const lines = document.querySelectorAll('.manifesto .line');
   if (!lines.length) return;
 
   lines.forEach((line) => {
     const words = line.textContent.trim().split(/\s+/);
-    line.innerHTML = words
-      .map((word) => `<span class="word">${word}</span>`)
-      .join(' ');
+    line.innerHTML = words.map((word) => `<span class="word">${word}</span>`).join(' ');
   });
 
   const words = document.querySelectorAll('.manifesto .word');
-
   if (prefersReducedMotion) {
     gsap.set(words, { opacity: 1 });
     return;
   }
 
-  // Initial opacity bumped from 0.15 to 0.5 -- 0.15 failed WCAG AA contrast
-  // in the Lighthouse a11y audit (pre-reveal text was unreadably dim)
   gsap.set(words, { opacity: 0.5 });
   gsap.to(words, {
     opacity: 1,
     stagger: 0.03,
     ease: 'none',
-    scrollTrigger: {
-      trigger: '.manifesto',
-      start: 'top 75%',
-      end: 'bottom 55%',
-      scrub: 0.6,
-    },
+    scrollTrigger: { trigger: '.manifesto', start: 'top 75%', end: 'bottom 55%', scrub: 0.6 },
   });
 }
 
-// Vision: scroll-scrubbed SVG draw-in that resolves into a thesis line
 function initVisionReveal() {
   const section = document.querySelector('.vision');
   if (!section) return;
@@ -133,33 +128,17 @@ function initVisionReveal() {
 
   shapes.forEach((shape) => {
     const length = shape.getTotalLength();
-    gsap.set(shape, {
-      strokeDasharray: length,
-      strokeDashoffset: length,
-      opacity: 0.55,
-    });
+    gsap.set(shape, { strokeDasharray: length, strokeDashoffset: length, opacity: 0.55 });
   });
 
   gsap.set(line, { opacity: 0, y: 12 });
-
-  gsap
-    .timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 75%',
-        end: 'bottom 40%',
-        scrub: 0.6,
-      },
-    })
-    .to(shapes, {
-      strokeDashoffset: 0,
-      stagger: 0.15,
-      ease: 'none',
-    })
+  gsap.timeline({
+    scrollTrigger: { trigger: section, start: 'top 75%', end: 'bottom 40%', scrub: 0.6 },
+  })
+    .to(shapes, { strokeDashoffset: 0, stagger: 0.15, ease: 'none' })
     .to(line, { opacity: 1, y: 0, ease: 'none' }, '-=0.3');
 }
 
-// Work: project card scroll-enter reveal + mouse tilt
 function initWorkCardsReveal() {
   const cards = document.querySelectorAll('.work .card');
   if (!cards.length) return;
@@ -176,15 +155,11 @@ function initWorkCardsReveal() {
       y: 0,
       duration: 0.7,
       ease: 'power3.out',
-      scrollTrigger: {
-        trigger: card,
-        start: 'top 88%',
-      },
+      scrollTrigger: { trigger: card, start: 'top 88%' },
     });
 
     const maxTilt = 6;
-
-    function handleMove(e) {
+    const handleMove = (e) => {
       const rect = card.getBoundingClientRect();
       const px = (e.clientX - rect.left) / rect.width - 0.5;
       const py = (e.clientY - rect.top) / rect.height - 0.5;
@@ -195,30 +170,20 @@ function initWorkCardsReveal() {
         duration: 0.4,
         ease: 'power2.out',
       });
-    }
-
-    function handleLeave() {
-      gsap.to(card, {
-        rotateX: 0,
-        rotateY: 0,
-        duration: 0.5,
-        ease: 'power3.out',
-      });
-    }
+    };
+    const handleLeave = () => gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.5, ease: 'power3.out' });
 
     card.addEventListener('pointermove', handleMove);
     card.addEventListener('pointerleave', handleLeave);
   });
 }
 
-// Section headings: numbered counter that ticks up when scrolled into view
 function initSectionCounters() {
   const counters = document.querySelectorAll('.section-counter[data-count]');
   if (!counters.length) return;
 
   counters.forEach((el) => {
     const target = parseInt(el.dataset.count, 10) || 0;
-
     if (prefersReducedMotion) {
       el.textContent = String(target).padStart(2, '0');
       return;
@@ -230,18 +195,12 @@ function initSectionCounters() {
       value: target,
       duration: 1,
       ease: 'power1.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 85%',
-      },
-      onUpdate: () => {
-        el.textContent = String(Math.round(counterObj.value)).padStart(2, '0');
-      },
+      scrollTrigger: { trigger: el, start: 'top 85%' },
+      onUpdate: () => { el.textContent = String(Math.round(counterObj.value)).padStart(2, '0'); },
     });
   });
 }
 
-// Capabilities: text blocks fade in individually on scroll enter
 function initCapabilitiesReveal() {
   const items = document.querySelectorAll('.capabilities .capability');
   if (!items.length) return;
@@ -258,73 +217,43 @@ function initCapabilitiesReveal() {
       y: 0,
       duration: 0.7,
       ease: 'power3.out',
-      scrollTrigger: {
-        trigger: item,
-        start: 'top 88%',
-      },
+      scrollTrigger: { trigger: item, start: 'top 88%' },
     });
   });
 }
 
-// Contact: magnetic hover effect on the primary CTA button
 function initContactMagnetic() {
   const cta = document.querySelector('.contact .cta');
-  if (!cta) return;
-  if (prefersReducedMotion) return;
-  const maxOffsetX = 14;
-  const maxOffsetY = 8;
-  function handleMove(e) {
+  if (!cta || prefersReducedMotion) return;
+
+  const handleMove = (e) => {
     const rect = cta.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width - 0.5;
     const py = (e.clientY - rect.top) / rect.height - 0.5;
-    gsap.to(cta, {
-      x: px * maxOffsetX,
-      y: py * maxOffsetY,
-      duration: 0.4,
-      ease: 'power2.out',
-    });
-  }
-  function handleLeave() {
-    gsap.to(cta, {
-      x: 0,
-      y: 0,
-      duration: 0.5,
-      ease: 'power3.out',
-    });
-  }
+    gsap.to(cta, { x: px * 14, y: py * 8, duration: 0.4, ease: 'power2.out' });
+  };
+  const handleLeave = () => gsap.to(cta, { x: 0, y: 0, duration: 0.5, ease: 'power3.out' });
+
   cta.addEventListener('pointermove', handleMove);
   cta.addEventListener('pointerleave', handleLeave);
 }
 
-// Scroll-progress side rail: fill height tracks overall page scroll progress
 function initScrollProgressRail() {
   const fill = document.querySelector('.scroll-progress-fill');
   if (!fill) return;
-
-  if (prefersReducedMotion) {
-    // Still functional without motion: jump straight to current progress
-    // instead of animating, then keep in sync on scroll.
-    ScrollTrigger.create({
-      start: 0,
-      end: 'max',
-      onUpdate: (self) => {
-        fill.style.height = `${self.progress * 100}%`;
-      },
-    });
-    return;
-  }
 
   ScrollTrigger.create({
     start: 0,
     end: 'max',
     onUpdate: (self) => {
-      gsap.set(fill, { height: `${self.progress * 100}%` });
+      fill.style.height = `${self.progress * 100}%`;
     },
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   initHeroReveal();
+  initHeroScrollChoreography();
   initLogReveal();
   initManifestoReveal();
   initVisionReveal();
