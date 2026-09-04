@@ -1,10 +1,7 @@
 ---
 import '../styles/tailwind.css';
 import ScrollProgress from '../components/ScrollProgress.astro';
-interface Props {
-  title?: string;
-  description?: string;
-}
+interface Props { title?: string; description?: string; }
 const { title = "Ankit — Generative AI Engineer" } = Astro.props;
 const { description = "Generative AI engineer building production text, image, and audio systems, not just demos." } = Astro.props;
 const siteUrl = "https://ai-3d-portfolio-ankit-sinhas-projects.vercel.app";
@@ -12,87 +9,16 @@ const ogImage = `${siteUrl}/og-image.png`;
 ---
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={siteUrl} />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={siteUrl} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <ScrollProgress />
-    <slot />
-    <script>
-      import '../scripts/scroll.js';
-      import '../scripts/polish.js';
-    </script>
-  </body>
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width" /><link rel="icon" type="image/svg+xml" href="/favicon.svg" /><meta name="generator" content={Astro.generator} /><title>{title}</title><meta name="description" content={description} /><link rel="canonical" href={siteUrl} /><meta property="og:type" content="website" /><meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:url" content={siteUrl} /><meta property="og:image" content={ogImage} /><meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content={title} /><meta name="twitter:description" content={description} /><meta name="twitter:image" content={ogImage} />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+<ScrollProgress /><slot /><script>import '../scripts/scroll.js'; import '../scripts/polish.js';</script>
+</body>
 </html>
-
-<style is:global>
-  :root {
-    --bg: #07090f;
-    --accent: #5eead4;
-    --warm: #ffd9a0;
-    --text: #f4f1ff;
-    --text-dim: #8d8aa3;
-
-    --font-display: 'Fraunces', serif;
-    --font-body: 'Inter', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-  }
-
-  .section-counter {
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
-    color: var(--warm);
-    font-size: 0.85rem;
-    letter-spacing: 0.15em;
-    margin-right: 0.75em;
-  }
-
-  /* Defense-in-depth: component-level animations (scroll.js, polish.js,
-     HeroCanvas/ParticleScene, HeroLines, Skills marquee) already gate on
-     prefers-reduced-motion individually. This global rule is a safety net
-     for anything future work misses. */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
-  }
+<style is="global">
+:root{--bg:#07090f;--accent:#5eead4;--warm:#ffd9a0;--text:#f4f1ff;--text-dim:#8d8aa3;--font-display:'Fraunces',serif;--font-body:'Inter',sans-serif;--font-mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--font-body)}body{overflow-x:hidden}main{position:relative;z-index:1}.section-counter{font-family:var(--font-mono);font-variant-numeric:tabular-nums;color:var(--warm);font-size:.85rem;letter-spacing:.15em;margin-right:.75em}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
