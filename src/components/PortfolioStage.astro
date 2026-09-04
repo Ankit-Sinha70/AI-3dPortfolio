@@ -1,19 +1,22 @@
 ---
 import HeroCanvas from './HeroCanvas.tsx';
+import ProjectScene from './ProjectScene.tsx';
 ---
 
 <div class="portfolio-stage" aria-hidden="true">
   <div class="stage-vignette"></div>
   <div class="stage-grid"></div>
+  <div class="stage-projects"><ProjectScene client:load /></div>
   <HeroCanvas client:load />
 </div>
 
 <style>
   .portfolio-stage { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; isolation: isolate; }
   .portfolio-stage :global(canvas) { position: absolute; inset: 0; width: 100% !important; height: 100% !important; display: block; pointer-events: none; }
+  .stage-projects { position:absolute; inset:0; z-index:1; }
   .stage-grid, .stage-vignette { position: absolute; inset: 0; pointer-events: none; }
-  .stage-grid { opacity: .12; background-image: linear-gradient(rgba(244,241,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(244,241,255,.04) 1px,transparent 1px); background-size:80px 80px; mask-image:radial-gradient(ellipse 75% 70% at 65% 48%,black 15%,transparent 88%); transform:perspective(900px) rotateX(62deg) translateY(18%); transform-origin:center bottom; }
+  .stage-grid { z-index:2; opacity:.12; background-image:linear-gradient(rgba(244,241,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(244,241,255,.04) 1px,transparent 1px); background-size:80px 80px; mask-image:radial-gradient(ellipse 75% 70% at 65% 48%,black 15%,transparent 88%); transform:perspective(900px) rotateX(62deg) translateY(18%); transform-origin:center bottom; }
   .stage-vignette { z-index:3; background:radial-gradient(circle at 62% 46%,transparent 0 28%,rgba(5,7,12,.16) 62%,rgba(5,7,12,.72) 100%),linear-gradient(180deg,rgba(5,7,12,.18),transparent 22%,transparent 78%,rgba(5,7,12,.5)); }
-  @media (max-width:800px) { .stage-grid { background-size:52px 52px; opacity:.08; } .stage-vignette { background:radial-gradient(circle at 55% 42%,transparent 0 24%,rgba(5,7,12,.62) 92%); } }
-  @media (prefers-reduced-motion:reduce) { .stage-grid { transform:none; } }
+  @media (max-width:800px) { .stage-grid{background-size:52px 52px;opacity:.08}.stage-vignette{background:radial-gradient(circle at 55% 42%,transparent 0 24%,rgba(5,7,12,.62) 92%)} }
+  @media (prefers-reduced-motion:reduce) { .stage-grid{transform:none} }
 </style>
