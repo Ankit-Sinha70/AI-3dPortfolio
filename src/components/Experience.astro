@@ -6,9 +6,9 @@ const experience = [
 ];
 ---
 <section class="experience" id="experience">
-  <div class="heading"><span class="eyebrow">04 / Experience</span><h2>Systems, shipped<br /><em>over time.</em></h2></div>
+  <div class="heading"><span class="eyebrow">04 / Experience</span><h2>Systems, shipped<br /><em>over time.</em></h2><p class="hint">Scroll through the timeline.</p></div>
   <div class="timeline">
-    {experience.map((item, index) => (
+    {experience.map((item) => (
       <article class="item" data-experience-item>
         <div class="marker"><span>{item.period}</span><i></i></div>
         <div class="body"><p class="role">{item.role}</p><h3>{item.title}</h3><p class="text">{item.text}</p><ul>{item.tags.map(tag => <li>{tag}</li>)}</ul></div>
@@ -17,8 +17,14 @@ const experience = [
   </div>
 </section>
 <style>
-.experience{position:relative;padding:10rem 8vw;display:grid;grid-template-columns:minmax(240px,.7fr) 1.3fr;gap:6vw}
-.heading{position:sticky;top:20vh;height:max-content}.eyebrow,.role{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-size:.75rem}.heading h2{font-family:var(--font-display);font-weight:300;font-size:clamp(2.5rem,6vw,5rem);line-height:.95;margin:1.5rem 0}.heading em{color:var(--text-dim)}
-.timeline{position:relative}.timeline:before{content:'';position:absolute;left:2rem;top:1rem;bottom:1rem;width:1px;background:linear-gradient(var(--accent),transparent)}.item{display:grid;grid-template-columns:4rem 1fr;min-height:260px;position:relative}.marker{display:flex;align-items:flex-start;justify-content:center}.marker span{font-family:var(--font-mono);font-size:.65rem;color:var(--text-dim);padding-top:.25rem}.marker i{position:absolute;left:1.72rem;top:.25rem;width:.55rem;height:.55rem;border:1px solid var(--accent);border-radius:50%;background:var(--bg)}.body{padding:0 0 5rem 2rem}.body h3{font-family:var(--font-display);font-size:2.3rem;font-weight:300;margin:.35rem 0 .8rem}.body .role{margin:0;color:var(--warm)}.text{max-width:48ch;color:var(--text-dim);line-height:1.7}.body ul{display:flex;gap:1rem;flex-wrap:wrap;list-style:none;padding:0;margin:1.5rem 0 0}.body li{font-family:var(--font-mono);font-size:.65rem;color:var(--text-dim);border:1px solid rgba(244,241,255,.1);padding:.45rem .7rem;border-radius:999px}
+.experience{position:relative;padding:10rem 8vw;display:grid;grid-template-columns:minmax(240px,.7fr) 1.3fr;gap:6vw}.heading{position:sticky;top:20vh;height:max-content}.eyebrow,.role{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-size:.75rem}.heading h2{font-family:var(--font-display);font-weight:300;font-size:clamp(2.5rem,6vw,5rem);line-height:.95;margin:1.5rem 0}.heading em{color:var(--text-dim)}.hint{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.08em;color:var(--text-dim);text-transform:uppercase;margin-top:2rem}
+.timeline{position:relative}.timeline:before{content:'';position:absolute;left:2rem;top:1rem;bottom:1rem;width:1px;background:linear-gradient(var(--accent),transparent)}.item{display:grid;grid-template-columns:4rem 1fr;min-height:260px;position:relative}.marker{display:flex;align-items:flex-start;justify-content:center}.marker span{font-family:var(--font-mono);font-size:.65rem;color:var(--text-dim);padding-top:.25rem}.marker i{position:absolute;left:1.72rem;top:.25rem;width:.55rem;height:.55rem;border:1px solid var(--accent);border-radius:50%;background:var(--bg);box-shadow:0 0 0 rgba(94,234,212,0);transition:box-shadow .3s ease,transform .3s ease}.body{padding:0 0 5rem 2rem;transition:transform .35s ease}.body h3{font-family:var(--font-display);font-size:2.3rem;font-weight:300;margin:.35rem 0 .8rem}.body .role{margin:0;color:var(--warm)}.text{max-width:48ch;color:var(--text-dim);line-height:1.7}.body ul{display:flex;gap:1rem;flex-wrap:wrap;list-style:none;padding:0;margin:1.5rem 0 0}.body li{font-family:var(--font-mono);font-size:.65rem;color:var(--text-dim);border:1px solid rgba(244,241,255,.1);padding:.45rem .7rem;border-radius:999px}.item.is-active .body{transform:translateX(8px)}.item.is-active .marker i{transform:scale(1.6);box-shadow:0 0 18px 4px rgba(94,234,212,.28)}
 @media(max-width:800px){.experience{grid-template-columns:1fr;gap:3rem;padding:6rem 6vw}.heading{position:relative;top:auto}.timeline:before{left:1.5rem}.item{grid-template-columns:3rem 1fr}.marker i{left:1.23rem}.body{padding-left:1rem}}
 </style>
+<script>
+const items = [...document.querySelectorAll('[data-experience-item]')];
+if (items.length && 'IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => entry.target.classList.toggle('is-active', entry.isIntersecting)), { threshold: 0.55 });
+  items.forEach((item) => observer.observe(item));
+}
+</script>
