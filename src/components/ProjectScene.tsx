@@ -3,8 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
 const PROJECTS = ['aurora', 'echo', 'ledger', 'drift', 'halo'];
-
-type SceneState = { active: number; workProgress: number; visible: boolean };
+type SceneState = { active: number; progress: number; visible: boolean };
 
 function useProjectState() {
   const state = useRef<SceneState>({ active: 0, workProgress: 0, visible: false });
@@ -14,35 +13,18 @@ function useProjectState() {
       const section = document.querySelector('.work');
       const cards = Array.from(document.querySelectorAll('.work .card'));
       if (!section || !cards.length) return;
-      const rect = section.getBoundingClientRect();
-      const vh = window.innerHeight;
-      state.current.visible = rect.top < vh * 0.9 && rect.bottom > vh * 0.1;
-      state.current.workProgress = THREE.MathUtils.clamp((vh * 0.82 - rect.top) / Math.max(rect.height - vh * 0.64, 1), 0, 1);
-
-      let closest = 0;
-      let distance = Infinity;
-      cards.forEach((card, index) => {
-        const r = card.getBoundingClientRect();
-        const d = Math.abs(r.top + r.height * 0.5 - vh * 0.5);
-        if (d < distance) {
-          distance = d;
-          closest = index;
-        }
-      });
+      const rect = section.getBoundingClientRect(); const vh = window.innerHeight;
+      state.current.visible = rect.top < vh * 0.95 && rect.bottom > vh * 0.05;
+      state.current.progress = THREE.MathUtils.clamp((vh * 0.85 - rect.top) / Math.max(rect.height - vh * 0.7, 1), 0, 1);
+      let closest = 0; let distance = Infinity;
+      cards.forEach((card, index) => { const r = card.getBoundingClientRect(); const d = Math.abs(r.top + r.height * 0.5 - vh * 0.5); if (d < distance) { distance = d; closest = index; } });
       state.current.active = Math.min(closest, PROJECTS.length - 1);
       cards.forEach((card, index) => card.toggleAttribute('data-active-project', index === state.current.active));
       section.setAttribute('data-active-project', PROJECTS[state.current.active]);
     };
-
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
-    return () => {
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
-    };
+    window.addEventListener('scroll', update, { passive: true }); window.addEventListener('resize', update); update();
+    return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', update); };
   }, []);
-
   return state;
 }
 
