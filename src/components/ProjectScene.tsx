@@ -21,9 +21,10 @@ function useProjectState() {
       state.current.active = Math.min(closest, PROJECTS.length - 1);
       cards.forEach((card, index) => card.toggleAttribute('data-active-project', index === state.current.active));
       section.setAttribute('data-active-project', PROJECTS[state.current.active]);
+      document.documentElement.classList.toggle('is-work-scene', state.current.visible);
     };
     window.addEventListener('scroll', update, { passive: true }); window.addEventListener('resize', update); update();
-    return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', update); };
+    return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', update); document.documentElement.classList.remove('is-work-scene'); };
   }, []);
   return state;
 }
@@ -73,20 +74,20 @@ export default function ProjectScene() {
     const { active, visible, workProgress } = state.current;
     groups.current.children.forEach((child, index) => {
       const distance = Math.abs(index - active);
-      const targetX = (index - active) * 3.8 + 1.25;
-      const targetY = index === active ? 0.15 : (index - active) * 0.32;
-      const targetZ = index === active ? 0 : -1.4 - distance * 0.8;
-      const targetScale = index === active ? 1.15 : 0.5;
-      const targetOpacity = visible ? Math.max(0, 1 - distance * 0.55) : 0;
-      child.position.x = THREE.MathUtils.lerp(child.position.x, targetX, 0.055);
-      child.position.y = THREE.MathUtils.lerp(child.position.y, targetY, 0.055);
-      child.position.z = THREE.MathUtils.lerp(child.position.z, targetZ, 0.055);
+      const targetX = (index - active) * 3.1 + 0.25;
+      const targetY = index === active ? 0.05 : (index - active) * 0.2;
+      const targetZ = index === active ? -2.35 : -3.4 - distance * 0.45;
+      const targetScale = index === active ? 1.28 : 0.72;
+      const targetOpacity = visible ? Math.max(0.025, index === active ? 0.22 : 0.075 - distance * 0.012) : 0;
+      child.position.x = THREE.MathUtils.lerp(child.position.x, targetX, 0.045);
+      child.position.y = THREE.MathUtils.lerp(child.position.y, targetY, 0.045);
+      child.position.z = THREE.MathUtils.lerp(child.position.z, targetZ, 0.045);
       tempScale.set(targetScale, targetScale, targetScale);
-      child.scale.lerp(tempScale, 0.055);
+      child.scale.lerp(tempScale, 0.045);
       child.userData.targetOpacity = targetOpacity;
       child.traverse((object) => {
         const material = (object as THREE.Mesh).material as THREE.Material & { opacity?: number; transparent?: boolean };
-        if (material?.opacity !== undefined) { material.transparent = true; material.opacity = THREE.MathUtils.lerp(material.opacity, targetOpacity, 0.08); }
+        if (material?.opacity !== undefined) { material.transparent = true; material.opacity = THREE.MathUtils.lerp(material.opacity, targetOpacity, 0.07); }
       });
       child.userData.depth = workProgress;
     });
