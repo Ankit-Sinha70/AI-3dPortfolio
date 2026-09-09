@@ -1,0 +1,158 @@
+<div class="palette" data-command-palette>
+  <button class="palette-backdrop" type="button" aria-label="Close command palette"></button>
+  <section class="palette-panel" role="dialog" aria-modal="true" aria-labelledby="palette-title" hidden>
+    <div class="palette-head">
+      <div>
+        <p class="palette-kicker">Portfolio command system</p>
+        <h2 id="palette-title">What do you want to explore?</h2>
+      </div>
+      <button class="palette-close" type="button" aria-label="Close command palette">Esc</button>
+    </div>
+    <div class="palette-search">
+      <span aria-hidden="true">⌕</span>
+      <input data-command-input type="search" autocomplete="off" spellcheck="false" placeholder="Search sections, projects, or actions…" aria-label="Search commands" />
+      <kbd>⌘K</kbd>
+    </div>
+    <div class="palette-list" data-command-list role="listbox" aria-label="Portfolio commands">
+      <button class="command" type="button" role="option" data-command="ai" data-search="ask ai assistant artificial intelligence">
+        <span class="command-icon">✦</span><span><strong>Ask AI</strong><small>Ask about projects, skills, or engineering</small></span><kbd>↵</kbd>
+      </button>
+      <button class="command" type="button" role="option" data-target="#work" data-search="work projects case studies">
+        <span class="command-icon">01</span><span><strong>Explore work</strong><small>Open the interactive project scene</small></span><kbd>W</kbd>
+      </button>
+      <button class="command" type="button" role="option" data-target="#capabilities" data-search="capabilities skills agents vision webgl">
+        <span class="command-icon">02</span><span><strong>View capabilities</strong><small>Agents · Vision · WebGL</small></span><kbd>C</kbd>
+      </button>
+      <button class="command" type="button" role="option" data-target="#experience" data-search="experience career timeline background">
+        <span class="command-icon">03</span><span><strong>Experience</strong><small>Systems shipped over time</small></span><kbd>E</kbd>
+      </button>
+      <button class="command" type="button" role="option" data-target="#about" data-search="about ank it profile engineer">
+        <span class="command-icon">04</span><span><strong>About Ankit</strong><small>Engineering philosophy and stack</small></span><kbd>A</kbd>
+      </button>
+      <button class="command" type="button" role="option" data-target="#contact" data-search="contact hire collaboration email">
+        <span class="command-icon">05</span><span><strong>Start a conversation</strong><small>Contact and collaboration</small></span><kbd>↗</kbd>
+      </button>
+      <button class="command" type="button" role="option" data-command="top" data-search="home top beginning">
+        <span class="command-icon">↑</span><span><strong>Back to top</strong><small>Return to the beginning</small></span><kbd>H</kbd>
+      </button>
+    </div>
+    <div class="palette-foot"><span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span><span><kbd>Enter</kbd> Select</span><span><kbd>Esc</kbd> Close</span></div>
+  </section>
+</div>
+
+<script>
+  const root = document.querySelector('[data-command-palette]');
+  if (root) {
+    const panel = root.querySelector('.palette-panel');
+    const backdrop = root.querySelector('.palette-backdrop');
+    const close = root.querySelector('.palette-close');
+    const input = root.querySelector('[data-command-input]');
+    const commands = [...root.querySelectorAll('.command')];
+    let activeIndex = 0;
+    let previousFocus = null;
+
+    const visibleCommands = () => commands.filter((command) => !command.hidden);
+    const setActive = (index) => {
+      const visible = visibleCommands();
+      if (!visible.length) return;
+      activeIndex = (index + visible.length) % visible.length;
+      commands.forEach((command) => command.removeAttribute('data-active'));
+      visible[activeIndex].setAttribute('data-active', 'true');
+      visible[activeIndex].scrollIntoView({ block: 'nearest' });
+    };
+
+    const setOpen = (open) => {
+      panel.hidden = !open;
+      root.classList.toggle('is-open', open);
+      document.body.classList.toggle('palette-open', open);
+      if (open) {
+        previousFocus = document.activeElement;
+        input.value = '';
+        commands.forEach((command) => { command.hidden = false; });
+        setActive(0);
+        window.setTimeout(() => input.focus(), 30);
+      } else if (previousFocus && previousFocus.focus) {
+        previousFocus.focus();
+      }
+    };
+
+    const runCommand = (command) => {
+      if (!command) return;
+      if (command.dataset.command === 'ai') {
+        setOpen(false);
+        const trigger = document.querySelector('[data-ai-assistant] .assistant-trigger');
+        if (trigger) trigger.click();
+        return;
+      }
+      if (command.dataset.command === 'top') {
+        setOpen(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      const target = document.querySelector(command.dataset.target);
+      if (target) {
+        setOpen(false);
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    };
+
+    const filter = () => {
+      const query = input.value.trim().toLowerCase();
+      commands.forEach((command) => {
+        command.hidden = query && !`${command.textContent} ${command.dataset.search || ''}`.toLowerCase().includes(query);
+      });
+      setActive(0);
+    };
+
+    input.addEventListener('input', filter);
+    commands.forEach((command) => command.addEventListener('click', () => runCommand(command)));
+    close.addEventListener('click', () => setOpen(false));
+    backdrop.addEventListener('click', () => setOpen(false));
+
+    document.addEventListener('keydown', (event) => {
+      const modifier = event.metaKey || event.ctrlKey;
+      if (modifier && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        setOpen(panel.hidden);
+        return;
+      }
+      if (panel.hidden) return;
+      if (event.key === 'Escape') { event.preventDefault(); setOpen(false); return; }
+      if (event.key === 'ArrowDown') { event.preventDefault(); setActive(activeIndex + 1); return; }
+      if (event.key === 'ArrowUp') { event.preventDefault(); setActive(activeIndex - 1); return; }
+      if (event.key === 'Enter') { event.preventDefault(); runCommand(visibleCommands()[activeIndex]); }
+    }, true);
+  }
+</script>
+
+<style>
+  .palette { position: fixed; inset: 0; z-index: 120; pointer-events: none; font-family: var(--font-body); }
+  .palette.is-open { pointer-events: auto; }
+  .palette-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: rgba(2,4,9,.68); backdrop-filter: blur(12px); opacity: 0; transition: opacity .22s ease; cursor: default; }
+  .palette.is-open .palette-backdrop { opacity: 1; }
+  .palette-panel { position: absolute; top: 11vh; left: 50%; width: min(650px, calc(100vw - 2rem)); max-height: 78vh; transform: translate(-50%, -14px) scale(.98); overflow: hidden; border: 1px solid rgba(244,241,255,.15); border-radius: 20px; background: rgba(9,12,20,.96); box-shadow: 0 40px 120px rgba(0,0,0,.65), 0 0 70px rgba(94,234,212,.08); backdrop-filter: blur(28px); opacity: 0; transition: opacity .22s ease, transform .22s ease; }
+  .palette-panel[hidden] { display: none; }
+  .palette.is-open .palette-panel { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  .palette-head { display: flex; justify-content: space-between; align-items: flex-start; padding: 1.35rem 1.35rem .95rem; }
+  .palette-kicker { margin: 0 0 .4rem; color: var(--accent); font: .58rem var(--font-mono); letter-spacing: .14em; text-transform: uppercase; }
+  .palette-head h2 { margin: 0; font: 1.75rem var(--font-display); font-weight: 300; }
+  .palette-close { border: 1px solid rgba(244,241,255,.1); border-radius: 7px; padding: .3rem .45rem; background: rgba(244,241,255,.03); color: var(--text-dim); font: .6rem var(--font-mono); cursor: pointer; }
+  .palette-search { display: flex; align-items: center; gap: .65rem; margin: 0 1.35rem .75rem; padding: .72rem .8rem; border: 1px solid rgba(244,241,255,.13); border-radius: 10px; background: rgba(244,241,255,.035); }
+  .palette-search > span { color: var(--accent); font-size: 1.1rem; }
+  .palette-search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: var(--text); font: .78rem var(--font-mono); }
+  .palette-search input::placeholder { color: #666477; }
+  kbd { border: 1px solid rgba(244,241,255,.11); border-bottom-color: rgba(244,241,255,.2); border-radius: 5px; padding: .18rem .35rem; color: var(--text-dim); background: rgba(244,241,255,.035); font: .58rem var(--font-mono); white-space: nowrap; }
+  .palette-list { max-height: 50vh; overflow-y: auto; padding: .2rem .65rem .75rem; scrollbar-width: thin; scrollbar-color: rgba(244,241,255,.16) transparent; }
+  .command { width: 100%; display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: .75rem; padding: .75rem .7rem; border: 1px solid transparent; border-radius: 10px; background: transparent; color: var(--text); text-align: left; cursor: pointer; }
+  .command:hover, .command[data-active="true"] { border-color: rgba(94,234,212,.18); background: rgba(94,234,212,.055); }
+  .command-icon { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid rgba(244,241,255,.09); border-radius: 8px; color: var(--accent); font: .55rem var(--font-mono); }
+  .command strong { display: block; font-size: .75rem; font-weight: 500; }
+  .command small { display: block; margin-top: .2rem; color: var(--text-dim); font-size: .65rem; line-height: 1.35; }
+  .palette-foot { display: flex; gap: 1rem; padding: .7rem 1.35rem; border-top: 1px solid rgba(244,241,255,.07); color: var(--text-dim); font: .58rem var(--font-mono); }
+  .palette-foot span { display: inline-flex; align-items: center; gap: .3rem; }
+  .palette-foot kbd { padding: .12rem .28rem; }
+  body.palette-open { overflow: hidden; }
+  @media (max-width: 640px) { .palette-panel { top: 5vh; max-height: 88vh; } .palette-head { padding: 1.1rem 1rem .8rem; } .palette-head h2 { font-size: 1.45rem; } .palette-search { margin-inline: 1rem; } .palette-list { padding-inline: .45rem; max-height: 62vh; } .palette-foot { padding-inline: 1rem; gap: .55rem; flex-wrap: wrap; } .palette-foot span:last-child { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .palette-backdrop, .palette-panel { transition: none; } }
+</style>
