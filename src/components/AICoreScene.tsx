@@ -67,7 +67,7 @@ function RealPlanet({ data, motion, index }: { data: typeof PLANETS[number]; mot
   return <group ref={group}>
     <mesh><sphereGeometry args={[data.size, 48, 32]} /><shaderMaterial ref={material} vertexShader={planetVertexShader} fragmentShader={planetFragmentShader} uniforms={uniforms} /></mesh>
     {data.earth && <>
-      <mesh scale={1.025}><sphereGeometry args={[data.size, 40, 28]} /><shaderMaterial ref={clouds} vertexShader={planetVertexShader} fragmentShader={cloudFragmentShader} uniforms={{ uTime: { value: 0 }, uLightDir: { value: new THREE.Vector3(-.72,.38,.72) } }} transparent depthWrite={false} blending={THREE.AdditiveBlending} /></mesh>
+      <mesh scale={1.025}><sphereGeometry args={[data.size, 40, 28]} /><shaderMaterial ref={clouds} vertexShader={planetVertexShader} fragmentShader={cloudFragmentShader} uniforms={{ uTime: { value: 0 }, uLightDir: { value: new THREE.Vector3(-.72,.38,.72) } }} transparent depthWrite={false} blending={THREE.AdditiveBlending} /> </mesh>
       <mesh scale={1.1}><sphereGeometry args={[data.size, 32, 24]} /><shaderMaterial vertexShader={planetVertexShader} fragmentShader={atmosphereFragmentShader} uniforms={{ uColor: { value: new THREE.Color('#63d9ff') } }} transparent depthWrite={false} blending={THREE.AdditiveBlending} side={THREE.BackSide} /></mesh>
       <mesh position={[data.size * 1.48, .025, 0]}><sphereGeometry args={[.075, 20, 16]} /><meshStandardMaterial color="#b9bec5" roughness={1} /></mesh>
     </>}
