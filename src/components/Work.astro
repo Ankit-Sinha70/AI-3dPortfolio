@@ -1,171 +1,28 @@
 ---
 import { projects } from '../data/projects.js';
-
-// Once the Work grid grows past this many cards, the rest collapse behind
-// a "More work" toggle instead of the page growing unbounded. With the
-// current 5 projects this stays under the threshold, so the button doesn't
-// render yet -- future-proofing for when more projects are added.
 const VISIBLE_COUNT = 6;
 const hasOverflow = projects.length > VISIBLE_COUNT;
 ---
 <section class="work" id="work">
-  <h2 class="eyebrow"><span class="section-counter" data-count="02">00</span>Work</h2>
+  <div class="work-heading"><h2 class="eyebrow"><span class="section-counter" data-count="02">00</span>Work</h2><p class="work-hint">The scene responds to the project in focus.</p></div>
   <div class="grid" data-work-grid>
     {projects.map((project, i) => (
-      <article class="card" data-extra={hasOverflow && i >= VISIBLE_COUNT ? 'true' : null}>
+      <article class="card" data-project={project.slug} data-project-index={i} data-extra={hasOverflow && i >= VISIBLE_COUNT ? 'true' : null}>
+        <span class="project-index">0{i + 1}</span>
         <h3>{project.title}</h3>
         <p class="desc">{project.description}</p>
-        <ul class="tags">
-          {project.tags.map((tag) => (
-            <li>{tag}</li>
-          ))}
-        </ul>
-        <a class="case-study-link" href={`/work/${project.slug}/`}>View case study →</a>
+        <ul class="tags">{project.tags.map((tag) => <li>{tag}</li>)}</ul>
+        <a class="case-study-link" href={`/work/${project.slug}/`} aria-label={`View case study for ${project.title}`}>View case study →</a>
       </article>
     ))}
   </div>
-  {hasOverflow && (
-    <button type="button" class="more-toggle" data-work-toggle aria-expanded="false">
-      More work
-    </button>
-  )}
+  {hasOverflow && <button type="button" class="more-toggle" data-work-toggle aria-expanded="false">More work</button>}
 </section>
-
 <style>
-  .work {
-    position: relative;
-    padding: 10rem 8vw;
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-  }
-
-  .eyebrow {
-    font-family: var(--font-mono);
-    color: var(--accent);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    margin: 0;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .card {
-    border: 1px solid rgba(244, 241, 255, 0.08);
-    border-radius: 4px;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    transition: border-color 0.25s ease;
-  }
-
-  .card[data-extra='true'] {
-    display: none;
-  }
-
-  .grid.is-expanded .card[data-extra='true'] {
-    display: flex;
-  }
-
-  .card:hover {
-    border-color: var(--accent);
-  }
-
-  .card h3 {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-weight: 300;
-    font-size: 1.4rem;
-    margin: 0;
-    color: var(--text);
-  }
-
-  .desc {
-    color: var(--text-dim);
-    font-size: 0.95rem;
-    line-height: 1.5;
-    margin: 0;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .tags li {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.05em;
-    color: var(--warm);
-    text-transform: uppercase;
-  }
-
-  .case-study-link {
-    margin-top: auto;
-    align-self: flex-start;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.25s ease;
-  }
-
-  .case-study-link:hover {
-    border-color: var(--accent);
-  }
-
-  .more-toggle {
-    align-self: center;
-    background: none;
-    border: 1px solid rgba(244, 241, 255, 0.15);
-    border-radius: 999px;
-    padding: 0.65rem 1.75rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--text);
-    cursor: pointer;
-    transition: border-color 0.25s ease, color 0.25s ease;
-  }
-
-  .more-toggle:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  @media (max-width: 640px) {
-    .work {
-      padding: 6rem 6vw;
-      gap: 2rem;
-    }
-    .grid {
-      grid-template-columns: 1fr;
-    }
-  }
+.work{position:relative;padding:10rem 8vw;display:flex;flex-direction:column;gap:3rem}.work-heading{display:flex;justify-content:space-between;align-items:end;gap:2rem}.eyebrow{font-family:var(--font-mono);color:var(--accent);letter-spacing:.15em;text-transform:uppercase;font-size:.85rem;margin:0}.work-hint{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);margin:0}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}.card{position:relative;border:1px solid rgba(244,241,255,.08);border-radius:4px;padding:2rem;min-height:250px;display:flex;flex-direction:column;gap:1rem;transition:border-color .3s ease,transform .35s ease,background .35s ease,box-shadow .35s ease;scroll-margin-top:30vh}.card[data-extra=true]{display:none}.grid.is-expanded .card[data-extra=true]{display:flex}.project-index{font-family:var(--font-mono);font-size:.65rem;color:var(--text-dim);letter-spacing:.1em}.card h3{font-family:var(--font-display);font-style:italic;font-weight:300;font-size:1.4rem;margin:0;color:var(--text)}.desc{color:var(--text-dim);font-size:.95rem;line-height:1.5;margin:0}.tags{display:flex;flex-wrap:wrap;gap:.6rem;list-style:none;margin:0;padding:0}.tags li{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.05em;color:var(--warm);text-transform:uppercase}.case-study-link{margin-top:auto;align-self:flex-start;font-family:var(--font-mono);font-size:.75rem;letter-spacing:.05em;color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .25s ease}.case-study-link:hover,.case-study-link:focus-visible{border-color:var(--accent)}.card[data-active-project]{border-color:var(--accent);transform:translateY(-8px);background:rgba(94,234,212,.035);box-shadow:0 18px 60px rgba(0,0,0,.2),0 0 28px rgba(94,234,212,.07)}.card[data-active-project] .project-index{color:var(--accent)}.more-toggle{align-self:center;background:none;border:1px solid rgba(244,241,255,.15);border-radius:999px;padding:.65rem 1.75rem;font-family:var(--font-mono);font-size:.75rem;letter-spacing:.05em;text-transform:uppercase;color:var(--text);cursor:pointer;transition:border-color .25s ease,color .25s ease}.more-toggle:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:640px){.work{padding:6rem 6vw;gap:2rem}.work-heading{align-items:flex-start;flex-direction:column;gap:.75rem}.grid{grid-template-columns:1fr}.card{min-height:220px}}
 </style>
-
 <script>
-  const toggle = document.querySelector('[data-work-toggle]');
-  const grid = document.querySelector('[data-work-grid]');
-
-  if (toggle && grid) {
-    toggle.addEventListener('click', () => {
-      const expanded = grid.classList.toggle('is-expanded');
-      toggle.textContent = expanded ? 'Show less' : 'More work';
-      toggle.setAttribute('aria-expanded', String(expanded));
-    });
-  }
+const toggle=document.querySelector('[data-work-toggle]');const grid=document.querySelector('[data-work-grid]');
+if(toggle&&grid){toggle.addEventListener('click',()=>{const expanded=grid.classList.toggle('is-expanded');toggle.textContent=expanded?'Show less':'More work';toggle.setAttribute('aria-expanded',String(expanded));});}
 </script>
