@@ -1,0 +1,251 @@
+---
+import { assistantKnowledge } from '../data/assistant.js';
+
+const knowledge = JSON.stringify(assistantKnowledge).replace(/</g, '\\u003c');
+---
+
+<div class="assistant" data-ai-assistant>
+  <button class="assistant-trigger" type="button" aria-label="Open portfolio AI assistant" aria-controls="portfolio-assistant" aria-expanded="false">
+    <span class="trigger-orbit" aria-hidden="true"><span></span></span>
+    <span class="trigger-label">Ask AI</span>
+    <span class="trigger-key">⌘K</span>
+  </button>
+
+  <section class="assistant-panel" id="portfolio-assistant" role="dialog" aria-modal="false" aria-labelledby="assistant-title" hidden>
+    <div class="assistant-header">
+      <div>
+        <p class="eyebrow"><span></span> Portfolio intelligence</p>
+        <h2 id="assistant-title">Ask about Ankit.</h2>
+        <p class="assistant-subtitle">Grounded in the projects, capabilities, and experience shown on this portfolio.</p>
+      </div>
+      <button class="assistant-close" type="button" aria-label="Close assistant">×</button>
+    </div>
+
+    <div class="assistant-status" aria-live="polite">
+      <span class="status-dot"></span>
+      <span>Local knowledge layer · ready</span>
+    </div>
+
+    <div class="assistant-messages" data-messages aria-live="polite" aria-label="Assistant conversation">
+      <div class="message message-ai">
+        <span class="message-label">AI</span>
+        <p>Ask me about Ankit's projects, stack, AI systems, or engineering approach.</p>
+      </div>
+    </div>
+
+    <div class="suggestions" data-suggestions>
+      <button type="button" data-prompt="What are Ankit's strongest skills?">Strongest skills</button>
+      <button type="button" data-prompt="Tell me about Aurora">Explain Aurora</button>
+      <button type="button" data-prompt="What makes Ankit different?">What makes him different?</button>
+      <button type="button" data-prompt="What has Ankit worked on?">Show projects</button>
+    </div>
+
+    <form class="assistant-form" data-form>
+      <label class="sr-only" for="assistant-input">Ask the portfolio assistant</label>
+      <input id="assistant-input" name="question" type="text" autocomplete="off" placeholder="Ask a question…" maxlength="240" />
+      <button type="submit" aria-label="Send question">↗</button>
+    </form>
+    <p class="assistant-footnote">Answers stay grounded in the portfolio data. No external API call is required.</p>
+  </section>
+</div>
+
+<script define:vars={{ knowledge }}>
+  const root = document.querySelector('[data-ai-assistant]');
+  if (root) {
+    const data = JSON.parse(knowledge);
+    const trigger = root.querySelector('.assistant-trigger');
+    const panel = root.querySelector('.assistant-panel');
+    const close = root.querySelector('.assistant-close');
+    const form = root.querySelector('[data-form]');
+    const input = root.querySelector('#assistant-input');
+    const messages = root.querySelector('[data-messages]');
+    const suggestions = root.querySelector('[data-suggestions]');
+
+    const normalize = (value) => value.toLowerCase().replace(/[^a-z0-9+#./ -]/g, ' ');
+
+    const addMessage = (role, text, typing = false) => {
+      const message = document.createElement('div');
+      message.className = `message message-${role}`;
+      const label = document.createElement('span');
+      label.className = 'message-label';
+      label.textContent = role === 'ai' ? 'AI' : 'YOU';
+      const body = document.createElement('p');
+      message.append(label, body);
+      messages.appendChild(message);
+      messages.scrollTop = messages.scrollHeight;
+
+      if (!typing) {
+        body.textContent = text;
+        return Promise.resolve();
+      }
+
+      return new Promise((resolve) => {
+        let index = 0;
+        const tick = () => {
+          body.textContent = text.slice(0, index);
+          index += Math.max(1, Math.ceil(text.length / 90));
+          messages.scrollTop = messages.scrollHeight;
+          if (index <= text.length) window.setTimeout(tick, 10);
+          else {
+            body.textContent = text;
+            resolve();
+          }
+        };
+        tick();
+      });
+    };
+
+    const projectAnswer = (project) => {
+      const tags = project.tags.join(', ');
+      return `${project.title}: ${project.description} His role was ${project.role} Key areas: ${tags}.`;
+    };
+
+    const answer = (question) => {
+      const q = normalize(question);
+      const projects = data.projects || [];
+      const project = projects.find((item) => q.includes(item.slug) || q.includes(item.title.toLowerCase().split(' — ')[0].toLowerCase()));
+
+      if (project) return projectAnswer(project);
+
+      if (/\b(project|projects|work|built|build|portfolio)\b/.test(q)) {
+        return `There are ${projects.length} featured systems: ${projects.map((item) => item.title.split(' — ')[0]).join(', ')}. Ask me for any project and I can explain its problem, approach, and outcome.`;
+      }
+
+      if (/\b(skill|skills|stack|technology|technologies|tech|tools)\b/.test(q)) {
+        return `The core stack is ${data.stack.join(', ')}. The strongest themes are AI systems, model serving, retrieval and agents, with Three.js/GLSL and GSAP used for interactive product experiences.`;
+      }
+
+      if (/\b(agent|agents|llm|rag|retrieval|orchestration|tool use)\b/.test(q)) {
+        return data.capabilities.find((item) => item.id === 'agents').summary + ` Stack: ${data.capabilities.find((item) => item.id === 'agents').stack.join(', ')}.`;
+      }
+
+      if (/\b(vision|image|diffusion|lora|computer vision|pytorch)\b/.test(q)) {
+        return data.capabilities.find((item) => item.id === 'vision').summary + ` Stack: ${data.capabilities.find((item) => item.id === 'vision').stack.join(', ')}.`;
+      }
+
+      if (/\b(webgl|three|three.js|glsl|3d|gsap|shader)\b/.test(q)) {
+        return data.capabilities.find((item) => item.id === 'webgl').summary + ` Stack: ${data.capabilities.find((item) => item.id === 'webgl').stack.join(', ')}.`;
+      }
+
+      if (/\b(experience|career|journey|background|worked)\b/.test(q)) {
+        return `${data.identity.name} is positioned as a ${data.identity.title}. ${data.experience.map((item) => `${item.period}: ${item.summary}`).join(' ')}`;
+      }
+
+      if (/\b(different|unique|why ankit|why him|strength|approach)\b/.test(q)) return data.faq.differentiator;
+      if (/\b(contact|hire|collaborat|reach|email)\b/.test(q)) return data.faq.contact;
+      if (/\b(about|who is|who's)\b/.test(q)) return `${data.identity.name} — ${data.identity.title}. ${data.identity.positioning}`;
+      if (/\b(how|approach|engineering)\b/.test(q)) return data.faq.approach;
+
+      return `I can help with Ankit's projects, skills, AI/agent work, WebGL capabilities, experience, or engineering approach. Try “Tell me about Aurora” or “What are his strongest skills?”`;
+    };
+
+    const setOpen = (open) => {
+      panel.hidden = !open;
+      trigger.setAttribute('aria-expanded', String(open));
+      root.classList.toggle('is-open', open);
+      if (open) window.setTimeout(() => input.focus(), 50);
+    };
+
+    const ask = async (question) => {
+      const clean = question.trim();
+      if (!clean) return;
+      input.value = '';
+      addMessage('user', clean);
+      suggestions.classList.add('is-hidden');
+      const thinking = document.createElement('div');
+      thinking.className = 'message message-ai message-thinking';
+      thinking.innerHTML = '<span class="message-label">AI</span><p><i></i><i></i><i></i></p>';
+      messages.appendChild(thinking);
+      messages.scrollTop = messages.scrollHeight;
+      await new Promise((resolve) => window.setTimeout(resolve, 260));
+      thinking.remove();
+      await addMessage('ai', answer(clean), true);
+    };
+
+    trigger.addEventListener('click', () => setOpen(panel.hidden));
+    close.addEventListener('click', () => setOpen(false));
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      ask(input.value);
+    });
+    suggestions.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-prompt]');
+      if (button) ask(button.dataset.prompt);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      const modifier = event.metaKey || event.ctrlKey;
+      if (modifier && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        setOpen(panel.hidden);
+      }
+      if (event.key === 'Escape' && !panel.hidden) setOpen(false);
+    });
+  }
+</script>
+
+<style>
+  .assistant { position: fixed; right: 1.75rem; bottom: 1.5rem; z-index: 80; font-family: var(--font-body); }
+  .assistant-trigger {
+    display: flex; align-items: center; gap: .65rem; height: 42px; padding: 0 .8rem .0 .55rem;
+    border: 1px solid rgba(244,241,255,.22); border-radius: 999px; background: rgba(7,9,15,.76); color: var(--text);
+    box-shadow: 0 12px 40px rgba(0,0,0,.3), 0 0 24px rgba(94,234,212,.06); backdrop-filter: blur(14px); cursor: pointer;
+    transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+  }
+  .assistant-trigger:hover { border-color: rgba(94,234,212,.7); transform: translateY(-2px); box-shadow: 0 16px 48px rgba(0,0,0,.38), 0 0 30px rgba(94,234,212,.1); }
+  .trigger-orbit { width: 27px; height: 27px; display: grid; place-items: center; border: 1px solid rgba(94,234,212,.55); border-radius: 50%; position: relative; }
+  .trigger-orbit::before, .trigger-orbit::after { content: ''; position: absolute; inset: 4px; border: 1px solid rgba(167,139,250,.45); border-radius: 50%; transform: rotate(55deg) scaleX(1.7); }
+  .trigger-orbit::after { transform: rotate(-55deg) scaleX(1.7); }
+  .trigger-orbit span { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+  .trigger-label { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; }
+  .trigger-key { color: var(--text-dim); font: .65rem var(--font-mono); border: 1px solid rgba(244,241,255,.12); border-radius: 5px; padding: .2rem .3rem; }
+
+  .assistant-panel {
+    position: absolute; right: 0; bottom: 54px; width: min(430px, calc(100vw - 2rem)); max-height: min(690px, calc(100vh - 5rem));
+    display: flex; flex-direction: column; overflow: hidden; border: 1px solid rgba(244,241,255,.14); border-radius: 20px;
+    background: rgba(9,12,20,.94); box-shadow: 0 30px 90px rgba(0,0,0,.58), 0 0 50px rgba(94,234,212,.07); backdrop-filter: blur(24px);
+  }
+  .assistant-panel[hidden] { display: none; }
+  .assistant-header { display: flex; justify-content: space-between; gap: 1rem; padding: 1.3rem 1.3rem 1rem; border-bottom: 1px solid rgba(244,241,255,.08); }
+  .eyebrow { margin: 0 0 .55rem; color: var(--text-dim); font: .62rem var(--font-mono); letter-spacing: .14em; text-transform: uppercase; }
+  .eyebrow span { display: inline-block; width: 5px; height: 5px; margin-right: .4rem; border-radius: 50%; background: var(--accent); box-shadow: 0 0 9px var(--accent); }
+  .assistant-header h2 { margin: 0; font: 2rem var(--font-display); font-weight: 300; }
+  .assistant-subtitle { margin: .45rem 0 0; max-width: 320px; color: var(--text-dim); font-size: .75rem; line-height: 1.55; }
+  .assistant-close { width: 30px; height: 30px; flex: 0 0 auto; border: 1px solid rgba(244,241,255,.1); border-radius: 50%; background: transparent; color: var(--text-dim); font-size: 1.2rem; cursor: pointer; }
+  .assistant-close:hover { color: var(--text); border-color: rgba(244,241,255,.3); }
+  .assistant-status { display: flex; align-items: center; gap: .45rem; padding: .65rem 1.3rem; color: #7fdbc9; font: .6rem var(--font-mono); letter-spacing: .04em; border-bottom: 1px solid rgba(244,241,255,.06); }
+  .status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  .assistant-messages { flex: 1; min-height: 150px; max-height: 330px; overflow: auto; padding: 1rem 1.1rem .6rem; scrollbar-width: thin; scrollbar-color: rgba(244,241,255,.18) transparent; }
+  .message { display: grid; grid-template-columns: 31px 1fr; gap: .55rem; margin-bottom: .85rem; }
+  .message-label { color: var(--text-dim); font: .55rem var(--font-mono); letter-spacing: .1em; padding-top: .35rem; }
+  .message p { margin: 0; padding: .65rem .75rem; border: 1px solid rgba(244,241,255,.08); border-radius: 10px 10px 10px 3px; background: rgba(244,241,255,.035); color: #d7d3e2; font-size: .76rem; line-height: 1.55; }
+  .message-user p { border-color: rgba(94,234,212,.16); background: rgba(94,234,212,.055); color: var(--text); border-radius: 10px 10px 3px 10px; }
+  .message-user .message-label { color: var(--accent); }
+  .message-thinking p { display: flex; align-items: center; gap: 4px; width: 54px; }
+  .message-thinking i { display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); animation: pulse 1s infinite ease-in-out; }
+  .message-thinking i:nth-child(2) { animation-delay: .15s; } .message-thinking i:nth-child(3) { animation-delay: .3s; }
+  @keyframes pulse { 0%,100% { opacity: .2; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-2px); } }
+  .suggestions { display: flex; flex-wrap: wrap; gap: .45rem; padding: .25rem 1.1rem .85rem; }
+  .suggestions.is-hidden { display: none; }
+  .suggestions button { border: 1px solid rgba(244,241,255,.1); border-radius: 999px; background: transparent; color: var(--text-dim); padding: .4rem .6rem; font: .61rem var(--font-mono); cursor: pointer; transition: .2s ease; }
+  .suggestions button:hover { border-color: rgba(94,234,212,.45); color: var(--text); background: rgba(94,234,212,.04); }
+  .assistant-form { display: flex; gap: .5rem; margin: 0 1.1rem; padding: .35rem; border: 1px solid rgba(244,241,255,.13); border-radius: 11px; background: rgba(0,0,0,.2); }
+  .assistant-form input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: var(--text); padding: .55rem .6rem; font: .75rem var(--font-body); }
+  .assistant-form input::placeholder { color: #666478; }
+  .assistant-form button { width: 34px; border: 0; border-radius: 8px; background: var(--accent); color: #07100f; font-size: 1rem; cursor: pointer; }
+  .assistant-footnote { margin: .55rem 1.25rem .85rem; color: #5e5b70; font: .55rem var(--font-mono); line-height: 1.4; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+  @media (max-width: 640px) {
+    .assistant { right: .75rem; bottom: .75rem; }
+    .assistant-trigger { height: 40px; }
+    .trigger-key { display: none; }
+    .assistant-panel { right: -.05rem; bottom: 50px; width: min(430px, calc(100vw - 1.5rem)); max-height: calc(100vh - 4.5rem); border-radius: 17px; }
+    .assistant-messages { max-height: 42vh; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .assistant-trigger, .suggestions button { transition: none; }
+    .message-thinking i { animation: none; }
+  }
+</style>
