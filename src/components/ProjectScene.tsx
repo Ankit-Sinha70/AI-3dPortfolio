@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import AmbientUniverse from './AmbientUniverse';
+import ScenePerformance from './ScenePerformance';
 
 const PROJECTS = ['aurora', 'echo', 'ledger', 'drift', 'halo'];
 type SceneState = { active: number; progress: number; visible: boolean };
@@ -48,5 +50,5 @@ export default function ProjectScene() {
       child.userData.depth = workProgress;
     });
   });
-  return <group ref={groups}>{PROJECTS.map((project) => <group key={project}><Artifact index={PROJECTS.indexOf(project)} intensity={1} /></group>)}</group>;
+  return <group><ScenePerformance /><AmbientUniverse /><group ref={groups}>{PROJECTS.map((project) => <group key={project}><Artifact index={PROJECTS.indexOf(project)} intensity={1} /></group>)}</group></group>;
 }
