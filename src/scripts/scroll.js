@@ -201,6 +201,33 @@ function initSectionCounters() {
   });
 }
 
+function initSectionTransitions() {
+  const sections = document.querySelectorAll('.skills, .experience, .demos, .about, .contact');
+  if (!sections.length) return;
+
+  if (prefersReducedMotion) {
+    gsap.set(sections, { opacity: 1, y: 0 });
+    return;
+  }
+
+  sections.forEach((section) => {
+    gsap.fromTo(section,
+      { opacity: 0, y: 34 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 82%',
+          once: true,
+        },
+      },
+    );
+  });
+}
+
 function initCapabilitiesReveal() {
   const items = document.querySelectorAll('.capabilities .capability');
   if (!items.length) return;
@@ -260,6 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initWorkCardsReveal();
   initCapabilitiesReveal();
   initSectionCounters();
+  initSectionTransitions();
   initContactMagnetic();
   initScrollProgressRail();
 });
