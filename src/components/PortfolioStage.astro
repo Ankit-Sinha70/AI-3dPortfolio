@@ -20,6 +20,15 @@ import HeroCanvas from './HeroCanvas.tsx';
   :global(html.is-work-scene) .stage-camera :global(canvas) { filter: blur(5px) saturate(.78); opacity:.72; }
   :global(html.is-work-scene) .stage-grid { opacity:.08; }
   @media (max-width:1200px) { .stage-camera { inset:-6%; width:112%; height:112%; transform:translate3d(3%, 1%, 0); } }
-  @media (max-width:800px) { .stage-camera{inset:-4%;width:108%;height:108%;transform:translate3d(2%,0,0)}.stage-grid{background-size:52px 52px;opacity:.08}.stage-vignette{background:radial-gradient(circle at 55% 42%,transparent 0 24%,rgba(5,7,12,.62) 92%)} :global(html.is-work-scene) .stage-camera :global(canvas){filter:blur(3px) saturate(.72);opacity:.62} }
+  @media (max-width:800px) {
+    .stage-camera{inset:-2%;width:104%;height:104%;transform:translate3d(1%,0,0);transform-origin:58% 44%}
+    .stage-grid{background-size:52px 52px;opacity:.06}
+    .stage-vignette{background:radial-gradient(circle at 55% 42%,transparent 0 24%,rgba(5,7,12,.62) 92%)}
+    :global(html.is-work-scene) .stage-camera :global(canvas){filter:blur(2px) saturate(.72);opacity:.62}
+  }
+  @media (max-width:480px) {
+    .stage-camera{inset:0;width:100%;height:100%;transform:none}
+    .stage-grid{display:none}
+  }
   @media (prefers-reduced-motion:reduce) { .stage-grid{transform:none}.portfolio-stage,.stage-camera,.stage-camera :global(canvas){transition:none}:global(html.is-work-scene) .stage-camera :global(canvas){filter:none} }
 </style>
