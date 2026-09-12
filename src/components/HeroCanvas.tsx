@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
+import SceneFallback from './SceneFallback';
 
 // Keep the heavy 3D hero out of the critical path while respecting accessibility
 // and devices that cannot provide WebGL.
@@ -23,10 +24,16 @@ function supportsWebGL(): boolean {
 export default function HeroCanvas() {
   const [ready, setReady] = useState(false);
   const [pageVisible, setPageVisible] = useState(true);
+  const [motionAllowed, setMotionAllowed] = useState(true);
+  const [webglAvailable, setWebglAvailable] = useState(true);
 
   useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced || !supportsWebGL()) return;
+    const reducedQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const reduced = reducedQuery.matches;
+    const webgl = supportsWebGL();
+    setMotionAllowed(!reduced);
+    setWebglAvailable(webgl);
+    if (reduced || !webgl) return;
 
     const handleVisibility = () => setPageVisible(document.visibilityState === 'visible');
     handleVisibility();
@@ -52,6 +59,7 @@ export default function HeroCanvas() {
     };
   }, []);
 
+  if (!webglAvailable || !motionAllowed) return <SceneFallback />;
   if (!ready || !pageVisible) return null;
 
   const Scene =
@@ -62,7 +70,7 @@ export default function HeroCanvas() {
         : ParticleScene;
 
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<SceneFallback />}>
       <Scene />
     </Suspense>
   );
