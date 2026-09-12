@@ -22,10 +22,15 @@ function supportsWebGL(): boolean {
 
 export default function HeroCanvas() {
   const [ready, setReady] = useState(false);
+  const [pageVisible, setPageVisible] = useState(true);
 
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced || !supportsWebGL()) return;
+
+    const handleVisibility = () => setPageVisible(document.visibilityState === 'visible');
+    handleVisibility();
+    document.addEventListener('visibilitychange', handleVisibility);
 
     const idle = (window as typeof window & {
       requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
@@ -34,14 +39,20 @@ export default function HeroCanvas() {
 
     if (idle) {
       const id = idle(() => setReady(true), { timeout: 2000 });
-      return () => window.cancelIdleCallback?.(id);
+      return () => {
+        window.cancelIdleCallback?.(id);
+        document.removeEventListener('visibilitychange', handleVisibility);
+      };
     }
 
     const id = window.setTimeout(() => setReady(true), 200);
-    return () => window.clearTimeout(id);
+    return () => {
+      window.clearTimeout(id);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
   }, []);
 
-  if (!ready) return null;
+  if (!ready || !pageVisible) return null;
 
   const Scene =
     HERO_VARIANT === 'core'
