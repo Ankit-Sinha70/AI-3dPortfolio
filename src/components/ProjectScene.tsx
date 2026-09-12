@@ -5,10 +5,10 @@ import AmbientUniverse from './AmbientUniverse';
 import ScenePerformance from './ScenePerformance';
 
 const PROJECTS = ['aurora', 'echo', 'ledger', 'drift', 'halo'];
-type SceneState = { active: number; progress: number; visible: boolean };
+type SceneState = { active: number; progress: number; workProgress: number; visible: boolean };
 
 function useProjectState() {
-  const state = useRef<SceneState>({ active: 0, workProgress: 0, visible: false });
+  const state = useRef<SceneState>({ active: 0, progress: 0, workProgress: 0, visible: false });
   useEffect(() => {
     const update = () => {
       const section = document.querySelector('.work'); const cards = Array.from(document.querySelectorAll('.work .card'));
@@ -16,6 +16,7 @@ function useProjectState() {
       const rect = section.getBoundingClientRect(); const vh = window.innerHeight;
       state.current.visible = rect.top < vh * 0.95 && rect.bottom > vh * 0.05;
       state.current.progress = THREE.MathUtils.clamp((vh * 0.85 - rect.top) / Math.max(rect.height - vh * 0.7, 1), 0, 1);
+      state.current.workProgress = state.current.progress;
       let closest = 0; let distance = Infinity;
       cards.forEach((card, index) => { const r = card.getBoundingClientRect(); const d = Math.abs(r.top + r.height * 0.5 - vh * 0.5); if (d < distance) { distance = d; closest = index; } });
       state.current.active = Math.min(closest, PROJECTS.length - 1);
