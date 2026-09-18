@@ -1,40 +1,17 @@
 <div class="palette" data-command-palette>
   <button class="palette-backdrop" type="button" aria-label="Close command palette"></button>
   <section class="palette-panel" role="dialog" aria-modal="true" aria-labelledby="palette-title" hidden>
-    <div class="palette-head">
-      <div>
-        <p class="palette-kicker">Portfolio command system</p>
-        <h2 id="palette-title">What do you want to explore?</h2>
-      </div>
-      <button class="palette-close" type="button" aria-label="Close command palette">Esc</button>
-    </div>
-    <div class="palette-search">
-      <span aria-hidden="true">⌕</span>
-      <input data-command-input type="search" autocomplete="off" spellcheck="false" placeholder="Search sections, projects, or actions…" aria-label="Search commands" />
-      <kbd>⌘K</kbd>
-    </div>
+    <div class="palette-head"><div><p class="palette-kicker">Portfolio command system</p><h2 id="palette-title">What do you want to explore?</h2></div><button class="palette-close" type="button" aria-label="Close command palette">Esc</button></div>
+    <div class="palette-search"><span aria-hidden="true">⌕</span><input data-command-input type="search" autocomplete="off" spellcheck="false" placeholder="Search sections, projects, or actions…" aria-label="Search commands" /><kbd>⌘K</kbd></div>
     <div class="palette-list" data-command-list role="listbox" aria-label="Portfolio commands">
-      <button class="command" type="button" role="option" data-command="ai" data-search="ask ai assistant artificial intelligence">
-        <span class="command-icon">✦</span><span><strong>Ask AI</strong><small>Ask about projects, skills, or engineering</small></span><kbd>↵</kbd>
-      </button>
-      <button class="command" type="button" role="option" data-target="#work" data-search="work projects case studies">
-        <span class="command-icon">01</span><span><strong>Explore work</strong><small>Open the interactive project scene</small></span><kbd>W</kbd>
-      </button>
-      <button class="command" type="button" role="option" data-target="#capabilities" data-search="capabilities skills agents vision webgl">
-        <span class="command-icon">02</span><span><strong>View capabilities</strong><small>Agents · Vision · WebGL</small></span><kbd>C</kbd>
-      </button>
-      <button class="command" type="button" role="option" data-target="#experience" data-search="experience career timeline background">
-        <span class="command-icon">03</span><span><strong>Experience</strong><small>Systems shipped over time</small></span><kbd>E</kbd>
-      </button>
-      <button class="command" type="button" role="option" data-target="#about" data-search="about ank it profile engineer">
-        <span class="command-icon">04</span><span><strong>About Ankit</strong><small>Engineering philosophy and stack</small></span><kbd>A</kbd>
-      </button>
-      <button class="command" type="button" role="option" data-target="#contact" data-search="contact hire collaboration email">
-        <span class="command-icon">05</span><span><strong>Start a conversation</strong><small>Contact and collaboration</small></span><kbd>↗</kbd>
-      </button>
-      <button class="command" type="button" role="option" data-command="top" data-search="home top beginning">
-        <span class="command-icon">↑</span><span><strong>Back to top</strong><small>Return to the beginning</small></span><kbd>H</kbd>
-      </button>
+      <button class="command" type="button" role="option" data-command="ai" data-search="ask ai assistant artificial intelligence"><span class="command-icon">✦</span><span><strong>Ask AI</strong><small>Ask about projects, skills, or engineering</small></span><kbd>↵</kbd></button>
+      <button class="command" type="button" role="option" data-target="#work" data-search="work projects case studies"><span class="command-icon">01</span><span><strong>Explore work</strong><small>Open the interactive project scene</small></span><kbd>W</kbd></button>
+      <button class="command" type="button" role="option" data-target="#capabilities" data-search="capabilities skills agents vision webgl"><span class="command-icon">02</span><span><strong>View capabilities</strong><small>Agents · Vision · WebGL</small></span><kbd>C</kbd></button>
+      <button class="command" type="button" role="option" data-target="#experience" data-search="experience career timeline background"><span class="command-icon">03</span><span><strong>Experience</strong><small>Systems shipped over time</small></span><kbd>E</kbd></button>
+      <button class="command" type="button" role="option" data-target="#about" data-search="about ankit profile engineer"><span class="command-icon">04</span><span><strong>About Ankit</strong><small>Engineering philosophy and stack</small></span><kbd>A</kbd></button>
+      <button class="command" type="button" role="option" data-target="#contact" data-search="contact hire collaboration email"><span class="command-icon">05</span><span><strong>Start a conversation</strong><small>Contact and collaboration</small></span><kbd>↗</kbd></button>
+      <button class="command" type="button" role="option" data-command="blog" data-search="blog writing articles notes posts"><span class="command-icon">06</span><span><strong>Read writing</strong><small>Notes on building generative AI systems</small></span><kbd>B</kbd></button>
+      <button class="command" type="button" role="option" data-command="top" data-search="home top beginning"><span class="command-icon">↑</span><span><strong>Back to top</strong><small>Return to the beginning</small></span><kbd>H</kbd></button>
     </div>
     <div class="palette-foot"><span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span><span><kbd>Enter</kbd> Select</span><span><kbd>Esc</kbd> Close</span></div>
   </section>
@@ -71,17 +48,19 @@
         commands.forEach((command) => { command.hidden = false; });
         setActive(0);
         window.setTimeout(() => input.focus(), 30);
-      } else if (previousFocus && previousFocus.focus) {
-        previousFocus.focus();
-      }
+      } else if (previousFocus && previousFocus.focus) previousFocus.focus();
     };
 
     const runCommand = (command) => {
       if (!command) return;
       if (command.dataset.command === 'ai') {
         setOpen(false);
-        const trigger = document.querySelector('[data-ai-assistant] .assistant-trigger');
-        if (trigger) trigger.click();
+        document.querySelector('[data-ai-assistant] .assistant-trigger')?.click();
+        return;
+      }
+      if (command.dataset.command === 'blog') {
+        setOpen(false);
+        window.location.href = '/blog/';
         return;
       }
       if (command.dataset.command === 'top') {
@@ -99,7 +78,7 @@
     const filter = () => {
       const query = input.value.trim().toLowerCase();
       commands.forEach((command) => {
-        command.hidden = query && !`${command.textContent} ${command.dataset.search || ''}`.toLowerCase().includes(query);
+        command.hidden = Boolean(query && !`${command.textContent} ${command.dataset.search || ''}`.toLowerCase().includes(query));
       });
       setActive(0);
     };
