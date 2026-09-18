@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ai-3d-portfolio-ankit-sinhas-projects.vercel.app/sitemap.xml
