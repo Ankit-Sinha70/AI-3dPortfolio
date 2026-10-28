@@ -8,7 +8,6 @@ const knowledge = JSON.stringify(assistantKnowledge).replace(/</g, '\\u003c');
   <button class="assistant-trigger" type="button" aria-label="Open portfolio AI assistant" aria-controls="portfolio-assistant" aria-expanded="false">
     <span class="trigger-orbit" aria-hidden="true"><span></span></span>
     <span class="trigger-label">Ask AI</span>
-    <span class="trigger-key">⌘K</span>
   </button>
 
   <section class="assistant-panel" id="portfolio-assistant" role="dialog" aria-modal="false" aria-labelledby="assistant-title" hidden>
@@ -144,6 +143,7 @@ const knowledge = JSON.stringify(assistantKnowledge).replace(/</g, '\\u003c');
       trigger.setAttribute('aria-expanded', String(open));
       root.classList.toggle('is-open', open);
       if (open) window.setTimeout(() => input.focus(), 50);
+      else trigger.focus();
     };
 
     const ask = async (question) => {
@@ -173,13 +173,13 @@ const knowledge = JSON.stringify(assistantKnowledge).replace(/</g, '\\u003c');
       if (button) ask(button.dataset.prompt);
     });
 
+    // Cmd/Ctrl+K is owned by CommandPalette. The assistant opens from the
+    // palette's "Ask AI" command or its visible trigger, avoiding dueling dialogs.
     document.addEventListener('keydown', (event) => {
-      const modifier = event.metaKey || event.ctrlKey;
-      if (modifier && event.key.toLowerCase() === 'k') {
+      if (event.key === 'Escape' && !panel.hidden) {
         event.preventDefault();
-        setOpen(panel.hidden);
+        setOpen(false);
       }
-      if (event.key === 'Escape' && !panel.hidden) setOpen(false);
     });
   }
 </script>
