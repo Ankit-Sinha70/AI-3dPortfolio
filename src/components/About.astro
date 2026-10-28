@@ -1,8 +1,11 @@
 ---
+import OptimizedImage from './OptimizedImage.astro';
+
 const stack = ['Python', 'PyTorch', 'TypeScript', 'FastAPI', 'LangChain', 'Astro'];
 ---
 <section class="about" id="about">
     <h2 class="eyebrow"><span class="section-counter" data-count="03">00</span>About</h2>
+  <div class="about-body">
   <div class="content">
     <p class="bio">
       I'm Ankit, a generative AI engineer who ships systems, not just demos.
@@ -19,6 +22,16 @@ const stack = ['Python', 'PyTorch', 'TypeScript', 'FastAPI', 'LangChain', 'Astro
         <li>{item}</li>
       ))}
     </ul>
+  </div>
+  <figure class="portrait">
+    <OptimizedImage
+      src="/images/ankit-profile.jpg"
+      webp="/images/ankit-profile.webp"
+      alt="Portrait of Ankit Sinha"
+      width={720}
+      height={900}
+    />
+  </figure>
   </div>
 </section>
 
@@ -40,7 +53,44 @@ const stack = ['Python', 'PyTorch', 'TypeScript', 'FastAPI', 'LangChain', 'Astro
     margin: 0;
   }
 
+  .about-body {
+    display: grid;
+    grid-template-columns: minmax(0, 60ch) minmax(220px, 340px);
+    grid-template-areas: 'text photo';
+    justify-content: space-between;
+    align-items: center;
+    gap: 3rem 4rem;
+  }
+
+  .portrait {
+    grid-area: photo;
+    position: relative;
+    margin: 0;
+    aspect-ratio: 4 / 5;
+    border: 1px solid rgba(94, 234, 212, 0.25);
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(244, 241, 255, 0.03);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 60px rgba(94, 234, 212, 0.06);
+  }
+
+  .portrait :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .portrait::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 62%, rgba(7, 9, 15, 0.5));
+  }
+
   .content {
+    grid-area: text;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -70,6 +120,18 @@ const stack = ['Python', 'PyTorch', 'TypeScript', 'FastAPI', 'LangChain', 'Astro
     letter-spacing: 0.05em;
     color: var(--warm);
     text-transform: uppercase;
+  }
+
+  @media (max-width: 860px) {
+    .about-body {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: 'photo' 'text';
+      justify-content: stretch;
+    }
+
+    .portrait {
+      width: min(72vw, 280px);
+    }
   }
 
   @media (max-width: 640px) {
