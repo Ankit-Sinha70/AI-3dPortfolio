@@ -17,11 +17,11 @@ const capabilities = [
     </div>
     <div class="detail-wrap">
       {capabilities.map((cap, index) => (
-        <article class:list={['detail', { active: index === 0 }]} id={`cap-${cap.id}`} role="tabpanel" aria-labelledby={`tab-${cap.id}`} data-detail={cap.id} hidden={index !== 0}>
+        <div class:list={['detail', { active: index === 0 }]} id={`cap-${cap.id}`} role="tabpanel" aria-labelledby={`tab-${cap.id}`} data-detail={cap.id} hidden={index !== 0}>
           <span class="detail-kicker">System / {cap.number}</span>
           <h3>{cap.label}</h3><p class="short">{cap.short}</p><p class="text">{cap.text}</p>
           <ul>{cap.stack.map(item => <li>{item}</li>)}</ul>
-        </article>
+        </div>
       ))}
     </div>
   </div>
