@@ -1,6 +1,12 @@
 ---
 const stack = ['Python', 'PyTorch', 'TypeScript', 'FastAPI', 'LangChain', 'Astro'];
 const orbits = ['a', 'b'];
+// Short labels drawn from the Capabilities section.
+const tags = [
+  { id: 'one', label: 'LLM · Agents' },
+  { id: 'two', label: 'Vision' },
+  { id: 'three', label: 'WebGL' },
+];
 ---
 <section class="about" id="about">
     <h2 class="eyebrow"><span class="section-counter" data-count="03">00</span>About</h2>
@@ -23,22 +29,27 @@ const orbits = ['a', 'b'];
     </ul>
   </div>
   <div class="portrait-stage" data-portrait>
-    <div class="portrait-float">
-      <div class="portrait-card">
-        <div class="halo" aria-hidden="true"></div>
-        {orbits.map((id) => <div class={`orbit orbit-${id} orbit-back`} aria-hidden="true"></div>)}
-        <div class="panel" aria-hidden="true"><div class="glare"></div></div>
-        <figure class="figure">
-          <img
-            src="/images/ankit-portrait.webp"
-            alt="Portrait of Ankit Sinha"
-            width="720"
-            height="900"
-            loading="lazy"
-            decoding="async"
-          />
-        </figure>
-        {orbits.map((id) => <div class={`orbit orbit-${id} orbit-front`} aria-hidden="true"></div>)}
+    <div class="portrait-par">
+      <div class="portrait-enter">
+        <div class="portrait-float">
+          <div class="portrait-card">
+            {orbits.map((id) => <div class={`orbit orbit-${id} orbit-back`} aria-hidden="true"></div>)}
+            <figure class="figure">
+              <img
+                src="/images/ankit-portrait.webp"
+                alt="Portrait of Ankit Sinha"
+                width="720"
+                height="900"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+            {orbits.map((id) => <div class={`orbit orbit-${id} orbit-front`} aria-hidden="true"></div>)}
+            {tags.map((tag) => (
+              <span class={`tag tag-${tag.id}`} aria-hidden="true"><i></i>{tag.label}</span>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -106,7 +117,13 @@ const orbits = ['a', 'b'];
     text-transform: uppercase;
   }
 
-  /* ---- 3D portrait: glass panel + cut-out figure + orbit rings, all in one perspective scene ---- */
+  /*
+   * ---- Portrait ----
+   * No panel and no backdrop: the cut-out stands directly on the galaxy and dissolves into it.
+   * Wrapper chain (each one owns a single transform so they never fight):
+   *   par   = scroll glide      enter = slide-in      float = idle sway (touch)      card = cursor tilt
+   * Every layer inside the card is a parallel plane, so depth sorting stays exact.
+   */
   .portrait-stage {
     grid-area: photo;
     position: relative;
@@ -118,11 +135,17 @@ const orbits = ['a', 'b'];
     --ring-b: 146%;
   }
 
+  .portrait-par,
+  .portrait-enter,
   .portrait-float,
   .portrait-card {
     position: absolute;
     inset: 0;
     transform-style: preserve-3d;
+  }
+
+  .portrait-par {
+    transform: translate3d(calc(var(--gx, 0) * 34px), calc(var(--gy, 0) * 26px), 0);
   }
 
   .portrait-card {
@@ -131,59 +154,26 @@ const orbits = ['a', 'b'];
     will-change: transform;
   }
 
-  .halo {
-    position: absolute;
-    inset: -22%;
-    transform: translateZ(-90px);
-    background:
-      radial-gradient(ellipse 50% 46% at 50% 46%, rgba(94, 234, 212, 0.22), transparent 100%),
-      radial-gradient(ellipse 30% 30% at 70% 70%, rgba(255, 217, 160, 0.12), transparent 100%);
-    pointer-events: none;
-  }
-
-  .panel {
-    position: absolute;
-    top: 19%;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    overflow: hidden;
-    border: 1px solid rgba(94, 234, 212, 0.28);
-    border-radius: 26px;
-    background:
-      linear-gradient(160deg, rgba(94, 234, 212, 0.2), rgba(167, 139, 250, 0.1) 46%, rgba(7, 9, 15, 0.6));
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.14),
-      0 40px 80px rgba(0, 0, 0, 0.5),
-      0 0 70px rgba(94, 234, 212, 0.08);
-  }
-
-  .glare {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at var(--mx, 30%) var(--my, 20%), rgba(255, 255, 255, 0.14), transparent 46%);
-  }
-
   .figure {
     position: absolute;
     inset: 0;
     margin: 0;
     transform: translateZ(55px);
-    /* lets the head rise above the panel while the shoulders stay inside its rounded base */
-    clip-path: inset(-40% 0 0 0 round 0 0 26px 26px);
+    /* soft vignette: hair and face stay solid, shoulders and base dissolve into the background */
+    -webkit-mask-image: radial-gradient(ellipse 54% 60% at 50% 40%, #000 60%, transparent 100%);
+    mask-image: radial-gradient(ellipse 54% 60% at 50% 40%, #000 60%, transparent 100%);
   }
 
   .figure img {
     display: block;
     width: 100%;
     height: 100%;
-    filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.45));
+    filter: drop-shadow(0 0 26px rgba(94, 234, 212, 0.1));
   }
 
   /*
-   * Orbit rings are flat ellipses drawn twice: the upper half sits behind the panel and the lower half
-   * in front of the figure, so the ring appears to weave around the person. Every layer stays parallel
-   * (no tilted planes), which keeps depth sorting exact and avoids intersecting-plane artifacts.
+   * Orbit rings are flat ellipses drawn twice: the upper half sits behind the figure and the lower half
+   * in front of it, so the ring appears to weave around the person.
    */
   .orbit {
     position: absolute;
@@ -238,7 +228,7 @@ const orbits = ['a', 'b'];
     --tilt: -12deg;
     --orb-c: var(--accent);
     top: 57%;
-    border: 1px solid rgba(94, 234, 212, 0.45);
+    border: 1px solid rgba(94, 234, 212, 0.32);
   }
 
   .orbit-b {
@@ -247,10 +237,107 @@ const orbits = ['a', 'b'];
     --tilt: 9deg;
     --orb-c: var(--warm);
     top: 52%;
-    border: 1px dashed rgba(255, 217, 160, 0.36);
+    border: 1px dashed rgba(255, 217, 160, 0.3);
   }
 
-  /* motion only while the portrait is on screen (toggled by the script) and the visitor allows motion */
+  /* floating labels: text only, no boxes, at different depths so the tilt gives them parallax */
+  .tag {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text);
+    text-shadow: 0 0 14px rgba(7, 9, 15, 0.9), 0 1px 2px rgba(7, 9, 15, 0.8);
+    pointer-events: none;
+  }
+
+  .tag i {
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  .tag-one {
+    top: 22%;
+    left: -4%;
+    transform: translateZ(130px);
+  }
+
+  .tag-two {
+    top: 54%;
+    right: -6%;
+    transform: translateZ(150px);
+  }
+
+  .tag-three {
+    top: 82%;
+    left: 2%;
+    transform: translateZ(110px);
+  }
+
+  .tag-two i {
+    background: var(--warm);
+    box-shadow: 0 0 10px var(--warm);
+  }
+
+  /* ---- Motion (all gated on reduced-motion; the script adds the js-* classes only when motion is allowed) ---- */
+
+  /* slide-in: portrait glides in from the right, text from the left, labels last */
+  .portrait-stage.js-slide .portrait-enter {
+    opacity: 0;
+    transform: translate3d(90px, 0, 0) rotateY(-14deg);
+    transition:
+      transform 1.15s cubic-bezier(0.22, 0.61, 0.36, 1),
+      opacity 0.9s ease;
+  }
+
+  .portrait-stage.js-slide.is-in .portrait-enter {
+    opacity: 1;
+    transform: none;
+  }
+
+  .portrait-stage.js-slide .tag {
+    opacity: 0;
+    translate: 46px 0;
+    transition:
+      opacity 0.7s ease,
+      translate 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .portrait-stage.js-slide.is-in .tag {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .portrait-stage.js-slide.is-in .tag-one { transition-delay: 0.55s; }
+  .portrait-stage.js-slide.is-in .tag-two { transition-delay: 0.75s; }
+  .portrait-stage.js-slide.is-in .tag-three { transition-delay: 0.95s; }
+
+  .about-body.js-slide .content > * {
+    opacity: 0;
+    translate: -44px 0;
+    transition:
+      opacity 0.8s ease,
+      translate 1s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .about-body.js-slide.is-in .content > * {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .about-body.js-slide.is-in .content > :nth-child(2) { transition-delay: 0.12s; }
+  .about-body.js-slide.is-in .content > :nth-child(3) { transition-delay: 0.24s; }
+
+  /* ambient: runs only while the portrait is on screen */
   @media (prefers-reduced-motion: no-preference) {
     .portrait-stage.is-live .orbit-a::before {
       animation: orbit-spin 14s linear infinite;
@@ -260,6 +347,13 @@ const orbits = ['a', 'b'];
       animation: orbit-spin 24s linear infinite reverse;
       animation-delay: -7s;
     }
+
+    .portrait-stage.is-live .tag {
+      animation: tag-bob 6s ease-in-out infinite alternate;
+    }
+
+    .portrait-stage.is-live .tag-two { animation-duration: 7.5s; animation-delay: -2s; }
+    .portrait-stage.is-live .tag-three { animation-duration: 5.2s; animation-delay: -4s; }
   }
 
   /* with a mouse the card follows the cursor, so the idle sway is only for touch screens */
@@ -269,14 +363,23 @@ const orbits = ['a', 'b'];
     }
   }
 
+  @keyframes orbit-spin {
+    to { offset-distance: 100%; }
+  }
+
+  @keyframes tag-bob {
+    from { transform: translateZ(var(--tz, 130px)) translateY(-5px); }
+    to { transform: translateZ(var(--tz, 130px)) translateY(6px); }
+  }
+
   @keyframes portrait-sway {
     from { transform: translateY(0) rotateY(-5deg); }
     to { transform: translateY(-9px) rotateY(5deg); }
   }
 
-  @keyframes orbit-spin {
-    to { offset-distance: 100%; }
-  }
+  .tag-one { --tz: 130px; }
+  .tag-two { --tz: 150px; }
+  .tag-three { --tz: 110px; }
 
   @media (max-width: 860px) {
     .about-body {
@@ -292,6 +395,15 @@ const orbits = ['a', 'b'];
       --ring-a: 124%;
       --ring-b: 140%;
     }
+
+    .tag-one { left: -10%; }
+    .tag-two { right: -12%; }
+    .tag-three { left: -2%; }
+
+    /* on a phone the text slides up instead of in from the side, so nothing starts off-screen */
+    .about-body.js-slide .content > * {
+      translate: 0 28px;
+    }
   }
 
   @media (max-width: 640px) {
@@ -304,20 +416,65 @@ const orbits = ['a', 'b'];
 
 <script>
   const stage = document.querySelector<HTMLElement>('[data-portrait]');
-  if (stage) {
+  const body = stage?.closest<HTMLElement>('.about-body');
+  const section = stage?.closest<HTMLElement>('.about');
+
+  if (stage && body && section) {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
     const card = stage.querySelector<HTMLElement>('.portrait-card');
-    const section = stage.closest<HTMLElement>('.about');
+    const par = stage.querySelector<HTMLElement>('.portrait-par');
     const clamp = (v: number) => Math.min(1, Math.max(-1, v));
+    const canObserve = typeof IntersectionObserver === 'function';
 
-    // Ambient motion runs only while the portrait is visible.
-    new IntersectionObserver(
-      ([entry]) => stage.classList.toggle('is-live', entry.isIntersecting),
-      { threshold: 0.15 },
-    ).observe(stage);
+    // Slide-in entrance: arm the hidden state only when motion is allowed, then release on first sight.
+    if (!reduce.matches && canObserve) {
+      stage.classList.add('js-slide');
+      body.classList.add('js-slide');
+      new IntersectionObserver(
+        (entries, observer) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          stage.classList.add('is-in');
+          body.classList.add('is-in');
+          observer.disconnect();
+        },
+        { threshold: 0.2 },
+      ).observe(stage);
+    }
 
-    if (card && section) {
+    // Ambient motion and the scroll glide run only while the portrait is visible.
+    let live = false;
+    let scrollFrame = 0;
+    const glide = () => {
+      scrollFrame = 0;
+      if (!par || reduce.matches) return;
+      const rect = stage.getBoundingClientRect();
+      const progress = clamp((rect.top + rect.height / 2 - window.innerHeight / 2) / (window.innerHeight * 0.6));
+      par.style.setProperty('--gx', progress.toFixed(3));
+      par.style.setProperty('--gy', (progress * -1).toFixed(3));
+    };
+    const onScroll = () => {
+      if (!scrollFrame) scrollFrame = window.requestAnimationFrame(glide);
+    };
+
+    if (canObserve) {
+      new IntersectionObserver(
+        ([entry]) => {
+          const visible = entry.isIntersecting;
+          stage.classList.toggle('is-live', visible);
+          if (visible && !live) {
+            window.addEventListener('scroll', onScroll, { passive: true });
+            glide();
+          } else if (!visible && live) {
+            window.removeEventListener('scroll', onScroll);
+          }
+          live = visible;
+        },
+        { threshold: 0.05 },
+      ).observe(stage);
+    }
+
+    if (card) {
       let frame = 0;
       let nx = 0;
       let ny = 0;
@@ -326,8 +483,6 @@ const orbits = ['a', 'b'];
         frame = 0;
         card.style.setProperty('--ry', nx.toFixed(3));
         card.style.setProperty('--rx', ny.toFixed(3));
-        card.style.setProperty('--mx', `${(50 + nx * 38).toFixed(1)}%`);
-        card.style.setProperty('--my', `${(28 + ny * 30).toFixed(1)}%`);
       };
       const schedule = () => {
         if (!frame) frame = window.requestAnimationFrame(paint);
