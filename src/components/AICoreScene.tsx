@@ -405,39 +405,60 @@ function Planet({ data, motion, index }: { data: typeof PLANETS[number]; motion:
   );
 }
 
-function Sun() {
+function Sun({ motion }: { motion: MotionRef }) {
   const material = useRef<THREE.ShaderMaterial>(null);
+  const glowMaterial = useRef<THREE.MeshBasicMaterial>(null);
+  const light = useRef<THREE.PointLight>(null);
 
   useFrame(({ clock }) => {
-    if (material.current) material.current.uniforms.uTime.value = clock.getElapsedTime();
+    const time = clock.getElapsedTime();
+    if (material.current) {
+      material.current.uniforms.uTime.value = time;
+    }
+
+    // Fade the sun and its light out while any featured planet is zoomed in.
+    const progress = motion.current.progress;
+    const activeFocus = PLANETS.reduce((maxFocus, planet, index) => {
+      if (!planet.focus) return maxFocus;
+      return Math.max(maxFocus, focusAmount(progress, index));
+    }, 0);
+    const sunVisibility = 1 - THREE.MathUtils.smoothstep(activeFocus, 0.04, 0.35);
+
+    if (material.current) material.current.uniforms.uOpacity.value = sunVisibility;
+    if (glowMaterial.current) glowMaterial.current.opacity = 0.11 * sunVisibility;
+    if (light.current) light.current.intensity = 3.2 * sunVisibility;
   });
 
   const vertex = `varying vec3 vP;void main(){vP=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
   const fragment = `
     uniform float uTime;
+    uniform float uOpacity;
     varying vec3 vP;
     float n(vec3 p){return fract(sin(dot(p,vec3(12.9898,78.233,45.164)))*43758.5453);}
     void main(){
       float v=n(vP*8.+uTime*.08);
       vec3 c=mix(vec3(1.,.22,.015),vec3(1.,.9,.42),v);
-      gl_FragColor=vec4(c*1.45,1.);
+      gl_FragColor=vec4(c*1.45,uOpacity);
     }`;
 
   return (
     <group>
-      <pointLight position={[0, 0, 0.2]} intensity={3.2} distance={11} color="#ffd18b" />
+      <pointLight ref={light} position={[0, 0, 0.2]} intensity={3.2} distance={11} color="#ffd18b" />
       <mesh>
         <sphereGeometry args={[0.23, 64, 40]} />
         <shaderMaterial
           ref={material}
           vertexShader={vertex}
           fragmentShader={fragment}
-          uniforms={{ uTime: { value: 0 } }}
+          transparent
+          depthWrite={false}
+          uniforms={{ uTime: { value: 0 }, uOpacity: { value: 1 } }}
         />
       </mesh>
       <mesh scale={1.65}>
         <sphereGeometry args={[0.23, 40, 24]} />
         <meshBasicMaterial
+          ref={glowMaterial}
           color="#ff9f38"
           transparent
           opacity={0.11}
@@ -529,7 +550,7 @@ function SolarSystem({ motion }: { motion: MotionRef }) {
 
   return (
     <group ref={system}>
-      <Sun />
+      <Sun motion={motion} />
       {PLANETS.map((planet, index) => (
         <Planet key={planet.name} data={planet} motion={motion} index={index} />
       ))}
