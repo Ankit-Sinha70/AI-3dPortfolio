@@ -1,0 +1,16 @@
+{
+  "name": "Ankit — Generative AI Engineer",
+  "short_name": "Ankit",
+  "description": "Generative AI engineer building production text, image, and audio systems.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07090f",
+  "theme_color": "#07090f",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

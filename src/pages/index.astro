@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
+import PortfolioStage from '../components/PortfolioStage.astro';
+import SceneTelemetry from '../components/SceneTelemetry.astro';
 import Hero from '../components/Hero.astro';
 import Log from '../components/Log.astro';
 import Manifesto from '../components/Manifesto.astro';
@@ -8,24 +10,32 @@ import Vision from '../components/Vision.astro';
 import Work from '../components/Work.astro';
 import Skills from '../components/Skills.astro';
 import Capabilities from '../components/Capabilities.astro';
+import Experience from '../components/Experience.astro';
 import Demos from '../components/Demos.astro';
 import About from '../components/About.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+import CommandPalette from '../components/CommandPalette.astro';
+import AIAssistant from '../components/AIAssistant.astro';
 ---
 <Layout>
+  <PortfolioStage />
+  <SceneTelemetry />
   <Nav />
-  <main>
+  <CommandPalette />
+  <AIAssistant />
+  <main id="main-content" tabindex="-1">
     <Hero />
     <Manifesto />
-      <Vision />
+    <Vision />
     <Work />
-      <Skills />
-      <Capabilities />
-      <Demos />
-      <About />
+    <Skills />
+    <Capabilities />
+    <Experience />
+    <Demos />
+    <About />
     <Contact />
-        <Log />
+    <Log />
   </main>
   <Footer />
 </Layout>

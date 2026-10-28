@@ -1,0 +1,77 @@
+---
+---
+
+<script>
+  const root = document.documentElement;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const sectionSelectors = [
+    ['hero', '.hero'],
+    ['manifesto', '.manifesto'],
+    ['vision', '.vision'],
+    ['work', '.work'],
+    ['skills', '.skills'],
+    ['capabilities', '.capabilities'],
+    ['experience', '.experience'],
+    ['demos', '.demos'],
+    ['about', '.about'],
+    ['contact', '.contact'],
+    ['log', '.log'],
+  ];
+
+  let ticking = false;
+  let sections = [];
+
+  function measure() {
+    sections = sectionSelectors
+      .map(([name, selector]) => {
+        const element = document.querySelector(selector);
+        return element ? { name, element } : null;
+      })
+      .filter(Boolean);
+    update();
+  }
+
+  function update() {
+    ticking = false;
+    if (!sections.length) return;
+
+    const viewport = window.innerHeight;
+    const focusLine = viewport * 0.42;
+    let active = sections[0];
+    let bestDistance = Number.POSITIVE_INFINITY;
+
+    sections.forEach((section) => {
+      const rect = section.element.getBoundingClientRect();
+      const center = rect.top + rect.height * 0.28;
+      const distance = Math.abs(center - focusLine);
+      if (rect.bottom > viewport * 0.16 && rect.top < viewport * 0.84 && distance < bestDistance) {
+        active = section;
+        bestDistance = distance;
+      }
+    });
+
+    const rect = active.element.getBoundingClientRect();
+    const local = Math.max(0, Math.min(1, (focusLine - rect.top) / Math.max(rect.height, 1)));
+    root.dataset.sceneSection = active.name;
+    root.style.setProperty('--scene-section-progress', local.toFixed(3));
+  }
+
+  function requestUpdate() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }
+
+  if (!reduce.matches) {
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', measure, { passive: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', measure, { once: true });
+  } else {
+    measure();
+  }
+
+  reduce.addEventListener?.('change', measure);
+</script>

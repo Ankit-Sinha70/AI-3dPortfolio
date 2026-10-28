@@ -1,84 +1,38 @@
 ---
 const capabilities = [
-{
-label: 'LLM & Agent Systems',
-text: 'I design and ship production agent pipelines -- retrieval, tool use, evaluation harnesses -- not just prompts. Systems that stay reliable when the input gets weird.',
-},
-{
-label: 'Applied Computer Vision',
-text: 'From diffusion fine-tuning to real-time inference, I build vision systems that hold up under production load, not just demo conditions.',
-},
-{
-label: '3D / WebGL Engineering',
-text: 'Three.js, shader work, and scroll-driven interaction -- the same craft that shaped this site, applied to product surfaces that need to feel alive.',
-},
+  { id: 'agents', number: '01', label: 'LLM & Agent Systems', short: 'Reasoning, retrieval, tools.', text: 'I design and ship production agent pipelines -- retrieval, tool use, evaluation harnesses -- not just prompts. Systems that stay reliable when the input gets weird.', stack: ['LLMs', 'RAG', 'Tool use', 'Evaluation'] },
+  { id: 'vision', number: '02', label: 'Applied Computer Vision', short: 'Models that survive production.', text: 'From diffusion fine-tuning to real-time inference, I build vision systems that hold up under production load, not just demo conditions.', stack: ['PyTorch', 'Diffusion', 'LoRA', 'Inference'] },
+  { id: 'webgl', number: '03', label: '3D / WebGL Engineering', short: 'Interfaces with a sense of depth.', text: 'Three.js, shader work, and scroll-driven interaction -- the same craft that shaped this site, applied to product surfaces that need to feel alive.', stack: ['Three.js', 'GLSL', 'GSAP', 'Interaction'] },
 ];
 ---
-
 <section class="capabilities" id="capabilities">
-<h2 class="eyebrow">Capabilities</h2>
-<div class="capability-list">
-{capabilities.map((cap) => (
-<div class="capability">
-<h3 class="capability-label">{cap.label}</h3>
-<p class="capability-text">{cap.text}</p>
-</div>
-))}
-</div>
+  <div class="heading"><h2 class="eyebrow">Capabilities</h2><p>Choose a system.</p></div>
+  <div class="capability-shell">
+    <div class="capability-list" role="tablist" aria-label="Technical capabilities">
+      {capabilities.map((cap, index) => (
+        <button class:list={['capability-tab', { active: index === 0 }]} type="button" role="tab" aria-selected={index === 0 ? 'true' : 'false'} aria-controls={`cap-${cap.id}`} id={`tab-${cap.id}`} data-capability={cap.id}>
+          <span class="number">{cap.number}</span><span class="label">{cap.label}</span><span class="arrow">↗</span>
+        </button>
+      ))}
+    </div>
+    <div class="detail-wrap">
+      {capabilities.map((cap, index) => (
+        <article class:list={['detail', { active: index === 0 }]} id={`cap-${cap.id}`} role="tabpanel" aria-labelledby={`tab-${cap.id}`} data-detail={cap.id} hidden={index !== 0}>
+          <span class="detail-kicker">System / {cap.number}</span>
+          <h3>{cap.label}</h3><p class="short">{cap.short}</p><p class="text">{cap.text}</p>
+          <ul>{cap.stack.map(item => <li>{item}</li>)}</ul>
+        </article>
+      ))}
+    </div>
+  </div>
 </section>
-
 <style>
-.capabilities {
-position: relative;
-padding: 10rem 8vw;
-display: flex;
-flex-direction: column;
-gap: 3rem;
-}
-
-.eyebrow {
-font-family: var(--font-mono);
-color: var(--accent);
-letter-spacing: 0.15em;
-text-transform: uppercase;
-font-size: 0.85rem;
-margin: 0;
-}
-
-.capability-list {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 3rem;
-}
-
-.capability-label {
-font-family: var(--font-display);
-font-weight: 400;
-font-size: 1.35rem;
-color: var(--text);
-margin: 0 0 0.75rem;
-}
-
-.capability-text {
-font-family: var(--font-body);
-font-size: 0.95rem;
-line-height: 1.6;
-color: var(--text-dim);
-margin: 0;
-max-width: 32ch;
-}
-
-@media (max-width: 900px) {
-.capability-list {
-grid-template-columns: 1fr;
-gap: 2rem;
-}
-}
-
-@media (max-width: 640px) {
-.capabilities {
-padding: 6rem 6vw;
-gap: 2rem;
-}
-}
+.capabilities{position:relative;padding:10rem 8vw;display:flex;flex-direction:column;gap:3rem}.heading{display:flex;justify-content:space-between;align-items:end}.eyebrow,.detail-kicker{font-family:var(--font-mono);color:var(--accent);letter-spacing:.15em;text-transform:uppercase;font-size:.85rem;margin:0}.heading p{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);margin:0}.capability-shell{display:grid;grid-template-columns:minmax(320px,.9fr) 1.1fr;gap:5vw;border-top:1px solid rgba(244,241,255,.08)}.capability-list{display:flex;flex-direction:column}.capability-tab{display:grid;grid-template-columns:3rem 1fr auto;align-items:center;gap:1rem;text-align:left;background:none;border:0;border-bottom:1px solid rgba(244,241,255,.08);padding:2rem 0;color:var(--text-dim);cursor:pointer;font:inherit;transition:color .3s ease,transform .3s ease}.capability-tab:hover,.capability-tab.active{color:var(--text)}.capability-tab.active{transform:translateX(12px)}.number{font-family:var(--font-mono);font-size:.65rem;color:var(--accent)}.label{font-family:var(--font-display);font-size:clamp(1.15rem,2vw,1.6rem);font-weight:300}.arrow{font-family:var(--font-mono);color:var(--accent);opacity:.35;transition:opacity .3s ease,transform .3s ease}.capability-tab.active .arrow{opacity:1;transform:translate(4px,-4px)}.detail-wrap{position:relative;min-height:360px;display:flex;align-items:center}.detail{width:100%;padding:2.5rem;border:1px solid rgba(244,241,255,.08);background:rgba(5,7,12,.24);backdrop-filter:blur(8px)}.detail[hidden]{display:none}.detail-kicker{font-size:.65rem}.detail h3{font-family:var(--font-display);font-weight:300;font-size:clamp(2rem,4vw,4rem);line-height:1;margin:.8rem 0}.short{font-family:var(--font-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--warm);margin:0 0 1.5rem}.text{max-width:52ch;color:var(--text-dim);line-height:1.7;margin:0}.detail ul{display:flex;gap:.6rem;flex-wrap:wrap;list-style:none;padding:0;margin:2rem 0 0}.detail li{font-family:var(--font-mono);font-size:.65rem;color:var(--text-dim);border:1px solid rgba(244,241,255,.1);border-radius:999px;padding:.45rem .7rem}.detail.active{animation:detail-in .45s ease both}@keyframes detail-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media(max-width:850px){.capabilities{padding:6rem 6vw}.heading{align-items:flex-start;flex-direction:column;gap:.7rem}.capability-shell{grid-template-columns:1fr;gap:2rem}.detail-wrap{min-height:0}.detail{padding:1.5rem}.capability-tab.active{transform:none}}
+@media(prefers-reduced-motion:reduce){.detail.active{animation:none}}
 </style>
+<script>
+const tabs=[...document.querySelectorAll('[data-capability]')];const details=[...document.querySelectorAll('[data-detail]')];
+const activate=(id)=>{tabs.forEach(tab=>{const active=tab.dataset.capability===id;tab.classList.toggle('active',active);tab.setAttribute('aria-selected',String(active));});details.forEach(detail=>{const active=detail.dataset.detail===id;detail.hidden=!active;detail.classList.toggle('active',active);});};
+tabs.forEach((tab,index)=>{tab.addEventListener('click',()=>activate(tab.dataset.capability));tab.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();const next=tabs[(index+1)%tabs.length];next.focus();activate(next.dataset.capability);}if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();const prev=tabs[(index-1+tabs.length)%tabs.length];prev.focus();activate(prev.dataset.capability);}});});
+</script>
