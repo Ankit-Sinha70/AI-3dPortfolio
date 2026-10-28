@@ -6,12 +6,12 @@ const CHAPTERS = [
   { selector: '.vision', x: 1.8, y: 0.5, scale: 1.03, rotate: 0.3, opacity: 0.96 },
   { selector: '.work', x: 3.8, y: 1.2, scale: 1.055, rotate: 0.5, opacity: 0.72 },
   { selector: '.skills', x: -2.4, y: -1, scale: 1.025, rotate: -0.35, opacity: 0.88 },
-  { selector: '.capabilities', x: 2.5, y: 0.8, scale: 1.045, rotate: 0.35, opacity: 0.9 },
-  { selector: '.experience', x: -1.8, y: 0.3, scale: 1.03, rotate: -0.2, opacity: 0.9 },
+  { selector: '.capabilities', x: 2.5, y: 0.8, scale: 1.045, rotate: 0.35, opacity: 0.62 },
+  { selector: '.experience', x: -1.8, y: 0.3, scale: 1.03, rotate: -0.2, opacity: 0.42 },
   { selector: '.demos', x: 2, y: -0.5, scale: 1.05, rotate: 0.3, opacity: 0.86 },
   { selector: '.about', x: -2.5, y: 0.7, scale: 1.035, rotate: -0.3, opacity: 0.9 },
-  { selector: '.contact', x: 0, y: -0.5, scale: 1.08, rotate: 0, opacity: 1 },
-  { selector: '.log', x: 0, y: 0, scale: 1.04, rotate: 0, opacity: 0.82 },
+  { selector: '.contact', x: 5, y: -0.5, scale: 1.08, rotate: 0, opacity: 0.5 },
+  { selector: '.log', x: 0, y: 0, scale: 1.04, rotate: 0, opacity: 0.55 },
 ];
 
 function initCinematicStage() {
