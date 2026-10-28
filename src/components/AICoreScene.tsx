@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import ProjectScene from './ProjectScene';
+import SceneFallback from './SceneFallback';
 
 type MotionState = {
   progress: number;
@@ -549,13 +550,39 @@ function Scene() {
 }
 
 export default function AICoreScene() {
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+  const [contextLost, setContextLost] = useState(false);
+
+  useEffect(() => {
+    if (!canvas) return;
+
+    const handleContextLost = (event: Event) => {
+      // Allow the browser to attempt restoration and show the non-WebGL
+      // atmosphere until the renderer's context is available again.
+      event.preventDefault();
+      setContextLost(true);
+    };
+    const handleContextRestored = () => setContextLost(false);
+
+    canvas.addEventListener('webglcontextlost', handleContextLost);
+    canvas.addEventListener('webglcontextrestored', handleContextRestored);
+    return () => {
+      canvas.removeEventListener('webglcontextlost', handleContextLost);
+      canvas.removeEventListener('webglcontextrestored', handleContextRestored);
+    };
+  }, [canvas]);
+
   return (
-    <Canvas
-      camera={{ position: [0, 0, 4.55], fov: 36 }}
-      dpr={[1, 1.5]}
-      gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
-    >
-      <Scene />
-    </Canvas>
+    <>
+      <Canvas
+        camera={{ position: [0, 0, 4.55], fov: 36 }}
+        dpr={[1, 1.5]}
+        gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
+        onCreated={({ gl }) => setCanvas(gl.domElement)}
+      >
+        <Scene />
+      </Canvas>
+      {contextLost && <SceneFallback />}
+    </>
   );
 }
