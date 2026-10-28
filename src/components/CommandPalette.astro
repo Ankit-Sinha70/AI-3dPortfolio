@@ -50,6 +50,7 @@
         previousFocus = document.activeElement;
         input.value = '';
         commands.forEach((command) => { command.hidden = false; });
+        emptyState.hidden = true;
         setActive(0);
         window.setTimeout(() => input.focus(), 30);
       } else if (previousFocus && previousFocus.focus) previousFocus.focus();
