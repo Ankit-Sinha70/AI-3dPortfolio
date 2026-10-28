@@ -2,8 +2,8 @@
   <button class="palette-backdrop" type="button" aria-label="Close command palette"></button>
   <section class="palette-panel" role="dialog" aria-modal="true" aria-labelledby="palette-title" hidden>
     <div class="palette-head"><div><p class="palette-kicker">Portfolio command system</p><h2 id="palette-title">What do you want to explore?</h2></div><button class="palette-close" type="button" aria-label="Close command palette">Esc</button></div>
-    <div class="palette-search"><span aria-hidden="true">⌕</span><input data-command-input type="search" autocomplete="off" spellcheck="false" placeholder="Search sections, projects, or actions…" aria-label="Search commands" /><kbd>⌘K</kbd></div>
-    <div class="palette-list" data-command-list role="listbox" aria-label="Portfolio commands">
+    <div class="palette-search"><span aria-hidden="true">⌕</span><input data-command-input type="search" role="combobox" aria-controls="palette-listbox" aria-expanded="true" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search sections, projects, or actions…" aria-label="Search commands" /><kbd>⌘K</kbd></div>
+    <div class="palette-list" id="palette-listbox" data-command-list role="listbox" aria-label="Portfolio commands">
       <button class="command" type="button" role="option" data-command="ai" data-search="ask ai assistant artificial intelligence"><span class="command-icon">✦</span><span><strong>Ask AI</strong><small>Ask about projects, skills, or engineering</small></span><kbd>↵</kbd></button>
       <button class="command" type="button" role="option" data-target="#work" data-search="work projects case studies"><span class="command-icon">01</span><span><strong>Explore work</strong><small>Open the interactive project scene</small></span><kbd>W</kbd></button>
       <button class="command" type="button" role="option" data-target="#capabilities" data-search="capabilities skills agents vision webgl"><span class="command-icon">02</span><span><strong>View capabilities</strong><small>Agents · Vision · WebGL</small></span><kbd>C</kbd></button>
@@ -32,13 +32,28 @@
     let activeIndex = 0;
     let previousFocus = null;
 
+    // Options are driven by the arrow keys while focus stays in the search input,
+    // so they stay out of the Tab order and are exposed via aria-activedescendant.
+    commands.forEach((command, index) => {
+      command.id = `palette-option-${index}`;
+      command.tabIndex = -1;
+    });
+
     const visibleCommands = () => commands.filter((command) => !command.hidden);
     const setActive = (index) => {
       const visible = visibleCommands();
-      if (!visible.length) return;
+      if (!visible.length) {
+        input.removeAttribute('aria-activedescendant');
+        return;
+      }
       activeIndex = (index + visible.length) % visible.length;
-      commands.forEach((command) => command.removeAttribute('data-active'));
+      commands.forEach((command) => {
+        command.removeAttribute('data-active');
+        command.setAttribute('aria-selected', 'false');
+      });
       visible[activeIndex].setAttribute('data-active', 'true');
+      visible[activeIndex].setAttribute('aria-selected', 'true');
+      input.setAttribute('aria-activedescendant', visible[activeIndex].id);
       visible[activeIndex].scrollIntoView({ block: 'nearest' });
     };
 
@@ -107,6 +122,17 @@
       }
       if (panel.hidden) return;
       if (event.key === 'Escape') { event.preventDefault(); setOpen(false); return; }
+      if (event.key === 'Tab') {
+        // aria-modal dialog: keep Tab and Shift+Tab inside the panel.
+        const focusable = [...panel.querySelectorAll('button, input')].filter((el) => !el.hidden && el.tabIndex >= 0);
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (!panel.contains(document.activeElement)) { event.preventDefault(); first.focus(); }
+        else if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+        return;
+      }
       if (event.key === 'ArrowDown') { event.preventDefault(); setActive(activeIndex + 1); return; }
       if (event.key === 'ArrowUp') { event.preventDefault(); setActive(activeIndex - 1); return; }
       if (event.key === 'Enter') { event.preventDefault(); runCommand(visibleCommands()[activeIndex]); }
