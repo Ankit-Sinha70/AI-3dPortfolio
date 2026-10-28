@@ -26,9 +26,12 @@ function initCinematicStage() {
 
   let frame = 0;
   let lastChapter = -1;
+  let disposed = false;
 
   const setStage = () => {
     frame = 0;
+    if (disposed) return;
+
     const viewport = window.innerHeight;
     const midpoint = window.scrollY + viewport * 0.48;
 
@@ -59,14 +62,36 @@ function initCinematicStage() {
   };
 
   const requestUpdate = () => {
-    if (frame) return;
+    if (disposed || frame) return;
     frame = window.requestAnimationFrame(setStage);
+  };
+
+  const handleLoad = () => requestUpdate();
+  const cleanup = () => {
+    if (disposed) return;
+    disposed = true;
+    window.removeEventListener('scroll', requestUpdate);
+    window.removeEventListener('resize', requestUpdate);
+    window.removeEventListener('load', handleLoad);
+    if (frame) window.cancelAnimationFrame(frame);
+    frame = 0;
+    window.removeEventListener('pagehide', handlePageHide);
+  };
+  const handlePageHide = (event) => {
+    // Keep listeners intact when the browser stores this page for restoration.
+    if (event.persisted) return;
+    cleanup();
   };
 
   window.addEventListener('scroll', requestUpdate, { passive: true });
   window.addEventListener('resize', requestUpdate, { passive: true });
-  window.addEventListener('load', requestUpdate, { once: true });
+  window.addEventListener('load', handleLoad, { once: true });
+  window.addEventListener('pagehide', handlePageHide);
   requestUpdate();
 }
 
-document.addEventListener('DOMContentLoaded', initCinematicStage);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCinematicStage, { once: true });
+} else {
+  initCinematicStage();
+}

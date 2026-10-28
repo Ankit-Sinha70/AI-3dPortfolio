@@ -5,18 +5,26 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const cleanupCallbacks = [];
+let animationContext;
+let disposed = false;
 
-// Use a single animation clock for Lenis + GSAP. Running Lenis from both its
-// own requestAnimationFrame and the GSAP ticker causes duplicate work and can
-// produce uneven scroll timing on high-refresh displays.
+// Use one animation clock for Lenis + GSAP and retain callback references so
+// every global subscription can be released when this page is torn down.
 if (!prefersReducedMotion) {
   const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+  const lenisTicker = (time) => lenis.raf(time * 1000);
+  const handleLenisScroll = () => ScrollTrigger.update();
 
-  gsap.ticker.add((time) => {
-    lenis.raf(time * 1000);
-  });
+  gsap.ticker.add(lenisTicker);
   gsap.ticker.lagSmoothing(0);
-  lenis.on('scroll', ScrollTrigger.update);
+  lenis.on('scroll', handleLenisScroll);
+
+  cleanupCallbacks.push(() => {
+    gsap.ticker.remove(lenisTicker);
+    lenis.off('scroll', handleLenisScroll);
+    lenis.destroy();
+  });
 }
 
 function initHeroReveal() {
@@ -175,6 +183,11 @@ function initWorkCardsReveal() {
 
     card.addEventListener('pointermove', handleMove);
     card.addEventListener('pointerleave', handleLeave);
+    cleanupCallbacks.push(() => {
+      card.removeEventListener('pointermove', handleMove);
+      card.removeEventListener('pointerleave', handleLeave);
+      gsap.killTweensOf(card);
+    });
   });
 }
 
@@ -263,6 +276,11 @@ function initContactMagnetic() {
 
   cta.addEventListener('pointermove', handleMove);
   cta.addEventListener('pointerleave', handleLeave);
+  cleanupCallbacks.push(() => {
+    cta.removeEventListener('pointermove', handleMove);
+    cta.removeEventListener('pointerleave', handleLeave);
+    gsap.killTweensOf(cta);
+  });
 }
 
 function initScrollProgressRail() {
@@ -278,16 +296,48 @@ function initScrollProgressRail() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  initHeroReveal();
-  initHeroScrollChoreography();
-  initLogReveal();
-  initManifestoReveal();
-  initVisionReveal();
-  initWorkCardsReveal();
-  initCapabilitiesReveal();
-  initSectionCounters();
-  initSectionTransitions();
-  initContactMagnetic();
-  initScrollProgressRail();
-});
+function initScrollExperience() {
+  if (disposed) return;
+
+  animationContext = gsap.context(() => {
+    initHeroReveal();
+    initHeroScrollChoreography();
+    initLogReveal();
+    initManifestoReveal();
+    initVisionReveal();
+    initWorkCardsReveal();
+    initCapabilitiesReveal();
+    initSectionCounters();
+    initSectionTransitions();
+    initContactMagnetic();
+    initScrollProgressRail();
+  });
+}
+
+function cleanupScrollExperience() {
+  if (disposed) return;
+  disposed = true;
+
+  for (const cleanup of cleanupCallbacks.splice(0).reverse()) {
+    cleanup();
+  }
+
+  animationContext?.revert();
+  animationContext = undefined;
+}
+
+function handlePageHide(event) {
+  // A page kept in the back-forward cache is still live and may be restored.
+  if (event.persisted) return;
+
+  cleanupScrollExperience();
+  window.removeEventListener('pagehide', handlePageHide);
+}
+
+window.addEventListener('pagehide', handlePageHide);
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initScrollExperience, { once: true });
+} else {
+  initScrollExperience();
+}
