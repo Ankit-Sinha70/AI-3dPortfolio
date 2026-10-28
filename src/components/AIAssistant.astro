@@ -13,7 +13,7 @@ const knowledge = JSON.stringify(assistantKnowledge).replace(/</g, '\\u003c');
   <section class="assistant-panel" id="portfolio-assistant" role="dialog" aria-modal="false" aria-labelledby="assistant-title" hidden>
     <div class="assistant-header">
       <div>
-        <p class="eyebrow"><span></span> Portfolio intelligence</p>
+        <p class="eyebrow"><span></span> Portfolio guide</p>
         <h2 id="assistant-title">Ask about Ankit.</h2>
         <p class="assistant-subtitle">Grounded in the projects, capabilities, and experience shown on this portfolio.</p>
       </div>
@@ -22,12 +22,12 @@ const knowledge = JSON.stringify(assistantKnowledge).replace(/</g, '\\u003c');
 
     <div class="assistant-status" aria-live="polite">
       <span class="status-dot"></span>
-      <span>Local knowledge layer · ready</span>
+      <span>Answers from this portfolio's content · not a live AI model</span>
     </div>
 
     <div class="assistant-messages" data-messages aria-live="polite" aria-label="Assistant conversation">
       <div class="message message-ai">
-        <span class="message-label">AI</span>
+        <span class="message-label">GUIDE</span>
         <p>Ask me about Ankit's projects, stack, AI systems, or engineering approach.</p>
       </div>
     </div>
@@ -67,7 +67,7 @@ const knowledge = JSON.stringify(assistantKnowledge).replace(/</g, '\\u003c');
       message.className = `message message-${role}`;
       const label = document.createElement('span');
       label.className = 'message-label';
-      label.textContent = role === 'ai' ? 'AI' : 'YOU';
+      label.textContent = role === 'ai' ? 'GUIDE' : 'YOU';
       const body = document.createElement('p');
       message.append(label, body);
       messages.appendChild(message);
@@ -154,7 +154,7 @@ const knowledge = JSON.stringify(assistantKnowledge).replace(/</g, '\\u003c');
       suggestions.classList.add('is-hidden');
       const thinking = document.createElement('div');
       thinking.className = 'message message-ai message-thinking';
-      thinking.innerHTML = '<span class="message-label">AI</span><p><i></i><i></i><i></i></p>';
+      thinking.innerHTML = '<span class="message-label">GUIDE</span><p><i></i><i></i><i></i></p>';
       messages.appendChild(thinking);
       messages.scrollTop = messages.scrollHeight;
       await new Promise((resolve) => window.setTimeout(resolve, 260));
@@ -216,14 +216,14 @@ const knowledge = JSON.stringify(assistantKnowledge).replace(/</g, '\\u003c');
   .assistant-status { display: flex; align-items: center; gap: .45rem; padding: .65rem 1.3rem; color: #7fdbc9; font: .6rem var(--font-mono); letter-spacing: .04em; border-bottom: 1px solid rgba(244,241,255,.06); }
   .status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
   .assistant-messages { flex: 1; min-height: 150px; max-height: 330px; overflow: auto; padding: 1rem 1.1rem .6rem; scrollbar-width: thin; scrollbar-color: rgba(244,241,255,.18) transparent; }
-  .message { display: grid; grid-template-columns: 31px 1fr; gap: .55rem; margin-bottom: .85rem; }
-  .message-label { color: var(--text-dim); font: .55rem var(--font-mono); letter-spacing: .1em; padding-top: .35rem; }
-  .message p { margin: 0; padding: .65rem .75rem; border: 1px solid rgba(244,241,255,.08); border-radius: 10px 10px 10px 3px; background: rgba(244,241,255,.035); color: #d7d3e2; font-size: .76rem; line-height: 1.55; }
-  .message-user p { border-color: rgba(94,234,212,.16); background: rgba(94,234,212,.055); color: var(--text); border-radius: 10px 10px 3px 10px; }
-  .message-user .message-label { color: var(--accent); }
-  .message-thinking p { display: flex; align-items: center; gap: 4px; width: 54px; }
-  .message-thinking i { display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); animation: pulse 1s infinite ease-in-out; }
-  .message-thinking i:nth-child(2) { animation-delay: .15s; } .message-thinking i:nth-child(3) { animation-delay: .3s; }
+  .assistant-messages :global(.message) { display: grid; grid-template-columns: 31px 1fr; gap: .55rem; margin-bottom: .85rem; }
+  .assistant-messages :global(.message-label) { color: var(--text-dim); font: .55rem var(--font-mono); letter-spacing: .1em; padding-top: .35rem; }
+  .assistant-messages :global(.message p) { margin: 0; padding: .65rem .75rem; border: 1px solid rgba(244,241,255,.08); border-radius: 10px 10px 10px 3px; background: rgba(244,241,255,.035); color: #d7d3e2; font-size: .76rem; line-height: 1.55; }
+  .assistant-messages :global(.message-user p) { border-color: rgba(94,234,212,.16); background: rgba(94,234,212,.055); color: var(--text); border-radius: 10px 10px 3px 10px; }
+  .assistant-messages :global(.message-user .message-label) { color: var(--accent); }
+  .assistant-messages :global(.message-thinking p) { display: flex; align-items: center; gap: 4px; width: 54px; }
+  .assistant-messages :global(.message-thinking i) { display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); animation: pulse 1s infinite ease-in-out; }
+  .assistant-messages :global(.message-thinking i:nth-child(2)) { animation-delay: .15s; } .assistant-messages :global(.message-thinking i:nth-child(3)) { animation-delay: .3s; }
   @keyframes pulse { 0%,100% { opacity: .2; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-2px); } }
   .suggestions { display: flex; flex-wrap: wrap; gap: .45rem; padding: .25rem 1.1rem .85rem; }
   .suggestions.is-hidden { display: none; }
@@ -246,6 +246,6 @@ const knowledge = JSON.stringify(assistantKnowledge).replace(/</g, '\\u003c');
 
   @media (prefers-reduced-motion: reduce) {
     .assistant-trigger, .suggestions button { transition: none; }
-    .message-thinking i { animation: none; }
+    .assistant-messages :global(.message-thinking i) { animation: none; }
   }
 </style>
