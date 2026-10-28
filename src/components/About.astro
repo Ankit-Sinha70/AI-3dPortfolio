@@ -1,7 +1,6 @@
 ---
-import OptimizedImage from './OptimizedImage.astro';
-
 const stack = ['Python', 'PyTorch', 'TypeScript', 'FastAPI', 'LangChain', 'Astro'];
+const orbits = ['a', 'b'];
 ---
 <section class="about" id="about">
     <h2 class="eyebrow"><span class="section-counter" data-count="03">00</span>About</h2>
@@ -23,15 +22,26 @@ const stack = ['Python', 'PyTorch', 'TypeScript', 'FastAPI', 'LangChain', 'Astro
       ))}
     </ul>
   </div>
-  <figure class="portrait">
-    <OptimizedImage
-      src="/images/ankit-profile.jpg"
-      webp="/images/ankit-profile.webp"
-      alt="Portrait of Ankit Sinha"
-      width={720}
-      height={900}
-    />
-  </figure>
+  <div class="portrait-stage" data-portrait>
+    <div class="portrait-float">
+      <div class="portrait-card">
+        <div class="halo" aria-hidden="true"></div>
+        {orbits.map((id) => <div class={`orbit orbit-${id} orbit-back`} aria-hidden="true"></div>)}
+        <div class="panel" aria-hidden="true"><div class="glare"></div></div>
+        <figure class="figure">
+          <img
+            src="/images/ankit-portrait.webp"
+            alt="Portrait of Ankit Sinha"
+            width="720"
+            height="900"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+        {orbits.map((id) => <div class={`orbit orbit-${id} orbit-front`} aria-hidden="true"></div>)}
+      </div>
+    </div>
+  </div>
   </div>
 </section>
 
@@ -42,6 +52,7 @@ const stack = ['Python', 'PyTorch', 'TypeScript', 'FastAPI', 'LangChain', 'Astro
     display: flex;
     flex-direction: column;
     gap: 2.5rem;
+    overflow-x: clip;
   }
 
   .eyebrow {
@@ -55,38 +66,11 @@ const stack = ['Python', 'PyTorch', 'TypeScript', 'FastAPI', 'LangChain', 'Astro
 
   .about-body {
     display: grid;
-    grid-template-columns: minmax(0, 60ch) minmax(220px, 340px);
+    grid-template-columns: minmax(0, 60ch) minmax(240px, 380px);
     grid-template-areas: 'text photo';
     justify-content: space-between;
     align-items: center;
     gap: 3rem 4rem;
-  }
-
-  .portrait {
-    grid-area: photo;
-    position: relative;
-    margin: 0;
-    aspect-ratio: 4 / 5;
-    border: 1px solid rgba(94, 234, 212, 0.25);
-    border-radius: 20px;
-    overflow: hidden;
-    background: rgba(244, 241, 255, 0.03);
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45), 0 0 60px rgba(94, 234, 212, 0.06);
-  }
-
-  .portrait :global(img) {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .portrait::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(180deg, transparent 62%, rgba(7, 9, 15, 0.5));
   }
 
   .content {
@@ -122,15 +106,191 @@ const stack = ['Python', 'PyTorch', 'TypeScript', 'FastAPI', 'LangChain', 'Astro
     text-transform: uppercase;
   }
 
+  /* ---- 3D portrait: glass panel + cut-out figure + orbit rings, all in one perspective scene ---- */
+  .portrait-stage {
+    grid-area: photo;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    perspective: 1100px;
+    perspective-origin: 50% 55%;
+    --ring-a: 128%;
+    --ring-b: 146%;
+  }
+
+  .portrait-float,
+  .portrait-card {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+  }
+
+  .portrait-card {
+    transform: rotateY(calc(var(--ry, 0) * 14deg)) rotateX(calc(var(--rx, 0) * -10deg));
+    transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+    will-change: transform;
+  }
+
+  .halo {
+    position: absolute;
+    inset: -22%;
+    transform: translateZ(-90px);
+    background:
+      radial-gradient(ellipse 50% 46% at 50% 46%, rgba(94, 234, 212, 0.22), transparent 100%),
+      radial-gradient(ellipse 30% 30% at 70% 70%, rgba(255, 217, 160, 0.12), transparent 100%);
+    pointer-events: none;
+  }
+
+  .panel {
+    position: absolute;
+    top: 19%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    border: 1px solid rgba(94, 234, 212, 0.28);
+    border-radius: 26px;
+    background:
+      linear-gradient(160deg, rgba(94, 234, 212, 0.2), rgba(167, 139, 250, 0.1) 46%, rgba(7, 9, 15, 0.6));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      0 40px 80px rgba(0, 0, 0, 0.5),
+      0 0 70px rgba(94, 234, 212, 0.08);
+  }
+
+  .glare {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--mx, 30%) var(--my, 20%), rgba(255, 255, 255, 0.14), transparent 46%);
+  }
+
+  .figure {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    transform: translateZ(55px);
+    /* lets the head rise above the panel while the shoulders stay inside its rounded base */
+    clip-path: inset(-40% 0 0 0 round 0 0 26px 26px);
+  }
+
+  .figure img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.45));
+  }
+
+  /*
+   * Orbit rings are flat ellipses drawn twice: the upper half sits behind the panel and the lower half
+   * in front of the figure, so the ring appears to weave around the person. Every layer stays parallel
+   * (no tilted planes), which keeps depth sorting exact and avoids intersecting-plane artifacts.
+   */
+  .orbit {
+    position: absolute;
+    left: 50%;
+    width: var(--orb-w);
+    aspect-ratio: var(--orb-r);
+    margin: calc(var(--orb-w) / var(--orb-r) / -2) 0 0 calc(var(--orb-w) / -2);
+    border-radius: 50%;
+    transform: translateZ(var(--oz)) scale(var(--os)) rotate(var(--tilt));
+    pointer-events: none;
+  }
+
+  .orbit::before {
+    content: '';
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    width: 9px;
+    height: 9px;
+    margin: -4.5px 0 0 -4.5px;
+    border-radius: 50%;
+    background: var(--orb-c);
+    box-shadow: 0 0 14px var(--orb-c);
+  }
+
+  /* the dot rides the ellipse with a motion path (paint-only, no layout per frame) where supported */
+  @supports (offset-path: ellipse(50% 50% at 50% 50%)) {
+    .orbit::before {
+      left: 0;
+      top: 0;
+      offset-path: ellipse(50% 50% at 50% 50%);
+      offset-rotate: 0deg;
+      offset-distance: 0%;
+    }
+  }
+
+  .orbit-back {
+    --oz: -40px;
+    --os: 1.0364; /* (perspective + |z|) / perspective: cancels depth scaling so both halves meet */
+    clip-path: inset(0 0 50% 0);
+  }
+
+  .orbit-front {
+    --oz: 95px;
+    --os: 0.9136;
+    clip-path: inset(50% 0 0 0);
+  }
+
+  .orbit-a {
+    --orb-w: var(--ring-a);
+    --orb-r: 3.1;
+    --tilt: -12deg;
+    --orb-c: var(--accent);
+    top: 57%;
+    border: 1px solid rgba(94, 234, 212, 0.45);
+  }
+
+  .orbit-b {
+    --orb-w: var(--ring-b);
+    --orb-r: 3.9;
+    --tilt: 9deg;
+    --orb-c: var(--warm);
+    top: 52%;
+    border: 1px dashed rgba(255, 217, 160, 0.36);
+  }
+
+  /* motion only while the portrait is on screen (toggled by the script) and the visitor allows motion */
+  @media (prefers-reduced-motion: no-preference) {
+    .portrait-stage.is-live .orbit-a::before {
+      animation: orbit-spin 14s linear infinite;
+    }
+
+    .portrait-stage.is-live .orbit-b::before {
+      animation: orbit-spin 24s linear infinite reverse;
+      animation-delay: -7s;
+    }
+  }
+
+  /* with a mouse the card follows the cursor, so the idle sway is only for touch screens */
+  @media (prefers-reduced-motion: no-preference) and (hover: none) {
+    .portrait-stage.is-live .portrait-float {
+      animation: portrait-sway 9s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes portrait-sway {
+    from { transform: translateY(0) rotateY(-5deg); }
+    to { transform: translateY(-9px) rotateY(5deg); }
+  }
+
+  @keyframes orbit-spin {
+    to { offset-distance: 100%; }
+  }
+
   @media (max-width: 860px) {
     .about-body {
       grid-template-columns: minmax(0, 1fr);
       grid-template-areas: 'photo' 'text';
       justify-content: stretch;
+      justify-items: start;
     }
 
-    .portrait {
-      width: min(72vw, 280px);
+    .portrait-stage {
+      width: min(66vw, 260px);
+      justify-self: center;
+      --ring-a: 124%;
+      --ring-b: 140%;
     }
   }
 
@@ -141,3 +301,55 @@ const stack = ['Python', 'PyTorch', 'TypeScript', 'FastAPI', 'LangChain', 'Astro
     }
   }
 </style>
+
+<script>
+  const stage = document.querySelector<HTMLElement>('[data-portrait]');
+  if (stage) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const card = stage.querySelector<HTMLElement>('.portrait-card');
+    const section = stage.closest<HTMLElement>('.about');
+    const clamp = (v: number) => Math.min(1, Math.max(-1, v));
+
+    // Ambient motion runs only while the portrait is visible.
+    new IntersectionObserver(
+      ([entry]) => stage.classList.toggle('is-live', entry.isIntersecting),
+      { threshold: 0.15 },
+    ).observe(stage);
+
+    if (card && section) {
+      let frame = 0;
+      let nx = 0;
+      let ny = 0;
+
+      const paint = () => {
+        frame = 0;
+        card.style.setProperty('--ry', nx.toFixed(3));
+        card.style.setProperty('--rx', ny.toFixed(3));
+        card.style.setProperty('--mx', `${(50 + nx * 38).toFixed(1)}%`);
+        card.style.setProperty('--my', `${(28 + ny * 30).toFixed(1)}%`);
+      };
+      const schedule = () => {
+        if (!frame) frame = window.requestAnimationFrame(paint);
+      };
+
+      // The portrait leans toward the cursor anywhere in the section, not only when hovered directly.
+      section.addEventListener(
+        'pointermove',
+        (event) => {
+          if (reduce.matches || !finePointer.matches || event.pointerType !== 'mouse') return;
+          const rect = stage.getBoundingClientRect();
+          nx = clamp((event.clientX - (rect.left + rect.width / 2)) / (window.innerWidth * 0.5));
+          ny = clamp((event.clientY - (rect.top + rect.height / 2)) / (window.innerHeight * 0.5));
+          schedule();
+        },
+        { passive: true },
+      );
+      section.addEventListener('pointerleave', () => {
+        nx = 0;
+        ny = 0;
+        schedule();
+      });
+    }
+  }
+</script>
