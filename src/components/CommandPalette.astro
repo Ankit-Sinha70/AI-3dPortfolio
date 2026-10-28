@@ -13,17 +13,21 @@
       <button class="command" type="button" role="option" data-command="blog" data-search="blog writing articles notes posts"><span class="command-icon">06</span><span><strong>Read writing</strong><small>Notes on building generative AI systems</small></span><kbd>B</kbd></button>
       <button class="command" type="button" role="option" data-command="top" data-search="home top beginning"><span class="command-icon">↑</span><span><strong>Back to top</strong><small>Return to the beginning</small></span><kbd>H</kbd></button>
     </div>
+    <p class="palette-empty" data-command-empty role="status" hidden>No commands match your search.</p>
     <div class="palette-foot"><span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span><span><kbd>Enter</kbd> Select</span><span><kbd>Esc</kbd> Close</span></div>
   </section>
 </div>
 
 <script>
+  import { isCommandPaletteShortcut, isEditableTarget } from '../scripts/keyboard-shortcuts.js';
+
   const root = document.querySelector('[data-command-palette]');
   if (root) {
     const panel = root.querySelector('.palette-panel');
     const backdrop = root.querySelector('.palette-backdrop');
     const close = root.querySelector('.palette-close');
     const input = root.querySelector('[data-command-input]');
+    const emptyState = root.querySelector('[data-command-empty]');
     const commands = [...root.querySelectorAll('.command')];
     let activeIndex = 0;
     let previousFocus = null;
@@ -80,6 +84,8 @@
       commands.forEach((command) => {
         command.hidden = Boolean(query && !`${command.textContent} ${command.dataset.search || ''}`.toLowerCase().includes(query));
       });
+      const hasResults = visibleCommands().length > 0;
+      emptyState.hidden = hasResults;
       setActive(0);
     };
 
@@ -89,8 +95,10 @@
     backdrop.addEventListener('click', () => setOpen(false));
 
     document.addEventListener('keydown', (event) => {
-      const modifier = event.metaKey || event.ctrlKey;
-      if (modifier && event.key.toLowerCase() === 'k') {
+      if (isCommandPaletteShortcut(event)) {
+        // Keep this as the single owner of Cmd/Ctrl+K. Don't steal shortcuts
+        // while the visitor is typing in another input or editable surface.
+        if (isEditableTarget(event.target) && !root.contains(event.target)) return;
         event.preventDefault();
         event.stopImmediatePropagation();
         setOpen(panel.hidden);
@@ -122,6 +130,7 @@
   .palette-search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: var(--text); font: .78rem var(--font-mono); }
   .palette-search input::placeholder { color: #666477; }
   kbd { border: 1px solid rgba(244,241,255,.11); border-bottom-color: rgba(244,241,255,.2); border-radius: 5px; padding: .18rem .35rem; color: var(--text-dim); background: rgba(244,241,255,.035); font: .58rem var(--font-mono); white-space: nowrap; }
+  .palette-empty { margin: 0 .7rem .8rem; padding: .75rem; color: var(--text-dim); font: .7rem var(--font-mono); }
   .palette-list { max-height: 50vh; overflow-y: auto; padding: .2rem .65rem .75rem; scrollbar-width: thin; scrollbar-color: rgba(244,241,255,.16) transparent; }
   .command { width: 100%; display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: .75rem; padding: .75rem .7rem; border: 1px solid transparent; border-radius: 10px; background: transparent; color: var(--text); text-align: left; cursor: pointer; }
   .command:hover, .command[data-active="true"] { border-color: rgba(94,234,212,.18); background: rgba(94,234,212,.055); }
