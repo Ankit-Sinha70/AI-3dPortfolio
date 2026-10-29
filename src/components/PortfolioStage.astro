@@ -21,7 +21,6 @@ import HeroCanvas from './HeroCanvas.tsx';
   :global(html.is-work-scene) .stage-grid { opacity:.08; }
   .portfolio-stage[data-chapter="work"] .stage-grid { opacity:.055; }
   .portfolio-stage[data-chapter="contact"] .stage-grid { opacity:.04; transform:perspective(900px) rotateX(62deg) translateY(22%) scale(1.04); }
-  .portfolio-stage[data-chapter="log"] .stage-camera :global(canvas) { filter:saturate(.72); }
   @media (max-width:1200px) { .stage-camera { inset:-6%; width:112%; height:112%; transform:translate3d(calc(3% + var(--scene-x)),calc(1% + var(--scene-y)),0) scale(var(--scene-scale)) rotate(var(--scene-rotate)); } }
   @media (max-width:800px) {
     .stage-camera{inset:-2%;width:104%;height:104%;transform:translate3d(calc(1% + var(--scene-x) * .55),calc(var(--scene-y) * .55),0) scale(calc(1 + (var(--scene-scale) - 1) * .7)) rotate(var(--scene-rotate));transform-origin:58% 44%}
