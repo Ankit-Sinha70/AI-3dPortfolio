@@ -97,27 +97,41 @@ function initLogReveal() {
 }
 
 function initManifestoReveal() {
-  const lines = document.querySelectorAll('.manifesto .line');
-  if (!lines.length) return;
+  const section = document.querySelector('.manifesto');
+  const stats = gsap.utils.toArray('.manifesto .stat');
+  if (!section || !stats.length) return;
 
-  lines.forEach((line) => {
-    const words = line.textContent.trim().split(/\s+/);
-    line.innerHTML = words.map((word) => `<span class="word">${word}</span>`).join(' ');
+  // Reduced motion (or no animation): the markup already holds the final figures.
+  if (prefersReducedMotion) return;
+
+  const row = section.querySelector('.stats');
+  const rule = section.querySelector('.stats-rule');
+  const counters = stats.map((stat) => stat.querySelector('[data-target]'));
+
+  gsap.set(stats, { opacity: 0, x: 120 });
+  gsap.set(rule, { scaleX: 0, transformOrigin: 'left center' });
+  counters.forEach((counter) => { counter.textContent = '0'; });
+
+  // Entrance, once: the line draws across, the figures slide in from the right one after another and count up.
+  const entrance = gsap.timeline({ scrollTrigger: { trigger: section, start: 'top 70%', once: true } });
+  entrance
+    .to(rule, { scaleX: 1, duration: 1.4, ease: 'power3.out' }, 0)
+    .to(stats, { opacity: 1, x: 0, duration: 1.1, ease: 'power3.out', stagger: 0.18 }, 0.1);
+  counters.forEach((counter, index) => {
+    const state = { value: 0 };
+    entrance.to(state, {
+      value: Number(counter.dataset.target),
+      duration: 1.6,
+      ease: 'power2.out',
+      onUpdate: () => { counter.textContent = String(Math.round(state.value)); },
+    }, 0.1 + index * 0.18);
   });
 
-  const words = document.querySelectorAll('.manifesto .word');
-  if (prefersReducedMotion) {
-    gsap.set(words, { opacity: 1 });
-    return;
-  }
-
-  gsap.set(words, { opacity: 0.5 });
-  gsap.to(words, {
-    opacity: 1,
-    stagger: 0.03,
-    ease: 'none',
-    scrollTrigger: { trigger: '.manifesto', start: 'top 75%', end: 'bottom 55%', scrub: 0.6 },
-  });
+  // While the section scrolls past, the whole row drifts slowly sideways.
+  gsap.fromTo(row,
+    { x: 48 },
+    { x: -48, ease: 'none', scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 0.8 } },
+  );
 }
 
 function initVisionReveal() {

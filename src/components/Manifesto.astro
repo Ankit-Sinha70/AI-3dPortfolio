@@ -1,9 +1,21 @@
 <section class="manifesto" id="manifesto">
   <h2 class="eyebrow"><span class="section-counter" data-count="01">00</span>At a glance</h2>
-  <div class="lines">
-    <p class="line">3+ years building production web applications.</p>
-    <p class="line">15+ reusable, accessible UI components.</p>
-    <p class="line">On time across 5+ concurrent client engagements.</p>
+  <div class="stats-wrap">
+    <div class="stats-rule" aria-hidden="true"></div>
+    <div class="stats">
+      <article class="stat">
+        <span class="stat-value"><span data-target="3">3</span><span class="stat-plus">+</span></span>
+        <p class="stat-label">years building production web applications.</p>
+      </article>
+      <article class="stat">
+        <span class="stat-value"><span data-target="15">15</span><span class="stat-plus">+</span></span>
+        <p class="stat-label">reusable, accessible UI components.</p>
+      </article>
+      <article class="stat">
+        <span class="stat-value"><span data-target="5">5</span><span class="stat-plus">+</span></span>
+        <p class="stat-label">concurrent client engagements, delivered on time.</p>
+      </article>
+    </div>
   </div>
 </section>
 
@@ -14,6 +26,7 @@
     display: flex;
     flex-direction: column;
     gap: 2.5rem;
+    overflow-x: clip;
   }
 
   .eyebrow {
@@ -25,31 +38,90 @@
     margin: 0;
   }
 
-  .lines {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    max-width: 28ch;
+  .stats-wrap {
+    position: relative;
+    padding-top: 3rem;
   }
 
-  .line {
+  /* the line stays put (it is drawn in once); only the row of figures drifts with the scroll */
+  .stats-rule {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(94, 234, 212, 0.6), rgba(244, 241, 255, 0.14) 60%, transparent);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 4vw, 4rem);
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .stat-value {
     font-family: var(--font-display);
     font-style: italic;
     font-weight: 300;
-    font-size: clamp(1.75rem, 4vw, 3rem);
-    line-height: 1.2;
-    margin: 0;
+    font-size: clamp(4rem, 10.5vw, 9rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
     color: var(--text);
   }
 
-  .line:last-child {
+  .stat-plus {
+    color: var(--accent);
+  }
+
+  .stat:last-child .stat-value {
     color: var(--warm);
+  }
+
+  .stat-label {
+    max-width: 24ch;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: clamp(0.95rem, 1.35vw, 1.2rem);
+    line-height: 1.5;
+    color: var(--text-dim);
   }
 
   @media (max-width: 640px) {
     .manifesto {
       padding: 8rem 6vw;
       gap: 1.5rem;
+    }
+
+    .stats-wrap {
+      padding-top: 2rem;
+    }
+
+    /* on a phone each figure becomes a row: big number, then its label */
+    .stats {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
+    }
+
+    .stat {
+      flex-direction: row;
+      align-items: baseline;
+      gap: 1.25rem;
+    }
+
+    .stat-value {
+      flex: 0 0 5.5rem;
+      font-size: 3.6rem;
+    }
+
+    .stat-label {
+      font-size: 1rem;
     }
   }
 </style>
