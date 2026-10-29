@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import AmbientUniverse from './AmbientUniverse';
 import ScenePerformance from './ScenePerformance';
 
-const PROJECTS = ['aurora', 'echo', 'ledger', 'drift', 'halo'];
+const PROJECTS = ['qisquare', 'iatf-toolbox', 'solution-to-share', 'crown-restaurant', 'ai-interview-simulator'];
 type SceneState = { active: number; progress: number; workProgress: number; visible: boolean };
 
 function useProjectState() {

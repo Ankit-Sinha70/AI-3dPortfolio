@@ -28,15 +28,15 @@ const knowledge = JSON.stringify(assistantKnowledge).replace(/</g, '\\u003c');
     <div class="assistant-messages" data-messages aria-live="polite" aria-label="Assistant conversation">
       <div class="message message-ai">
         <span class="message-label">GUIDE</span>
-        <p>Ask me about Ankit's projects, stack, AI systems, or engineering approach.</p>
+        <p>Ask me about Ankit's projects, stack, experience, or how he works.</p>
       </div>
     </div>
 
     <div class="suggestions" data-suggestions>
       <button type="button" data-prompt="What are Ankit's strongest skills?">Strongest skills</button>
-      <button type="button" data-prompt="Tell me about Aurora">Explain Aurora</button>
+      <button type="button" data-prompt="Tell me about QISquare">Explain QISquare</button>
       <button type="button" data-prompt="What makes Ankit different?">What makes him different?</button>
-      <button type="button" data-prompt="What has Ankit worked on?">Show projects</button>
+      <button type="button" data-prompt="Which projects has Ankit built?">Show projects</button>
     </div>
 
     <form class="assistant-form" data-form>
@@ -95,47 +95,48 @@ const knowledge = JSON.stringify(assistantKnowledge).replace(/</g, '\\u003c');
     };
 
     const projectAnswer = (project) => {
-      const tags = project.tags.join(', ');
-      return `${project.title}: ${project.description} His role was ${project.role} Key areas: ${tags}.`;
+      const when = project.period ? ` (${project.period})` : '';
+      return `${project.title}: ${project.description} ${project.role.replace(/\.$/, '')}${when}. Stack: ${(project.stack || project.tags).join(', ')}.`;
+    };
+
+    const capabilityAnswer = (id) => {
+      const item = data.capabilities.find((capability) => capability.id === id);
+      return `${item.summary} Stack: ${item.stack.join(', ')}.`;
     };
 
     const answer = (question) => {
       const q = normalize(question);
       const projects = data.projects || [];
-      const project = projects.find((item) => q.includes(item.slug) || q.includes(item.title.toLowerCase().split(' — ')[0].toLowerCase()));
+      const project = projects.find((item) => {
+        const short = item.title.split(' — ')[0].toLowerCase();
+        return q.includes(item.slug) || q.includes(short) || (item.aliases || []).some((alias) => q.includes(alias));
+      });
 
       if (project) return projectAnswer(project);
 
-      if (/\b(project|projects|work|built|build|portfolio)\b/.test(q)) {
-        return `There are ${projects.length} featured systems: ${projects.map((item) => item.title.split(' — ')[0]).join(', ')}. Ask me for any project and I can explain its problem, approach, and outcome.`;
-      }
-
       if (/\b(skill|skills|stack|technology|technologies|tech|tools)\b/.test(q)) {
-        return `The core stack is ${data.stack.join(', ')}. The strongest themes are AI systems, model serving, retrieval and agents, with Three.js/GLSL and GSAP used for interactive product experiences.`;
+        return `The core stack is ${data.stack.join(', ')}. The strongest themes are full-stack web applications in React, Next.js and Angular, accessible UI systems and data visualization, and LLM integrations across Anthropic Claude, OpenAI and Gemini.`;
       }
 
-      if (/\b(agent|agents|llm|rag|retrieval|orchestration|tool use)\b/.test(q)) {
-        return data.capabilities.find((item) => item.id === 'agents').summary + ` Stack: ${data.capabilities.find((item) => item.id === 'agents').stack.join(', ')}.`;
+      if (/\b(ai|llm|llms|claude|openai|gemini|groq)\b/.test(q)) return capabilityAnswer('ai');
+      if (/\b(ui|component|components|design system|chart|charts|visuali[sz]ation|dashboard|tailwind)\b/.test(q)) return capabilityAnswer('ui');
+      if (/\b(performance|lighthouse|webgl|three|three\.js|3d|shader)\b/.test(q)) return capabilityAnswer('performance');
+      if (/\b(full[- ]?stack|react|next|nextjs|angular|node|backend|frontend|front end|api|apis|typescript)\b/.test(q)) return capabilityAnswer('fullstack');
+
+      if (/\b(project|projects|work|built|build|portfolio)\b/.test(q)) {
+        return `There are ${projects.length} featured projects: ${projects.map((item) => item.title.split(' — ')[0]).join(', ')}. Ask me about any of them and I can describe what was built and the stack behind it.`;
       }
 
-      if (/\b(vision|image|diffusion|lora|computer vision|pytorch)\b/.test(q)) {
-        return data.capabilities.find((item) => item.id === 'vision').summary + ` Stack: ${data.capabilities.find((item) => item.id === 'vision').stack.join(', ')}.`;
-      }
-
-      if (/\b(webgl|three|three.js|glsl|3d|gsap|shader)\b/.test(q)) {
-        return data.capabilities.find((item) => item.id === 'webgl').summary + ` Stack: ${data.capabilities.find((item) => item.id === 'webgl').stack.join(', ')}.`;
-      }
-
-      if (/\b(experience|career|journey|background|worked)\b/.test(q)) {
-        return `${data.identity.name} is positioned as a ${data.identity.title}. ${data.experience.map((item) => `${item.period}: ${item.summary}`).join(' ')}`;
+      if (/\b(experience|career|journey|background|worked|education|studied)\b/.test(q)) {
+        return `${data.identity.name} is a ${data.identity.title}. ${data.experience.map((item) => `${item.period}: ${item.summary}`).join(' ')}`;
       }
 
       if (/\b(different|unique|why ankit|why him|strength|approach)\b/.test(q)) return data.faq.differentiator;
       if (/\b(contact|hire|collaborat|reach|email)\b/.test(q)) return data.faq.contact;
       if (/\b(about|who is|who's)\b/.test(q)) return `${data.identity.name} — ${data.identity.title}. ${data.identity.positioning}`;
-      if (/\b(how|approach|engineering)\b/.test(q)) return data.faq.approach;
+      if (/\b(how|engineering)\b/.test(q)) return data.faq.approach;
 
-      return `I can help with Ankit's projects, skills, AI/agent work, WebGL capabilities, experience, or engineering approach. Try “Tell me about Aurora” or “What are his strongest skills?”`;
+      return `I can help with Ankit's projects, skills, full-stack and AI work, UI and performance, experience, or how he works. Try “Tell me about QISquare” or “What are his strongest skills?”`;
     };
 
     const setOpen = (open) => {

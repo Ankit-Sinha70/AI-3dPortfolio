@@ -3,22 +3,25 @@ interface Demo {
   title: string;
   description: string;
   tags: string[];
-  status: string;
+  href: string;
+  cta: string;
 }
 
 const demos: Demo[] = [
   {
-    title: 'Aurora — Text-to-Image Playground',
-    description: 'Type a prompt, get a generated image back from a hosted diffusion endpoint. Live inference, not a canned gallery.',
-    tags: ['Diffusion', 'FastAPI', 'Inference'],
-    status: 'Live demo coming soon',
+    title: 'AI Interview Simulator',
+    description: 'Adaptive mock interviews with real-time difficulty scaling, webcam attention tracking, voice delivery scoring, and recruiter-grade reports.',
+    tags: ['Next.js 16', 'MediaPipe', 'Recharts'],
+    href: 'https://interview-simulator-psi.vercel.app',
+    cta: 'Open live site',
   },
-{
-title: 'Echo — Voice Cloning Playground',
-description: 'Type a line, pick a voice profile, and stream back synthesized speech from a hosted TTS endpoint. Low-latency, not a pre-rendered clip.',
-tags: ['TTS', 'PyTorch', 'WebSockets'],
-status: 'Live demo coming soon',
-},
+  {
+    title: '3D Portfolio Website',
+    description: 'An interactive Three.js portfolio with custom lighting, smooth camera controls, and scene transitions, scoring 90+ on Lighthouse performance.',
+    tags: ['React.js', 'Three.js', 'Vite'],
+    href: 'https://ankit-sinha70.github.io',
+    cta: 'Open live site',
+  },
 ];
 ---
 <section class="demos" id="demos">
@@ -26,9 +29,9 @@ status: 'Live demo coming soon',
   <div class="grid">
     {demos.map((demo) => (
       <article class="card">
-        <div class="preview" aria-hidden="true">
-          <span class="preview-label">{demo.status}</span>
-        </div>
+        <a class="preview" href={demo.href} target="_blank" rel="noopener" aria-label={`${demo.cta}: ${demo.title} (opens in a new tab)`}>
+          <span class="preview-label">{demo.cta} ↗</span>
+        </a>
         <h3>{demo.title}</h3>
         <p class="desc">{demo.description}</p>
         <ul class="tags">
@@ -86,7 +89,15 @@ status: 'Live demo coming soon',
     height: 140px;
     border-radius: 4px;
     background: linear-gradient(135deg, rgba(94, 234, 212, 0.08), rgba(255, 217, 160, 0.06));
-    border: 1px dashed rgba(244, 241, 255, 0.15);
+    border: 1px solid rgba(94, 234, 212, 0.22);
+    text-decoration: none;
+    transition: border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .preview:hover,
+  .preview:focus-visible {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(94, 234, 212, 0.14), rgba(255, 217, 160, 0.08));
   }
 
   .preview-label {
@@ -94,7 +105,7 @@ status: 'Live demo coming soon',
     font-size: 0.7rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--text-dim);
+    color: var(--text);
   }
 
   .card h3 {

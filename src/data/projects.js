@@ -1,101 +1,160 @@
 // Shared project data source for the Work grid (src/components/Work.astro)
 // and the individual case-study pages (src/pages/work/[slug].astro).
 // Add a project here once; both surfaces stay in sync.
+//
+// Content comes from the resume. `approach` holds what was built/worked on,
+// `stack` is the full technology list for the case-study page, `tags` is the
+// short list shown on the card, and `links` are optional external links.
 
 export const projects = [
   {
-    slug: 'aurora',
-    title: 'Aurora — Text-to-Image Pipeline',
+    slug: 'qisquare',
+    title: 'QISquare — Equity Research & Financial Analytics SaaS',
     description:
-      'End-to-end diffusion pipeline with custom LoRA fine-tuning, queued inference, and a review UI for output curation.',
-    tags: ['Diffusion', 'LoRA', 'FastAPI'],
-    role: 'Solo engineer — model, backend, and review tooling.',
+      'Institutional equity-research platform for financial analysts, with advanced data visualization and automated reporting.',
+    tags: ['Angular 10', 'TypeScript', 'Auth0', 'Kendo UI'],
+    stack: ['Angular 10', 'TypeScript', 'Auth0', 'Kendo UI', 'Angular Material'],
+    role: 'Full-Stack Engineer at Brainerhub Solutions',
+    period: 'Jun 2026 – Present',
     summary:
-      'Aurora turns a small set of reference images into a fine-tuned diffusion checkpoint, then serves it behind a queued inference API so generation requests never block on GPU availability.',
-    problem:
-      "Ad-hoc fine-tuning scripts and manual prompt testing didn't scale past a handful of styles. There was no way to review, compare, or roll back checkpoints without digging through raw output folders.",
+      'QISquare is an institutional equity-research SaaS platform serving financial analysts with advanced data visualization and automated reporting.',
     approach: [
-      'Built a LoRA fine-tuning harness on top of a base diffusion model, with checkpoint versioning so every training run is reproducible.',
-      'Queued inference through a FastAPI service backed by a job queue, so bursts of requests degrade gracefully instead of timing out.',
-      'Shipped a lightweight review UI for side-by-side output comparison across checkpoints, used to decide which fine-tune ships.',
+      'Upgrading the platform off a deprecated Angular version, modernizing legacy modules and dependencies while preserving existing production functionality.',
+      'Diagnosed and corrected data flows in the market-pricing and SEC EDGAR filing ingestion pipelines, restoring accuracy of the financial data surfaced across the platform.',
+      'Maintained and extended reference-data and financial-statement modules, including Index Tags, Value Chain, and cascading country, currency, and exchange filters built with Angular Material and Kendo UI data grids.',
+      'Extended role and permission-based access control to additional routes and modules within an established Auth0 JWT setup, working across Angular route guards and HTTP interceptors for secure multi-tenant access.',
+      'Contributed to interactive analytical reports covering peer comparison, trend analysis, CAGR, manipulation detection, and Beta/CAPM valuation models, with interactive charts and PDF and Excel export.',
     ],
-    outcome:
-      'Cut the time from "new reference set" to "usable checkpoint" from a manual afternoon to a queued job measured in minutes, with a paper trail for every version shipped.',
+    links: [],
   },
   {
-    slug: 'echo',
-    title: 'Echo — Voice Cloning Service',
+    slug: 'iatf-toolbox',
+    title: 'IATF Solutions Toolbox — Automotive Quality Compliance Suite',
     description:
-      'Low-latency voice synthesis service with speaker embedding cache and streaming playback.',
-    tags: ['TTS', 'PyTorch', 'WebSockets'],
-    role: 'Solo engineer — model serving, caching layer, streaming API.',
-    summary:
-      'Echo clones a speaker from a short reference clip and streams synthesized speech back over a WebSocket, targeting conversational latency rather than batch rendering.',
-    problem:
-      'Naive per-request inference re-computed the speaker embedding every call, and clients had to wait for a full audio file before playback could start.',
-    approach: [
-      'Cached speaker embeddings keyed by voice profile, so repeat requests for the same voice skip the expensive encoding step.',
-      'Switched delivery to a WebSocket stream, sending audio chunks as they render instead of waiting on the full clip.',
-      'Tuned the PyTorch inference path (batching, precision) to keep first-chunk latency low enough for near-real-time playback.',
+      'Turborepo monorepo of four AI-powered quality-engineering tools plus a Strapi CMS-driven marketing site.',
+    tags: ['Next.js 16', 'Turborepo', 'Stripe', 'LLM APIs'],
+    stack: [
+      'Next.js 16',
+      'React 19',
+      'TypeScript',
+      'Turborepo',
+      'Stripe',
+      'Upstash Redis',
+      'Anthropic',
+      'OpenAI',
+      'Gemini',
+      'Strapi',
+      'Zod',
     ],
-    outcome:
-      'Brought time-to-first-audio down from full-clip wait to a streaming start, making the service usable for live, conversational use cases instead of just offline rendering.',
+    role: 'Full-Stack Engineer at Brainerhub Solutions',
+    period: 'Jan 2026 – May 2026',
+    summary:
+      'The IATF Solutions Toolbox is an automotive quality-compliance SaaS suite: four AI-powered quality-engineering tools and a Strapi CMS-driven marketing site, built on shared UI, config, and API-client packages.',
+    approach: [
+      'Architected a Turborepo monorepo shipping 4 AI-powered quality-engineering tools plus a Strapi CMS-driven marketing site, backed by shared UI, config, and API-client packages.',
+      'Engineered a provider-agnostic AI abstraction across Anthropic, OpenAI, and Gemini that generates audit-ready compliance artifacts, including root-cause analyses, compliance matrices, and management-review narratives, from structured input.',
+      'Implemented end-to-end Stripe billing with checkout, webhooks, and credit-based usage metering, backed by Upstash Redis for session storage and API rate limiting.',
+      'Automated multi-format document export pipelines producing .xlsx, .pdf, and .docx outputs from Zod-validated schemas, removing manual report preparation for end users.',
+    ],
+    links: [],
   },
   {
-    slug: 'ledger',
-    title: 'Ledger — RAG Knowledge Assistant',
+    slug: 'solution-to-share',
+    title: 'Solution to Share GmbH — Calendar Plus & File Manager',
     description:
-      'Retrieval-augmented assistant over internal docs with hybrid search and citation-grounded answers.',
-    tags: ['RAG', 'Vector DB', 'LangChain'],
-    role: 'Solo engineer — retrieval pipeline, grounding, and evaluation.',
+      'Enterprise productivity SaaS combining collaborative scheduling with secure document management for multi-user teams.',
+    tags: ['React.js', 'TypeScript'],
+    stack: ['React.js', 'TypeScript'],
+    role: 'Full-Stack Engineer at Brainerhub Solutions',
+    period: 'Jun 2025 – May 2026',
     summary:
-      'Ledger answers questions over a private document set and grounds every answer in the source passages it retrieved, instead of letting the model answer from memory.',
-    problem:
-      'Pure vector search missed exact-match queries (IDs, terse keywords), and early answers had no way to verify which document they came from.',
+      'An enterprise productivity SaaS that combines collaborative scheduling with secure document management for multi-user teams.',
     approach: [
-      'Combined dense vector retrieval with keyword search in a hybrid ranker, so exact terms and semantic queries both surface the right passages.',
-      'Forced citation-grounded generation: the assistant can only answer using retrieved passages, and every claim links back to its source.',
-      'Built a small evaluation set of real questions to catch retrieval regressions before they reached users.',
+      'Extended Calendar Plus with daily, weekly, and monthly recurring event scheduling, multi-user calendar sharing, automated conflict detection, color-coded tagging, and in-app notifications and reminders.',
+      'Enhanced File Manager with in-browser PDF and image preview, advanced search and filtering, and role-based access control across user tiers, building on an existing folder hierarchy and upload/download layer.',
     ],
-    outcome:
-      'Reduced unsupported or hallucinated answers by grounding every response in a traceable source passage, and hybrid search closed the gap on queries pure vector search missed.',
+    links: [],
   },
   {
-    slug: 'drift',
-    title: 'Drift — Agentic Workflow Runner',
+    slug: 'crown-restaurant',
+    title: 'Crown Restaurant — Multi-location Management System',
     description:
-      'Multi-step agent orchestration with tool calling, retries, and human-in-the-loop checkpoints.',
-    tags: ['Agents', 'Orchestration', 'TypeScript'],
-    role: 'Solo engineer — orchestration engine and tool interface.',
+      'Restaurant management across branches: a central admin panel for menu, orders, and reservations, plus a customer ordering interface.',
+    tags: ['React.js', 'TypeScript'],
+    stack: ['React.js', 'TypeScript'],
+    role: 'Full-Stack Engineer at Brainerhub Solutions',
+    period: 'Jan 2024 – Aug 2024',
     summary:
-      "Drift runs multi-step agent workflows that call tools, retry on failure, and pause for human approval at checkpoints the workflow author defines.",
-    problem:
-      'Long agent chains would silently fail mid-way or take an unsafe action with no way for a human to intervene before it committed.',
+      'A multi-location restaurant management system with a centralized admin panel for branches and a responsive customer-facing interface.',
     approach: [
-      'Modeled workflows as a typed step graph in TypeScript, so each step declares its inputs, tools, and retry policy up front.',
-      'Added automatic retries with backoff for transient tool failures, separate from a distinct "needs human approval" pause state.',
-      'Built human-in-the-loop checkpoints that halt the run and surface full context before any irreversible action executes.',
+      'Built the platform end to end, delivering a centralized admin panel for menu, order, and reservation management across branches plus a responsive customer interface for browsing restaurants and placing orders.',
     ],
-    outcome:
-      'Turned brittle, all-or-nothing agent chains into resumable workflows where failures are retried automatically and risky steps wait for a human sign-off.',
+    links: [],
   },
   {
-    slug: 'halo',
-    title: 'Halo — Generative Video Prototyping',
+    slug: 'ai-interview-simulator',
+    title: 'AI Interview Simulator',
     description:
-      'Frame-consistent short-form video generation pipeline with prompt-driven storyboard control.',
-    tags: ['Video Gen', 'Python', 'FFmpeg'],
-    role: 'Solo engineer — generation pipeline and storyboard tooling.',
-    summary:
-      'Halo generates short-form video from a prompt-driven storyboard, keeping subjects and style consistent frame-to-frame instead of generating each frame independently.',
-    problem:
-      'Frame-independent generation produced flicker and identity drift — the same "character" would subtly change across a clip, which reads as broken to a viewer.',
-    approach: [
-      'Introduced a storyboard layer where a prompt sequence defines shots, letting the pipeline condition each frame on its neighbors rather than generating in isolation.',
-      'Carried forward reference frames and style embeddings across the sequence to hold subject and palette consistent.',
-      'Used FFmpeg for the assembly stage — frame interpolation, timing, and encoding — decoupled from the generation step so either can be iterated on independently.',
+      'Full-stack AI mock-interview platform with adaptive difficulty, webcam proctoring, and recruiter-grade reports.',
+    tags: ['Next.js 16', 'MediaPipe', 'LLM providers', 'MongoDB'],
+    stack: [
+      'Next.js 16',
+      'React 19',
+      'TypeScript',
+      'Tailwind v4',
+      'Radix UI',
+      'MediaPipe FaceMesh',
+      'Recharts',
+      'Node.js',
+      'Express',
+      'MongoDB',
     ],
-    outcome:
-      'Reduced visible flicker and identity drift enough that short clips read as one continuous shot rather than a slideshow of related images.',
+    role: 'Personal project — design and full-stack build',
+    period: '',
+    summary:
+      'A full-stack AI mock-interview platform with adaptive difficulty, webcam and voice analysis, and recruiter-grade reports, live on Vercel.',
+    approach: [
+      'Built a full-stack AI mock-interview platform on a layered architecture (routes, controllers, services, AI engines) running adaptive interviews with real-time difficulty scaling, 5-dimension scoring, AI-generated follow-ups, and recruiter-grade reports.',
+      'Engineered webcam-based proctoring in the browser with MediaPipe FaceMesh for real-time gaze and attention tracking, plus a voice mode scoring words per minute, filler words, and delivery confidence.',
+      'Designed analytics dashboards with Recharts featuring skill radar and readiness scoring, and integrated JWT and Google OAuth authentication with Stripe subscriptions, webhooks, and refunds.',
+      'Developed a Resume, GitHub, and Job-Description matching interface combining PDF parsing, repository analysis, ATS-style match scoring, and skill-gap detection.',
+      'Designed a provider-agnostic AI engine using the factory pattern, enabling hot-swappable Gemini, Groq, and OpenAI backends without code changes.',
+    ],
+    links: [{ label: 'Live site', href: 'https://interview-simulator-psi.vercel.app' }],
+  },
+  {
+    slug: 'portfolio-3d',
+    title: '3D Portfolio Website',
+    description:
+      'Interactive Three.js portfolio with custom lighting, smooth camera controls, and scene transitions, scoring 90+ on Lighthouse performance.',
+    tags: ['React.js', 'Vite', 'Three.js', 'Tailwind CSS'],
+    stack: ['React.js', 'Vite', 'Three.js', 'Tailwind CSS'],
+    role: 'Personal project — design and development',
+    period: '',
+    summary:
+      'An interactive 3D portfolio built with React, Vite, and Three.js, with custom lighting, geometry, smooth camera controls, and scene transitions.',
+    approach: [
+      'Designed and deployed an interactive 3D portfolio with custom lighting, geometry, smooth camera controls, and scene transitions.',
+      'Achieved a 90+ Lighthouse performance score through lazy loading, asset optimization, and responsive rendering across devices.',
+    ],
+    links: [{ label: 'Live site', href: 'https://ankit-sinha70.github.io' }],
+  },
+  {
+    slug: 'ai-resume-analyzer',
+    title: 'AI Resume Analyzer',
+    description:
+      'Full-stack TypeScript app that extracts skills from PDF resumes with LLMs and scores them against job descriptions.',
+    tags: ['Next.js 14', 'Node.js', 'LLM providers', 'Zod'],
+    stack: ['Next.js 14', 'TypeScript', 'Node.js', 'Express', 'OpenAI', 'Gemini', 'Groq', 'Zod', 'Winston'],
+    role: 'Personal project — design and full-stack build',
+    period: '',
+    summary:
+      'A full-stack TypeScript app that reads PDF resumes with LLMs, scores them against job descriptions, and suggests improvements.',
+    approach: [
+      'Built a full-stack TypeScript app extracting skills from PDF resumes via LLMs, scoring them against job descriptions, and generating actionable improvement suggestions behind a provider-agnostic AI layer with runtime provider switching and a mock mode for cost-free testing.',
+      'Built a Next.js interface featuring drag-and-drop upload, dark mode, PDF export, and a normalized skill-matching engine that resolves synonyms such as k8s and Kubernetes to compute accurate match percentages.',
+      'Structured the backend using Clean Architecture across domain, application, infrastructure, and interface layers in an npm-workspaces monorepo with shared types, Helmet, CORS, Zod validation, and Winston logging.',
+    ],
+    links: [{ label: 'GitHub profile', href: 'https://github.com/Ankit-Sinha70' }],
   },
 ];

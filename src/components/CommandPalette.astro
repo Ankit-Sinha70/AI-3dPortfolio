@@ -6,11 +6,10 @@
     <div class="palette-list" id="palette-listbox" data-command-list role="listbox" aria-label="Portfolio commands">
       <button class="command" type="button" role="option" data-command="ai" data-search="ask ai assistant artificial intelligence"><span class="command-icon">✦</span><span><strong>Ask AI</strong><small>Ask about projects, skills, or engineering</small></span><kbd>↵</kbd></button>
       <button class="command" type="button" role="option" data-target="#work" data-search="work projects case studies"><span class="command-icon">01</span><span><strong>Explore work</strong><small>Open the interactive project scene</small></span><kbd>W</kbd></button>
-      <button class="command" type="button" role="option" data-target="#capabilities" data-search="capabilities skills agents vision webgl"><span class="command-icon">02</span><span><strong>View capabilities</strong><small>Agents · Vision · WebGL</small></span><kbd>C</kbd></button>
-      <button class="command" type="button" role="option" data-target="#experience" data-search="experience career timeline background"><span class="command-icon">03</span><span><strong>Experience</strong><small>Systems shipped over time</small></span><kbd>E</kbd></button>
-      <button class="command" type="button" role="option" data-target="#about" data-search="about ankit profile engineer"><span class="command-icon">04</span><span><strong>About Ankit</strong><small>Engineering philosophy and stack</small></span><kbd>A</kbd></button>
+      <button class="command" type="button" role="option" data-target="#capabilities" data-search="capabilities skills full-stack ui ai llm performance 3d"><span class="command-icon">02</span><span><strong>View capabilities</strong><small>Full-stack · UI · AI · 3D</small></span><kbd>C</kbd></button>
+      <button class="command" type="button" role="option" data-target="#experience" data-search="experience career timeline background"><span class="command-icon">03</span><span><strong>Experience</strong><small>Brainerhub Solutions and client projects</small></span><kbd>E</kbd></button>
+      <button class="command" type="button" role="option" data-target="#about" data-search="about ankit profile engineer"><span class="command-icon">04</span><span><strong>About Ankit</strong><small>Summary and core stack</small></span><kbd>A</kbd></button>
       <button class="command" type="button" role="option" data-target="#contact" data-search="contact hire collaboration email"><span class="command-icon">05</span><span><strong>Start a conversation</strong><small>Contact and collaboration</small></span><kbd>↗</kbd></button>
-      <button class="command" type="button" role="option" data-command="blog" data-search="blog writing articles notes posts"><span class="command-icon">06</span><span><strong>Read writing</strong><small>Notes on building generative AI systems</small></span><kbd>B</kbd></button>
       <button class="command" type="button" role="option" data-command="top" data-search="home top beginning"><span class="command-icon">↑</span><span><strong>Back to top</strong><small>Return to the beginning</small></span><kbd>H</kbd></button>
     </div>
     <p class="palette-empty" data-command-empty role="status" hidden>No commands match your search.</p>
@@ -76,11 +75,6 @@
       if (command.dataset.command === 'ai') {
         setOpen(false);
         document.querySelector('[data-ai-assistant] .assistant-trigger')?.click();
-        return;
-      }
-      if (command.dataset.command === 'blog') {
-        setOpen(false);
-        window.location.href = '/blog/';
         return;
       }
       if (command.dataset.command === 'top') {
