@@ -269,7 +269,7 @@ const tags = [
 
   .tag-one {
     top: 22%;
-    left: -4%;
+    left: -12%;
     transform: translateZ(130px);
   }
 
@@ -383,6 +383,11 @@ const tags = [
   .tag-two { --tz: 150px; }
   .tag-three { --tz: 110px; }
 
+  /* narrower layouts: put the first label above the hair, where there is no room beside the head */
+  @media (max-width: 1100px) {
+    .tag-one { top: -3%; left: auto; right: -6%; }
+  }
+
   @media (max-width: 860px) {
     .about-body {
       grid-template-columns: minmax(0, 1fr);
@@ -398,7 +403,6 @@ const tags = [
       --ring-b: 140%;
     }
 
-    .tag-one { left: -10%; }
     .tag-two { right: -12%; }
     .tag-three { left: -2%; }
 
