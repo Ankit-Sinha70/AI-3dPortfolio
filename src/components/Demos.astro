@@ -5,6 +5,7 @@ interface Demo {
   tags: string[];
   href: string;
   cta: string;
+  image: string;
 }
 
 const demos: Demo[] = [
@@ -14,6 +15,7 @@ const demos: Demo[] = [
     tags: ['Next.js 16', 'MediaPipe', 'Recharts'],
     href: 'https://interview-simulator-psi.vercel.app',
     cta: 'Open live site',
+    image: '/images/demos/ai-interview-simulator.webp',
   },
   {
     title: '3D Portfolio Website',
@@ -21,6 +23,7 @@ const demos: Demo[] = [
     tags: ['React.js', 'Three.js', 'Vite'],
     href: 'https://ankit-sinha70.github.io',
     cta: 'Open live site',
+    image: '/images/demos/3d-portfolio.webp',
   },
 ];
 ---
@@ -30,6 +33,7 @@ const demos: Demo[] = [
     {demos.map((demo) => (
       <article class="card">
         <a class="preview" href={demo.href} target="_blank" rel="noopener" aria-label={`${demo.cta}: ${demo.title} (opens in a new tab)`}>
+          <img src={demo.image} alt="" width="800" height="500" loading="lazy" decoding="async" />
           <span class="preview-label">{demo.cta} ↗</span>
         </a>
         <h3>{demo.title}</h3>
@@ -64,7 +68,7 @@ const demos: Demo[] = [
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
     gap: 1.5rem;
   }
 
@@ -83,29 +87,68 @@ const demos: Demo[] = [
   }
 
   .preview {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 140px;
-    border-radius: 4px;
-    background: linear-gradient(135deg, rgba(94, 234, 212, 0.08), rgba(255, 217, 160, 0.06));
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: 6px;
     border: 1px solid rgba(94, 234, 212, 0.22);
+    background: #05070c;
     text-decoration: none;
-    transition: border-color 0.25s ease, background 0.25s ease;
+    transition: border-color 0.25s ease;
+  }
+
+  .preview img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .preview::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 58%, rgba(7, 9, 15, 0.82));
   }
 
   .preview:hover,
   .preview:focus-visible {
     border-color: var(--accent);
-    background: linear-gradient(135deg, rgba(94, 234, 212, 0.14), rgba(255, 217, 160, 0.08));
+  }
+
+  .preview:hover img,
+  .preview:focus-visible img {
+    transform: scale(1.04);
   }
 
   .preview-label {
+    position: absolute;
+    left: 0.8rem;
+    bottom: 0.8rem;
+    z-index: 1;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(7, 9, 15, 0.72);
     font-family: var(--font-mono);
     font-size: 0.7rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .preview img {
+      transition: none;
+    }
+
+    .preview:hover img,
+    .preview:focus-visible img {
+      transform: none;
+    }
   }
 
   .card h3 {
