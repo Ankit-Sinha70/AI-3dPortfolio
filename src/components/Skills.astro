@@ -1,156 +1,131 @@
 ---
-const rowOne = [
-  'React.js',
-  'Next.js',
-  'Angular',
-  'TypeScript',
-  'Redux',
-  'Zustand',
-  'Tailwind CSS',
-  'ShadCN UI',
-];
-
-const rowTwo = [
-  'Node.js',
-  'Express.js',
-  'MongoDB',
-  'REST APIs',
-  'Stripe',
-  'Turborepo',
-  'LLM APIs',
-  'Three.js',
+// Skill groups and entries exactly as listed on the resume.
+const groups = [
+  { title: 'Frontend', items: ['React.js', 'Next.js 16', 'Angular 10+', 'JavaScript (ES6+)', 'TypeScript', 'HTML5', 'CSS3', 'Responsive Web Design'] },
+  { title: 'State Management', items: ['Redux', 'Zustand'] },
+  { title: 'UI and Styling', items: ['Tailwind CSS v4', 'ShadCN UI', 'Angular Material', 'Kendo UI', 'Material UI', 'Radix UI', 'Base UI', 'Accessible component design'] },
+  { title: 'Data Visualization', items: ['Recharts', 'Plotly', 'Kendo Charts'] },
+  { title: 'Performance and 3D', items: ['Lighthouse auditing', 'Lazy loading', 'Asset optimization', 'Three.js', 'Vite'] },
+  { title: 'Backend', items: ['Node.js', 'Express.js', 'MongoDB', 'REST API design', 'JWT authentication', 'OAuth 2.0', 'Auth0'] },
+  { title: 'SaaS and Infrastructure', items: ['Turborepo (monorepo)', 'npm workspaces', 'Stripe (checkout, webhooks, subscriptions)', 'Upstash Redis', 'Zod', 'Winston', 'Vercel'] },
+  { title: 'AI and LLM Integration', items: ['Anthropic Claude API', 'OpenAI API', 'Google Gemini', 'Groq'] },
+  { title: 'CMS and i18n', items: ['Strapi CMS', 'next-intl'] },
+  { title: 'Testing and Tools', items: ['React Testing Library', 'Postman', 'Git', 'GitHub', 'GitLab', 'VS Code'] },
 ];
 ---
 <section class="skills" id="skills">
-    <h2 class="eyebrow">Skills</h2>
-  <div class="marquee-wrap">
-    <div class="marquee-row row-1">
-      <div class="marquee-track">
-        {rowOne.map((skill) => (
-          <span class="skill-tag">{skill}</span>
-        ))}
-        {rowOne.map((skill) => (
-          <span class="skill-tag" aria-hidden="true">{skill}</span>
-        ))}
-      </div>
-    </div>
-    <div class="marquee-row row-2">
-      <div class="marquee-track">
-        {rowTwo.map((skill) => (
-          <span class="skill-tag">{skill}</span>
-        ))}
-        {rowTwo.map((skill) => (
-          <span class="skill-tag" aria-hidden="true">{skill}</span>
-        ))}
-      </div>
-    </div>
+  <h2 class="eyebrow">Skills</h2>
+  <div class="groups">
+    {groups.map((group) => (
+      <article class="group">
+        <h3>{group.title}</h3>
+        <ul>
+          {group.items.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+    ))}
   </div>
 </section>
 
 <style>
-.skills {
-  position: relative;
-  padding: 10rem 0;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  overflow: hidden;
-}
-
-.eyebrow {
-  font-family: var(--font-mono);
-  color: var(--accent);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  margin: 0;
-  padding: 0 8vw;
-}
-
-.marquee-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.marquee-row {
-  overflow: hidden;
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
-}
-
-.marquee-track {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: max-content;
-  will-change: transform;
-  animation: marquee 32s linear infinite;
-}
-
-.row-2 .marquee-track {
-  animation-direction: reverse;
-}
-
-.marquee-row:hover .marquee-track {
-  animation-play-state: paused;
-}
-
-.skill-tag {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  border: 1px solid rgba(244, 241, 255, 0.12);
-  border-radius: 999px;
-  padding: 0.6rem 1.4rem;
-  white-space: nowrap;
-  transition: color 0.25s ease, border-color 0.25s ease;
-}
-
-.skill-tag:hover {
-  color: var(--warm);
-  border-color: var(--warm);
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee-row {
-    overflow: visible;
-    mask-image: none;
-  }
-  .marquee-track {
-    flex-wrap: wrap;
-    width: auto;
-    animation: none;
-    transform: none;
-  }
-  .marquee-track [aria-hidden='true'] {
-    display: none;
-  }
-}
-
-@media (max-width: 640px) {
   .skills {
-    padding: 6rem 0;
-    gap: 2rem;
+    position: relative;
+    padding: 10rem 8vw;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
   }
+
   .eyebrow {
-    padding: 0 6vw;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    margin: 0;
   }
-}
+
+  .groups {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* each group sits on its own dark panel so the text stays readable over the scene behind it */
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(244, 241, 255, 0.09);
+    border-radius: 6px;
+    background: rgba(7, 9, 15, 0.66);
+    transition: border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .group:hover {
+    border-color: rgba(94, 234, 212, 0.45);
+    background: rgba(7, 9, 15, 0.8);
+  }
+
+  .group h3 {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .group ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .group li {
+    padding: 0.3rem 0.75rem;
+    border: 1px solid rgba(244, 241, 255, 0.14);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--text);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .group li:hover {
+    color: var(--warm);
+    border-color: var(--warm);
+  }
+
+  /* with three columns the tenth group would sit alone, so let it take the full last row */
+  @media (min-width: 1001px) {
+    .group:last-child {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .groups {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .skills {
+      padding: 6rem 6vw;
+      gap: 2rem;
+    }
+
+    .groups {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
 </style>
