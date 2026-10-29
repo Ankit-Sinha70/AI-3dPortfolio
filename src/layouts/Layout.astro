@@ -2,8 +2,8 @@
 import '../styles/tailwind.css';
 import ScrollProgress from '../components/ScrollProgress.astro';
 interface Props { title?: string; description?: string; }
-const { title = "Ankit — Generative AI Engineer" } = Astro.props;
-const { description = "Generative AI engineer building production text, image, and audio systems, not just demos." } = Astro.props;
+const { title = "Ankit — Full-Stack Engineer" } = Astro.props;
+const { description = "Full-stack engineer with 3+ years building responsive, high-performance web applications with React, Next.js, Angular, Node.js, and TypeScript, plus LLM integrations." } = Astro.props;
 const siteUrl = (Astro.site ?? new URL("https://ai-3d-portfolio-ankit-sinhas-projects.vercel.app")).origin;
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 const ogImage = `${siteUrl}/og-image.png`;
@@ -12,14 +12,14 @@ const personSchema = {
   '@graph': [
     {
       '@type': 'Person',
-      name: 'Ankit Sinha',
-      jobTitle: 'Generative AI Engineer',
+      name: 'Ankit Kumar Sinha',
+      jobTitle: 'Full-Stack Engineer',
       url: siteUrl,
-      sameAs: ['https://github.com/Ankit-Sinha70', 'https://www.linkedin.com/in/ankit-sinha70/'],
+      sameAs: ['https://github.com/Ankit-Sinha70', 'https://www.linkedin.com/in/ankit-sinha-58702a204'],
     },
     {
       '@type': 'WebSite',
-      name: 'Ankit — Generative AI Engineer',
+      name: 'Ankit — Full-Stack Engineer',
       url: siteUrl,
       description,
     },
