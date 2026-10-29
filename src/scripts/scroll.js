@@ -76,26 +76,6 @@ function initHeroScrollChoreography() {
     .to(meta, { y: 40, opacity: 0, ease: 'none' }, 0);
 }
 
-function initLogReveal() {
-  const entries = document.querySelectorAll('.log .log-entry');
-  if (!entries.length) return;
-
-  if (prefersReducedMotion) {
-    gsap.set(entries, { opacity: 1, y: 0 });
-    return;
-  }
-
-  gsap.set(entries, { opacity: 0, y: 16 });
-  gsap.to(entries, {
-    opacity: 1,
-    y: 0,
-    duration: 0.6,
-    ease: 'power3.out',
-    stagger: 0.08,
-    scrollTrigger: { trigger: '.log', start: 'top 80%' },
-  });
-}
-
 function initManifestoReveal() {
   const section = document.querySelector('.manifesto');
   const stats = gsap.utils.toArray('.manifesto .stat');
@@ -332,7 +312,6 @@ function initScrollExperience() {
   animationContext = gsap.context(() => {
     initHeroReveal();
     initHeroScrollChoreography();
-    initLogReveal();
     initManifestoReveal();
     initVisionReveal();
     initWorkCardsReveal();

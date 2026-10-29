@@ -11,7 +11,6 @@ const CHAPTERS = [
   { selector: '.demos', x: 2, y: -0.5, scale: 1.05, rotate: 0.3, opacity: 0.86 },
   { selector: '.about', x: -2.5, y: 0.7, scale: 1.035, rotate: -0.3, opacity: 0.9 },
   { selector: '.contact', x: 5, y: -0.5, scale: 1.08, rotate: 0, opacity: 0.5 },
-  { selector: '.log', x: 0, y: 0, scale: 1.04, rotate: 0, opacity: 0.55 },
 ];
 
 function initCinematicStage() {

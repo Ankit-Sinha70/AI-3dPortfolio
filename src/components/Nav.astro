@@ -91,6 +91,7 @@ const links = [
       ticking = true;
       requestAnimationFrame(() => {
         updateActiveSection();
+        nav?.classList.toggle('is-scrolled', window.scrollY > 40);
         ticking = false;
       });
     };
@@ -99,6 +100,7 @@ const links = [
     window.addEventListener('resize', updateActiveSection);
     window.addEventListener('load', updateActiveSection);
     updateActiveSection();
+    nav?.classList.toggle('is-scrolled', window.scrollY > 40);
   }
 </script>
 
@@ -114,6 +116,16 @@ const links = [
     align-items: center;
     padding: 1.5rem 8vw;
     mix-blend-mode: difference;
+    transition: background-color .3s ease, padding .3s ease, border-color .3s ease;
+    border-bottom: 1px solid transparent;
+  }
+
+  /* once the page has scrolled, give the bar its own dark backdrop so links never sit on top of content */
+  .nav.is-scrolled {
+    mix-blend-mode: normal;
+    padding-block: 1rem;
+    background-color: rgba(7, 9, 15, 0.86);
+    border-bottom-color: rgba(244, 241, 255, 0.07);
   }
 
   .logo { font-family: var(--font-mono); color: var(--text); text-decoration: none; font-size: .95rem; letter-spacing: .05em; }
