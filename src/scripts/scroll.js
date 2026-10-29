@@ -255,6 +255,22 @@ function initSectionTransitions() {
   });
 }
 
+function initSkillsReveal() {
+  const groups = gsap.utils.toArray('.skills .group');
+  if (!groups.length) return;
+
+  // Reduced motion (or no animation): the groups are simply shown.
+  if (prefersReducedMotion) return;
+
+  // Each row of groups rises in with a short stagger as it enters the viewport.
+  gsap.set(groups, { opacity: 0, y: 36 });
+  ScrollTrigger.batch(groups, {
+    start: 'top 88%',
+    once: true,
+    onEnter: (batch) => gsap.to(batch, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.12, overwrite: true }),
+  });
+}
+
 function initCapabilitiesReveal() {
   const items = document.querySelectorAll('.capabilities .capability');
   if (!items.length) return;
@@ -320,6 +336,7 @@ function initScrollExperience() {
     initManifestoReveal();
     initVisionReveal();
     initWorkCardsReveal();
+    initSkillsReveal();
     initCapabilitiesReveal();
     initSectionCounters();
     initSectionTransitions();
